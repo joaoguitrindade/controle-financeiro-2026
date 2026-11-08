@@ -22,102 +22,82 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-  <style id="appThemeAndStyles">
-    /* ============================================================
-       CONTROLE FINANCEIRO — ARQUITETURA CSS SÊNIOR FLUIDA & MODULAR
-       Padrão de Alto Desempenho (60fps/120fps GPU) para Mobile, Tablet e Desktop
-       ============================================================ */
+    <style id="appThemeAndStyles">
+    /* =========================================================================
+       CONTROLE FINANCEIRO — DESIGN SYSTEM MINIMALISTA (APPLE / NUBANK / LINEAR)
+       Arquitetura CSS Unificada, Sem Sobreposições, Mobile & Tablet First
+       ========================================================================= */
 
-    /* 1. TOKENS DE DESIGN & VARIÁVEIS (FLUID CLAMP & CORES WCAG AAA) */
     :root {
-      /* Área Segura de Dispositivos (iPhone Notch / Android Gesture Bar) */
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --safe-left: env(safe-area-inset-left, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
 
-      /* Tipografia Fluida (Escala orgânica de 320px a 1440px sem saltos) */
-      --font-hero: clamp(1.25rem, 2.5vw + 0.6rem, 1.85rem);
-      --font-title: clamp(1.05rem, 1.8vw + 0.55rem, 1.45rem);
-      --font-kpi: clamp(1.35rem, 2.2vw + 0.65rem, 1.95rem);
-      --font-body: clamp(0.82rem, 0.4vw + 0.72rem, 0.94rem);
-      --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, monospace;
       --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, monospace;
 
-      /* Espaçamento Fluido */
-      --space-xs: clamp(4px, 0.6vw, 6px);
-      --space-sm: clamp(6px, 1vw, 10px);
-      --space-md: clamp(10px, 1.5vw, 16px);
-      --space-lg: clamp(14px, 2vw, 22px);
-      --space-xl: clamp(18px, 2.8vw, 30px);
-
-      /* Paleta Modo Claro (Fintech Green & Alta Nitidez) */
-      --bg-main: #f4f6f8;
+      --bg-main: #f4f6f9;
       --bg-card: #ffffff;
       --bg-card-hover: #f8fafc;
-      --bg-card-subtle: #f8fafc;
+      --bg-card-subtle: #f1f5f9;
       --border: #e2e8f0;
-      --border-subtle: #f1f5f9;
-      --text-main: #1e293b;
+      --border-subtle: #edf2f7;
+      --text-main: #0f172a;
       --text-muted: #64748b;
       --text-dim: #94a3b8;
-      
+
       --primary: #00A868;
-      --primary-hover: #00935b;
-      --primary-dark: #007a4b;
+      --primary-hover: #008f58;
       --primary-light: rgba(0, 168, 104, 0.10);
-      --primary-glow: rgba(0, 168, 104, 0.20);
-      
+      --primary-glow: rgba(0, 168, 104, 0.22);
+
       --success: #00A868;
-      --success-light: rgba(0, 168, 104, 0.10);
+      --success-light: rgba(0, 168, 104, 0.12);
       --danger: #e11d48;
       --danger-light: rgba(225, 29, 72, 0.10);
       --warning: #f59e0b;
-      --warning-light: rgba(245, 158, 11, 0.10);
-      --info: #0ea5e9;
-      --info-light: rgba(14, 165, 233, 0.10);
+      --warning-light: rgba(245, 158, 11, 0.12);
+      --info: #0284c7;
+      --info-light: rgba(2, 132, 199, 0.10);
       --accent-blue: #0284c7;
-      --accent-sky: #38bdf8;
+      --accent-sky: #0ea5e9;
 
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 16px;
-      --radius-xl: 22px;
-      --shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.05);
-      --shadow-lg: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+      --radius-xl: 20px;
 
-      /* Cores do Balão de Dívidas (WCAG AAA - Contraste > 7:1) */
-      --card-debt-balloon-bg: #FFF1F2;
-      --card-debt-balloon-border: #FECDD3;
-      --card-debt-balloon-text: #9F1239;
-      --card-debt-balloon-sub: #BE123C;
-      --card-debt-balloon-badge-bg: #FFE4E6;
-      --card-debt-balloon-badge-text: #881337;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
+      --shadow-lg: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+
+      --card-debt-balloon-bg: #fff1f2;
+      --card-debt-balloon-border: #fecdd3;
+      --card-debt-balloon-text: #9f1239;
+      --card-debt-balloon-sub: #be123c;
     }
 
-    /* Paleta Modo Escuro Profundo */
     body.dark-theme {
       --bg-main: #0b0f17;
       --bg-card: #131926;
-      --bg-card-hover: #1a2334;
-      --bg-card-subtle: #172030;
+      --bg-card-hover: #1a2234;
+      --bg-card-subtle: #182032;
       --border: #1e293b;
-      --border-subtle: #182336;
+      --border-subtle: #1a2436;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
-      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
-      --shadow-lg: 0 10px 30px -4px rgba(0, 0, 0, 0.65);
+      --accent-sky: #38bdf8;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
 
       --card-debt-balloon-bg: rgba(225, 29, 72, 0.12);
-      --card-debt-balloon-border: rgba(244, 63, 94, 0.28);
-      --card-debt-balloon-text: #FDA4AF;
-      --card-debt-balloon-sub: #FB7185;
-      --card-debt-balloon-badge-bg: rgba(225, 29, 72, 0.22);
-      --card-debt-balloon-badge-text: #FECDD3;
+      --card-debt-balloon-border: rgba(244, 63, 94, 0.25);
+      --card-debt-balloon-text: #fda4af;
+      --card-debt-balloon-sub: #fb7185;
     }
 
-    /* 2. RESET E PADRÕES DE RENDERIZAÇÃO FLUIDA */
+    /* 1. RESET & BASE */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -128,130 +108,146 @@
       scroll-behavior: smooth;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
-      max-width: 100vw;
+      max-width: 100%;
     }
 
     body {
       font-family: var(--font);
       background-color: var(--bg-main);
       color: var(--text-main);
-      line-height: 1.5;
-      padding: var(--space-md) var(--space-md) calc(clamp(70px, 8vh, 88px) + var(--safe-bottom));
+      line-height: 1.45;
+      font-size: 0.9rem;
+      padding: 16px 20px calc(80px + var(--safe-bottom));
       min-height: 100vh;
       min-height: 100dvh;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-      max-width: 100vw;
-      overflow-wrap: normal;
-      word-wrap: normal;
+      max-width: 100%;
     }
 
-    /* 3. ESTRUTURA DE CONTÊINER E GRIDS FLUIDOS */
+    .font-mono, .kpi-value, .tx-summary-val, .fixed-item-val, .bank-inv-amount, td, th {
+      font-feature-settings: "tnum" 1, "cv05" 1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.015em;
+    }
+
+    .val-pos { color: var(--success) !important; }
+    body.dark-theme .val-pos { color: #34d399 !important; }
+    .val-neg { color: var(--danger) !important; }
+    body.dark-theme .val-neg { color: #fb7185 !important; }
+    .val-neutral { color: var(--text-muted) !important; }
+    .val-warning { color: var(--warning) !important; }
+
     .container {
       width: 100%;
-      max-width: 1440px;
+      max-width: 1360px;
       margin: 0 auto;
     }
 
-    /* Grids Auto-Fit: Adaptam-se organicamente a qualquer largura de tela */
+    /* 2. SISTEMA DE GRIDS RESPONSIVOS (SEM ESMAGAMENTO EM TABLETS E CELULARES) */
     .grid {
       display: grid;
-      gap: var(--space-md);
-    }
-
-    .grid-2 {
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
-    }
-
-    .grid-4 {
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
     .grid-5 {
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     .grid-3 {
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    /* 4. CABEÇALHO (HEADER) DE ALTO DESEMPENHO */
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* 3. HEADER LIMPO E COMPACTO */
     header {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
       align-items: center;
-      gap: var(--space-md);
-      padding-bottom: var(--space-md);
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
       border-bottom: 1px solid var(--border);
-      margin-bottom: var(--space-md);
     }
 
     .brand-title {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
 
     .brand-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent-blue) 50%, var(--accent-sky) 100%);
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent-blue) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 0.95rem;
       font-weight: 800;
-      color: #ffffff;
-      box-shadow: 0 4px 14px var(--primary-glow);
-      flex-shrink: 0;
+      color: #fff;
+      box-shadow: 0 3px 10px var(--primary-glow);
+    }
+
+    .brand-text {
+      min-width: 0;
     }
 
     .brand-text h1 {
-      font-size: var(--font-title);
+      font-size: clamp(1rem, 1.6vw, 1.25rem);
       font-weight: 800;
       letter-spacing: -0.02em;
       color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .brand-text p {
-      font-size: 0.78rem;
-      color: var(--text-muted);
+      display: none;
     }
 
     .header-nav-group {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.025);
+      background: var(--bg-card);
       padding: 4px 6px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
     }
 
     .header-nav-divider {
       width: 1px;
-      height: 20px;
+      height: 18px;
       background: var(--border);
-      margin: 0 4px;
     }
 
     .btn-nav-item {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 0.84rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      min-height: 40px;
+      gap: 5px;
+      min-height: 36px;
       transition: background-color 0.15s ease, color 0.15s ease;
-      touch-action: manipulation;
     }
 
     .btn-nav-item:hover {
@@ -262,34 +258,69 @@
     .header-right-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
-    .btn-sidebar-toggle {
-      background: var(--bg-card-subtle);
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      cursor: pointer;
       border: 1px solid var(--border);
-      color: var(--text-main);
-      width: 44px;
-      height: 44px;
-      min-width: 44px;
-      min-height: 44px;
-      border-radius: var(--radius-md);
+      background: var(--bg-card);
+    }
+
+    .user-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .user-badge-details {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .user-badge-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .user-badge-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .btn-sidebar-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
       cursor: pointer;
-      transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
-      touch-action: manipulation;
     }
 
-    .btn-sidebar-toggle:active {
-      transform: scale(0.94);
-    }
-
-    /* 5. NAVEGAÇÃO PRINCIPAL & SELETOR DE ANO */
+    /* 4. NAVEGAÇÃO PRINCIPAL, ANO E BARRA DE MESES */
     .nav-wrapper {
-      margin-bottom: var(--space-md);
+      margin-bottom: 14px;
     }
 
     .main-nav {
@@ -297,31 +328,30 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: var(--space-sm);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     .nav-btn {
-      padding: 10px 18px;
-      border-radius: var(--radius-md);
-      font-size: 0.88rem;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
       font-weight: 600;
       color: var(--text-muted);
-      background: transparent;
-      border: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       cursor: pointer;
-      min-height: 44px;
+      min-height: 38px;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      transition: color 0.15s ease, background-color 0.15s ease;
-      touch-action: manipulation;
+      gap: 6px;
+      transition: all 0.15s ease;
     }
 
     .nav-btn.active {
-      color: #ffffff;
+      color: #fff;
       background: var(--primary);
+      border-color: var(--primary);
       box-shadow: 0 2px 8px var(--primary-glow);
     }
 
@@ -331,145 +361,147 @@
       gap: 8px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow);
-      min-height: 44px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      min-height: 38px;
     }
 
     .year-selector-label {
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .year-stepper {
       display: inline-flex;
       align-items: center;
-      background: var(--bg-body, var(--bg-card-subtle));
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      background: var(--bg-card-subtle);
+      border-radius: 8px;
       overflow: hidden;
-      min-height: 36px;
     }
 
     .year-step-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 0.9rem;
-      padding: 6px 12px;
+      font-size: 0.8rem;
+      padding: 4px 10px;
       cursor: pointer;
-      min-width: 44px;
-      min-height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.15s ease, color 0.15s ease;
-      touch-action: manipulation;
+      min-height: 30px;
     }
 
     .year-step-btn:hover:not(:disabled) {
-      color: #ffffff;
       background: var(--primary);
-    }
-
-    .year-step-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
+      color: #fff;
     }
 
     .year-select-input {
       background: transparent;
       border: none;
       font-family: var(--font-mono);
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       font-weight: 800;
       color: var(--text-main);
-      padding: 4px 8px;
+      padding: 2px 6px;
+      min-height: 30px;
+      width: auto;
       cursor: pointer;
-      outline: none;
-      text-align: center;
-      min-height: 36px;
     }
 
     .year-range-pill {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: var(--primary-light);
-      color: var(--primary);
-      border: 1px solid var(--primary-glow);
+      display: none;
     }
 
-    /* Régua de Meses com Scroll Snap Tátil */
     .months-bar {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding: 8px 2px 10px;
-      -webkit-overflow-scrolling: touch;
-      scroll-snap-type: x proximity;
+      padding: 4px 0 6px;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
+
     .months-bar::-webkit-scrollbar {
       display: none;
     }
 
     .month-pill {
       flex: 0 0 auto;
-      min-width: 76px;
-      min-height: 42px;
-      padding: 8px 12px;
-      text-align: center;
-      border-radius: var(--radius-md);
+      min-width: 68px;
+      min-height: 36px;
+      padding: 6px 10px;
+      border-radius: 10px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-muted);
       cursor: pointer;
-      font-size: 0.84rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      scroll-snap-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .month-pill:hover {
-      background: var(--bg-card-hover);
-      color: var(--text-main);
-      border-color: var(--primary);
+      transition: all 0.15s ease;
     }
 
     .month-pill.active {
       background: var(--primary);
-      color: #ffffff;
+      color: #fff;
       border-color: var(--primary);
-      box-shadow: 0 2px 10px var(--primary-glow);
+      box-shadow: 0 2px 8px var(--primary-glow);
     }
 
-    /* 6. CARTÕES (CARDS) & KPIS FLUIDOS */
+    /* CABEÇALHO DO MÊS SELECIONADO */
+    .month-navigation-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .btn-month-nav-arrow {
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-size: 1.3rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .current-month-heading {
+      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+      font-weight: 800;
+      text-align: center;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* 5. CARDS & KPIS (DESIGN LIMPO, SEM OVERFLOW) */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: var(--space-md);
+      padding: 14px 16px;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      gap: var(--space-sm);
+      gap: 8px;
+      min-width: 0;
       overflow: hidden;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .card:hover {
-      border-color: rgba(0, 168, 104, 0.3);
-      box-shadow: var(--shadow-lg);
     }
 
     .card-header {
@@ -477,173 +509,127 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      flex-wrap: wrap;
+      min-width: 0;
     }
 
     .card-title {
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       font-weight: 700;
-      color: var(--text-muted);
-      display: flex;
+      color: var(--text-main);
+      display: inline-flex;
       align-items: center;
+      gap: 6px;
+      min-width: 0;
+      line-height: 1.25;
+    }
+
+    /* KPIs Centralizados com Respiro */
+    .card-kpi-centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      padding: 14px 12px;
       gap: 6px;
     }
 
+    .card-kpi-centered .card-header {
+      width: 100%;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .card-kpi-centered .card-title {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .kpi-value {
-      font-size: var(--font-kpi);
+      font-size: clamp(1.2rem, 1.8vw + 0.5rem, 1.65rem);
       font-weight: 800;
       font-family: var(--font-mono);
-      line-height: 1.2;
+      line-height: 1.15;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .kpi-sub {
-      font-size: 0.78rem;
+      font-size: 0.73rem;
       color: var(--text-muted);
-      line-height: 1.35;
-    }
-
-    /* Cores de Valores Financeiros */
-    .val-pos {
-      color: #00A868 !important;
-    }
-    body.dark-theme .val-pos {
-      color: #34D399 !important;
-    }
-
-    .val-neg {
-      color: #e11d48 !important;
-    }
-    body.dark-theme .val-neg {
-      color: #FB7185 !important;
-    }
-
-    .val-neutral {
-      color: var(--text-muted) !important;
-    }
-
-    .val-warning {
-      color: #f59e0b !important;
-    }
-
-    /* Balão de Dívidas de Cartão (Acessibilidade WCAG AAA) */
-    .card-debt-balloon, .card-total-debt-summary {
-      background: var(--card-debt-balloon-bg) !important;
-      border: 1px solid var(--card-debt-balloon-border) !important;
-      border-radius: var(--radius-md) !important;
-      padding: 10px 14px !important;
-      margin-top: 8px !important;
-      color: var(--card-debt-balloon-text) !important;
-    }
-
-    .card-debt-balloon strong, .card-total-debt-summary strong {
-      color: var(--card-debt-balloon-text) !important;
-      font-family: var(--font-mono) !important;
-      font-size: 1.05rem !important;
-    }
-
-    /* 7. TABELAS DE DADOS & TRANSFORMAÇÃO EM CARDS MOBILE */
-    .table-container {
+      line-height: 1.3;
       width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: var(--bg-card);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: var(--font-body);
-    }
-
-    th {
-      background: var(--bg-card-subtle);
-      color: var(--text-muted);
-      font-weight: 700;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-      font-size: 0.82rem;
-    }
-
-    td {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border-subtle);
-      vertical-align: middle;
-      
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:hover td {
-      background: var(--bg-card-hover);
-    }
-
-    /* Strip de Resumo */
-    .transactions-summary-strip {
+    .kpi-sub-lines {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      background: var(--bg-card-subtle);
-      padding: 10px 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      margin-bottom: 12px;
-    }
-
-    .tx-summary-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .tx-summary-label {
-      font-size: 0.78rem;
-      font-weight: 600;
+      justify-content: center;
+      gap: 4px 8px;
+      font-size: 0.72rem;
       color: var(--text-muted);
+      width: 100%;
     }
 
-    .tx-summary-val {
-      font-size: 0.95rem;
-      font-weight: 800;
-      font-family: var(--font-mono);
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--bg-card-subtle);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 4px 0;
     }
 
-    /* 8. BOTÕES & CONTROLES INTERATIVOS */
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent-sky) 100%);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    /* 6. BOTÕES & BADGES COMPACTOS */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: var(--radius-md);
-      font-size: 0.88rem;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
       font-weight: 600;
       border: 1px solid transparent;
       cursor: pointer;
-      min-height: 44px;
-      transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+      min-height: 38px;
+      transition: all 0.15s ease;
       touch-action: manipulation;
-      white-space: nowrap;
+      text-align: center;
+      line-height: 1.2;
     }
 
     .btn:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary) 0%, #00935b 100%);
-      color: #ffffff;
-      box-shadow: 0 4px 14px var(--primary-glow);
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 8px var(--primary-glow);
     }
 
     .btn-primary:hover {
-      background: linear-gradient(135deg, var(--primary-hover) 0%, #007a4b 100%);
+      background: var(--primary-hover);
     }
 
     .btn-outline {
@@ -657,1963 +643,283 @@
       border-color: var(--primary);
     }
 
-    /* Badges */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .badge-success { background: var(--success-light); color: var(--success); border: 1px solid rgba(0, 168, 104, 0.25); }
-    .badge-danger { background: var(--danger-light); color: var(--danger); border: 1px solid rgba(225, 29, 72, 0.25); }
-    .badge-warning { background: var(--warning-light); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.25); }
-    .badge-info { background: var(--info-light); color: var(--info); border: 1px solid rgba(14, 165, 233, 0.25); }
-    .badge-primary { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-glow); }
-
-    /* Formulários */
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: var(--space-sm);
-    }
-
-    .form-group label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .form-control, input, select, textarea {
-      width: 100%;
-      min-height: 44px;
-      padding: 10px 14px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .form-control:focus, input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-light);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-      gap: var(--space-sm);
-    }
-
-    /* 9. MODAIS & NATIVE BOTTOM SHEET (HARDWARE ACCELERATED) */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      padding: clamp(12px, 2vw, 24px);
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    .modal-overlay.open {
-      display: flex;
-      opacity: 1;
-    }
-
-    .modal {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      width: 100%;
-      max-width: 620px;
-      padding: clamp(16px, 2.5vw, 28px);
-      box-shadow: var(--shadow-lg);
-      max-height: min(90vh, 90dvh);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      transform: scale(0.96) translateY(10px);
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
-    }
-
-    .modal-overlay.open .modal {
-      transform: scale(1) translateY(0);
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .modal-title {
-      font-size: var(--font-title);
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .modal-close {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.6rem;
-      cursor: pointer;
-      width: 44px;
-      height: 44px;
-      min-width: 44px;
-      min-height: 44px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-      transition: color 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .modal-close:hover {
-      color: var(--danger);
-    }
-
-    .modal-handle-bar {
-      width: 44px;
-      height: 5px;
-      background: var(--border);
-      border-radius: 999px;
-      margin: 0 auto 12px;
-      display: none;
-    }
-
-    /* 10. MENU LATERAL (SIDEBAR DRAWER) COM ACELERAÇÃO POR HARDWARE */
-    .sidebar-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 1000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-
-    .sidebar-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .sidebar-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: min(380px, 90vw);
-      height: 100vh;
-      height: 100dvh;
-      background: var(--bg-card);
-      border-left: 1px solid var(--border);
-      box-shadow: -8px 0 28px rgba(0, 0, 0, 0.35);
-      z-index: 1010;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(100%);
-      transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: var(--safe-bottom);
-    }
-
-    .sidebar-drawer.active {
-      transform: translateX(0);
-    }
-
-    .sidebar-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-card-subtle);
-    }
-
-    .sidebar-body {
-      padding: 16px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      flex: 1;
-    }
-
-    .sidebar-section-title {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sidebar-item-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding: 12px 14px;
-      background: var(--bg-card-subtle);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      color: var(--text-main);
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      min-height: 44px;
-      margin-bottom: 8px;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .sidebar-item-btn:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--primary);
-    }
-
-    /* 11. BARRA DE NAVEGAÇÃO INFERIOR PARA DISPOSITIVOS MÓVEIS */
-    .mobile-bottom-nav {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: calc(62px + var(--safe-bottom));
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      padding: 0 10px var(--safe-bottom);
-      z-index: 900;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
-      justify-content: space-around;
-      align-items: center;
-    }
-
-    body.dark-theme .mobile-bottom-nav {
-      background: rgba(19, 25, 38, 0.96);
-      border-top-color: #26334D;
-      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.45);
-    }
-
-    .mobile-nav-item {
-      background: transparent;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.72rem;
-      font-weight: 600;
-      cursor: pointer;
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      min-width: 58px;
-      min-height: 48px;
-      transition: color 0.15s ease, transform 0.1s ease;
-      touch-action: manipulation;
-    }
-
-    .mobile-nav-item.active {
-      color: var(--primary);
-    }
-
-    .mobile-nav-item:active {
-      transform: scale(0.92);
-    }
-
-    .m-nav-icon {
-      font-size: 1.25rem;
-      margin-bottom: 2px;
-      line-height: 1;
-    }
-
-    .m-nav-center-action {
-      position: relative;
-      top: -12px;
-      min-width: 64px;
-    }
-
-    .m-nav-fab-circle {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, #008f58 100%);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.75rem;
-      font-weight: 300;
-      box-shadow: 0 6px 20px rgba(0, 168, 104, 0.45);
-      border: 3px solid var(--bg-main);
-      margin-bottom: 2px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .m-nav-center-action:active .m-nav-fab-circle {
-      transform: scale(0.92);
-      box-shadow: 0 2px 10px rgba(0, 168, 104, 0.3);
-    }
-
-    /* 12. SISTEMA DE TOASTS FLUTUANTES */
-    .toast-container {
-      position: fixed;
-      top: calc(16px + var(--safe-top));
-      right: 16px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      pointer-events: none;
-      max-width: min(90vw, 380px);
-    }
-
-    .toast-item {
-      background: rgba(19, 25, 38, 0.95);
-      color: #f8fafc;
-      padding: 10px 18px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-      font-size: 0.88rem;
-      font-weight: 600;
-      
-      opacity: 0;
-      transform: translateY(-12px) scale(0.96);
-      transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: auto;
-    }
-
-    .toast-item.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* 13. TELA DE AUTENTICAÇÃO */
-    #authScreen {
-      min-height: 90vh;
-      min-height: 90dvh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: var(--space-md);
-    }
-
-    .auth-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: clamp(24px, 4vw, 40px);
-      width: 100%;
-      max-width: 420px;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .auth-header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .auth-logo {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 14px;
-      border-radius: 16px;
-      background: var(--primary-light);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-
-    .auth-title {
-      font-size: var(--font-title);
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .auth-subtitle {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    .auth-tabs {
-      display: flex;
-      background: var(--bg-card-subtle);
-      border-radius: var(--radius-md);
-      padding: 4px;
-      margin-bottom: 20px;
-      border: 1px solid var(--border);
-    }
-
-    .auth-tab-btn {
-      flex: 1;
-      padding: 8px;
-      border: none;
-      background: transparent;
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      min-height: 40px;
-      transition: background-color 0.15s ease, color 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .auth-tab-btn.active {
-      background: var(--bg-card);
-      color: var(--primary);
-      box-shadow: var(--shadow);
-    }
-
-    /* 14. MEDIA QUERIES FLUIDAS: SMARTPHONES & TABLETS */
-    /* Tablets (769px a 1024px) */
-    @media (min-width: 769px) and (max-width: 1024px) {
-      body {
-        padding: 16px 16px calc(60px + var(--safe-bottom));
-      }
-
-      .grid-4 {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 14px !important;
-      }
-
-      .grid-5 {
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 14px !important;
-      }
-
-      .grid-2 {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 14px !important;
-      }
-
-      .header-nav-group {
-        max-width: 58vw;
-        overflow-x: auto;
-      }
-    }
-
-    /* Smartphones (<= 768px) */
-    @media (max-width: 768px) {
-      body {
-        padding: 10px 10px calc(80px + var(--safe-bottom)) !important;
-      }
-
-      #dashboardMainContainer .mobile-bottom-nav {
-        display: flex !important;
-      }
-
-      .toast-container {
-        top: auto;
-        bottom: calc(75px + var(--safe-bottom));
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%);
-        width: max-content;
-        max-width: 90vw;
-      }
-
-      /* Header compacto de linha única */
-      header {
-        display: flex !important;
-        flex-wrap: nowrap !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        padding-top: calc(4px + var(--safe-top)) !important;
-        padding-bottom: 10px !important;
-        margin-bottom: 10px !important;
-        gap: 8px !important;
-      }
-
-      .brand-title {
-        gap: 8px !important;
-        flex: 1 !important;
-        min-width: 0 !important;
-      }
-
-      .brand-icon {
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
-        font-size: 15px !important;
-        border-radius: 9px !important;
-      }
-
-      .brand-text {
-        overflow: hidden;
-      }
-
-      .brand-text h1 {
-        font-size: 1.05rem !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-      }
-
-      .brand-text p {
-        display: none !important;
-      }
-
-      .header-nav-group {
-        display: none !important;
-      }
-
-      .header-right-actions {
-        display: flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        flex-shrink: 0 !important;
-      }
-
-      #badgeSupabaseCloud {
-        font-size: 0.68rem !important;
-        padding: 3px 8px !important;
-      }
-
-      .user-badge-details {
-        display: none !important;
-      }
-
-      .user-profile-badge {
-        padding: 0 !important;
-        background: transparent !important;
-        border: none !important;
-      }
-
-      .user-avatar-circle {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 0.85rem !important;
-      }
-
-      .btn-sidebar-toggle {
-        width: 38px !important;
-        height: 38px !important;
-        font-size: 1.15rem !important;
-      }
-
-      /* Oculta botões duplicados no topo da navegação (controlados via barra inferior) */
-      .main-nav {
-        border-bottom: none !important;
-        padding-bottom: 0 !important;
-        margin-bottom: 4px !important;
-      }
-
-      .main-nav > div:first-child {
-        display: none !important;
-      }
-
-      .year-selector-widget {
-        width: 100% !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        padding: 6px 12px !important;
-        margin-bottom: 6px !important;
-      }
-
-      /* Linha de Navegação do Mês em formato compacto */
-      .month-navigation-header {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        margin-bottom: 12px !important;
-        gap: 8px !important;
-      }
-
-      .month-navigation-header h2 {
-        font-size: 1.25rem !important;
-        font-weight: 800 !important;
-        margin: 0 !important;
-        text-align: center !important;
-        flex: 1 !important;
-      }
-
-      .btn-month-nav-arrow {
-        width: 44px !important;
-        height: 44px !important;
-        min-width: 44px !important;
-        border-radius: var(--radius-md) !important;
-        font-size: 1.4rem !important;
-        font-weight: 700 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 0 !important;
-      }
-
-      /* KPIs em Grid de 2 Colunas */
-      .grid-5 {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
-        margin-bottom: 16px !important;
-      }
-
-      .grid-5 > .card:last-child {
-        grid-column: span 2 !important;
-      }
-
-      .grid-4, .grid-3, .grid-2 {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-      }
-
-      .card {
-        padding: 12px 14px !important;
-      }
-
-      .kpi-value {
-        font-size: 1.35rem !important;
-      }
-
-      /* Prevenção de Auto-Zoom no iOS */
-      .form-control, input, select, textarea {
-        font-size: 16px !important;
-        min-height: 44px !important;
-      }
-
-      /* Transformação Automática da Tabela em Cards no Mobile */
-      .transactions-table-wrapper {
-        background: transparent !important;
-        border: none !important;
-        overflow-x: visible !important;
-      }
-
-      .transactions-table-wrapper table {
-        display: block;
-        width: 100%;
-      }
-
-      .transactions-table-wrapper thead {
-        display: none !important;
-      }
-
-      .transactions-table-wrapper tbody {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-      }
-
-      .transactions-table-wrapper tbody tr {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        background: var(--bg-card) !important;
-        border: 1px solid var(--border) !important;
-        border-radius: var(--radius-lg) !important;
-        padding: 14px !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-        gap: 8px !important;
-        position: relative !important;
-      }
-
-      body.dark-theme .transactions-table-wrapper tbody tr {
-        background: #131926 !important;
-        border-color: #26334D !important;
-      }
-
-      .transactions-table-wrapper tbody tr:active {
-        transform: scale(0.985);
-      }
-
-      .transactions-table-wrapper tbody tr td:nth-child(2) {
-        order: 1;
-        flex: 1 1 55%;
-        padding: 0 !important;
-        border: none !important;
-      }
-
-      .transactions-table-wrapper tbody tr td:nth-child(7),
-      .transactions-table-wrapper tbody tr td:nth-child(8) {
-        order: 2;
-        text-align: right;
-        padding: 0 !important;
-        border: none !important;
-      }
-
-      .transactions-table-wrapper tbody tr td:nth-child(1) {
-        order: 3;
-        font-size: 0.76rem !important;
-        color: var(--text-muted);
-        padding: 0 !important;
-        border: none !important;
-      }
-
-      .transactions-table-wrapper tbody tr td:nth-child(3) {
-        order: 4;
-        padding: 0 !important;
-        border: none !important;
-      }
-
-      .transactions-table-wrapper tbody tr td:nth-child(4) {
-        order: 5;
-        padding: 0 !important;
-        border: none !important;
-      }
-
-      .transactions-table-wrapper tbody tr td:nth-child(6) {
-        order: 6;
-        padding: 0 !important;
-        border: none !important;
-      }
-
-      .transactions-table-wrapper tbody tr td:nth-child(5) {
-        order: 7;
-        width: 100%;
-        padding: 4px 0 0 0 !important;
-        border: none !important;
-      }
-
-      .transactions-table-wrapper tbody tr td:last-child {
-        order: 8;
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-        padding: 8px 0 0 0 !important;
-        border-top: 1px dashed var(--border) !important;
-        margin-top: 4px;
-      }
-
-      .transactions-table-wrapper tbody tr td:last-child button {
-        min-width: 44px;
-        min-height: 42px;
-        font-size: 0.9rem;
-        padding: 6px 14px !important;
-      }
-    }
-
-    /* Modais Bottom-Sheet em Smartphones (<= 640px) */
-    @media (max-width: 640px) {
-      .modal-overlay {
-        align-items: flex-end;
-        padding: 0;
-        backdrop-filter: blur(6px);
-      }
-
-      .modal {
-        border-bottom-left-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
-        border-top-left-radius: 24px !important;
-        border-top-right-radius: 24px !important;
-        max-height: 88vh;
-        max-height: 88dvh;
-        width: 100%;
-        max-width: 100%;
-        padding: 16px 18px calc(24px + var(--safe-bottom)) !important;
-        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.45);
-        transform: translateY(100%);
-      }
-
-      .modal-overlay.open .modal {
-        transform: translateY(0);
-      }
-
-      .modal-handle-bar {
-        display: block;
-      }
-    }
-  
-    /* 15. SEÇÕES DE VISÃO (ALTERNÂNCIA ENTRE MENSAL E ANUAL) */
-    .view-section {
-      display: none;
-    }
-    .view-section.active {
-      display: block;
-    }
-
-    /* 16. RECIPIENTE DE GRÁFICOS (CHART.JS COM ALTURA FIXA SEGURA) */
-    .chart-container {
-      position: relative;
-      height: 280px;
-      width: 100%;
-    }
-
-    /* 17. BARRA DE BUSCA E FILTROS RÁPIDOS */
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .search-input {
-      padding: 8px 14px;
-      border-radius: var(--radius-md);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 0.88rem;
-      flex: 1;
-      min-width: 200px;
-      outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .search-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-light);
-    }
-
-    /* 18. BARRAS DE PROGRESSO DE METAS */
-    .progress-track {
-      width: 100%;
-      height: 8px;
-      background: var(--bg-card-subtle);
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 10px 0 6px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--accent-sky) 60%, #10b981 100%);
-      border-radius: 999px;
-      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: width;
-    }
-
-    /* 19. CARDS DE DESTAQUE ESPECIAL (EXTRATO) */
-    .card-highlighted {
-      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-card-subtle) 100%);
-      border: 1.5px solid rgba(0, 168, 104, 0.35);
-      position: relative;
-    }
-
-    /* 20. BOTÕES DE ÍCONE E OPÇÃO */
     .btn-icon {
       background: transparent;
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-subtle);
       color: var(--text-muted);
-      padding: 6px 10px;
-      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      border-radius: 8px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-width: 32px;
       min-height: 32px;
-      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-      touch-action: manipulation;
+      font-size: 0.82rem;
+      transition: all 0.15s ease;
     }
 
     .btn-icon:hover {
       background: var(--bg-card-hover);
-      border-color: var(--primary);
+      border-color: var(--border);
       color: var(--text-main);
     }
 
-    .btn-choice {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      text-align: left !important;
-      white-space: normal !important;
-      word-break: normal !important;
-      overflow-wrap: normal !important;
-      overflow: visible !important;
-      width: 100% !important;
-      padding: 12px 16px !important;
-      border-radius: var(--radius-sm) !important;
-      cursor: pointer !important;
-      transition: transform 0.12s ease, background-color 0.15s ease !important;
-      box-sizing: border-box !important;
-      touch-action: manipulation;
-      line-height: 1.45 !important;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      line-height: 1.3;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .btn-choice div, .btn-choice span, .btn-choice strong, .btn-choice p {
-      white-space: normal !important;
-      word-break: normal !important;
-      overflow-wrap: normal !important;
-      overflow: visible !important;
-      text-overflow: clip !important;
+    .badge-success { background: var(--success-light); color: var(--success); }
+    .badge-danger { background: var(--danger-light); color: var(--danger); }
+    .badge-warning { background: var(--warning-light); color: #d97706; }
+    body.dark-theme .badge-warning { color: #fbbf24; }
+    .badge-info { background: var(--info-light); color: var(--info); }
+    body.dark-theme .badge-info { color: #38bdf8; }
+    .badge-primary { background: var(--primary-light); color: var(--primary); }
+
+    .badge-third-party {
+      background: rgba(245, 158, 11, 0.14);
+      color: #d97706;
+      font-weight: 700;
+    }
+    body.dark-theme .badge-third-party { color: #fbbf24; }
+
+    .badge-temp {
+      background: rgba(139, 92, 246, 0.14);
+      color: #7c3aed;
+      font-weight: 700;
+    }
+    body.dark-theme .badge-temp { color: #c4b5fd; }
+
+    .badge-temp-last {
+      background: var(--success-light);
+      color: var(--success);
+      font-weight: 700;
     }
 
-    .btn-choice:active {
-      transform: scale(0.985);
-    }
-
-    /* 21. ABAS INTERNAS EM MODAIS */
-    .tab-pills {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
-    }
-
-    .tab-pill-btn {
-      padding: 8px 16px;
-      border: none;
-      background: transparent;
+    .badge-fixed-regular {
+      background: var(--bg-card-subtle);
       color: var(--text-muted);
       font-weight: 600;
-      font-size: 0.86rem;
-      cursor: pointer;
-      border-radius: var(--radius-md);
-      transition: background-color 0.15s ease, color 0.15s ease;
-      touch-action: manipulation;
     }
 
-    .tab-pill-btn.active {
-      background: var(--primary);
-      color: #ffffff;
-      box-shadow: 0 2px 8px var(--primary-glow);
-    }
-
-    /* 22. MENSAGEM DE ERRO NA AUTENTICAÇÃO */
-    .auth-error {
-      background: rgba(225, 29, 72, 0.12);
-      border: 1px solid rgba(225, 29, 72, 0.3);
-      color: var(--danger);
-      padding: 10px 14px;
-      border-radius: var(--radius-md);
-      font-size: 0.85rem;
-      margin-bottom: 16px;
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* 23. BADGE DE PERFIL NO HEADER */
-    .user-profile-badge {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 4px 10px;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      transition: background-color 0.15s ease, border-color 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .user-profile-badge:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--primary);
-    }
-
-    .user-avatar-circle {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      color: #ffffff;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.9rem;
-      flex-shrink: 0;
-    }
-
-    .user-badge-details {
+    /* 7. FATURAS DE CARTÃO DE CRÉDITO (COMPACTO E PROPORCIONAL) */
+    .bank-card-pro {
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
       display: flex;
       flex-direction: column;
-      text-align: left;
+      gap: 6px;
+      min-width: 0;
     }
 
-    .user-badge-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-main);
-      line-height: 1.2;
-    }
-
-    .user-badge-sub {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
-    /* 24. SIDEBAR DETALHADA */
-    .sidebar-user-block {
+    .bank-card-top-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
     }
 
-    .sidebar-close-btn {
-      background: transparent;
-      border: none;
-      font-size: 1.6rem;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 4px 8px;
-      line-height: 1;
-      transition: color 0.15s ease;
-      touch-action: manipulation;
+    .bank-card-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex: 1;
     }
 
-    .sidebar-close-btn:hover {
-      color: var(--danger);
+    .bank-name-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border);
-      background: var(--bg-card-subtle);
-      margin-top: auto;
-    }
-
-    .cloud-info-card {
-      padding: 12px 14px;
-      background: var(--bg-card-subtle);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.45;
-    }
-
-    /* 25. SELETOR DE COR COMPACTO */
-    .color-picker-input {
-      width: 32px;
-      height: 32px;
-      min-width: 32px;
-      border: none;
-      border-radius: 6px;
+    .color-picker-input-mini {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.4);
       cursor: pointer;
       background: transparent;
       padding: 0;
     }
 
-    /* 26. BALÕES DE DÍVIDA DE CARTÃO (TIPOGRAFIA INTERNA) */
-    .card-debt-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .card-debt-sub {
-      font-size: 0.72rem;
-      color: inherit;
-      opacity: 0.9;
-      margin-top: 2px;
-    }
-
-    .card-debt-amount {
-      font-size: 1.15rem;
-      font-weight: 800;
-      font-family: var(--font-mono);
-    }
-
-    .total-debt-label {
-      font-size: 0.78rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .total-debt-sub {
-      font-size: 0.72rem;
-      opacity: 0.9;
-      margin-top: 2px;
-    }
-
-    .total-debt-val {
-      font-size: 1.35rem;
-      font-weight: 800;
-      font-family: var(--font-mono);
-      white-space: nowrap;
-    }
-
-    .bank-logo {
+    .bank-card-amount-block {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-    }
-
-    .bank-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .badge-outline {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-    }
-
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-    }
-
-    /* 27. BOTÃO FLUTUANTE (FAB) DESKTOP */
-    .floating-action-btn {
-      position: fixed;
-      bottom: calc(24px + var(--safe-bottom));
-      right: 24px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, #008f58 100%);
-      color: #ffffff;
-      font-size: 1.8rem;
-      font-weight: 300;
-      border: none;
-      box-shadow: 0 8px 24px rgba(0, 168, 104, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 900;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .floating-action-btn:hover {
-      transform: scale(1.06);
-      box-shadow: 0 10px 28px rgba(0, 168, 104, 0.5);
-    }
-
-    .floating-action-btn:active {
-      transform: scale(0.94);
-    }
-
-    @media (max-width: 768px) {
-      .floating-action-btn {
-        display: none !important;
-      }
-    }
-
-    /* 28. TIPOGRAFIA NUMÉRICA TABULAR COM A FONTE INTER */
-    .font-mono, .kpi-value, .tx-summary-val, .card-debt-amount, .total-debt-val, td, th {
-      font-feature-settings: "tnum" 1, "cv05" 1;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.015em;
-    }
-
-  
-    .expense-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      font-size: 0.88rem;
-      font-weight: 500;
-    }
-
-    .expense-checkbox {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: var(--primary);
-    }
-
-    .expense-paid {
-      text-decoration: line-through;
-      color: var(--text-dim);
-    }
-
-    .m-nav-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-
-    .table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-  
-    /* ============================================================
-       ESTILOS DE CLASSE MUNDIAL: APPLE & NUBANK HYBRID EXPERIENCE
-       ============================================================ */
-
-    /* 29. CARDS COM ESTÉTICA APPLE (SOMBRAS PROFUNDAS E BORDAS MINIMALISTAS) */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px !important;
-      padding: var(--space-md);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04) !important;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-sm);
-      overflow: hidden;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-    }
-
-    body.dark-theme .card {
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
-      border-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .card:hover {
-      border-color: rgba(0, 168, 104, 0.25);
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06) !important;
-    }
-
-    body.dark-theme .card:hover {
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45) !important;
-    }
-
-    /* 30. TABELA DESKTOP ULTRA-CLEAN (ESTILO STRIPE & APPLE - MÁXIMO DATA-INK RATIO) */
-    .transactions-table-wrapper {
-      background: var(--bg-card);
-      border-radius: 20px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    body.dark-theme .transactions-table-wrapper {
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      border-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .transactions-table-wrapper table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-
-    .transactions-table-wrapper thead.desktop-thead {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: rgba(255, 255, 255, 0.88);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    body.dark-theme .transactions-table-wrapper thead.desktop-thead {
-      background: rgba(19, 25, 38, 0.88);
-      border-bottom-color: rgba(255, 255, 255, 0.06);
-    }
-
-    .transactions-table-wrapper th {
-      padding: 14px 18px;
-      font-size: 0.74rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      border: none;
-      background: transparent;
-      white-space: nowrap;
-    }
-
-    .transactions-table-wrapper td {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border-subtle);
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      vertical-align: middle;
-      transition: background-color 0.12s ease;
-    }
-
-    .transactions-table-wrapper tr:hover td {
-      background-color: var(--bg-card-hover);
-    }
-
-    .transactions-table-wrapper tr:last-child td {
-      border-bottom: none;
-    }
-
-    .transactions-table-wrapper th.col-value,
-    .transactions-table-wrapper td.col-value {
-      text-align: right;
-    }
-
-    .tx-value-amount {
-      font-weight: 700;
-      font-size: 0.95rem;
-      font-family: var(--font-mono);
-      font-feature-settings: "tnum" 1, "cv05" 1;
-      font-variant-numeric: tabular-nums;
-      display: inline-block;
-    }
-
-    .tx-installment-sub {
-      font-size: 0.7rem;
-      color: var(--text-dim);
-      margin-top: 1px;
-    }
-
-    .installment-details {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-      line-height: 1.35;
-    }
-
-    .badge-bank-pill {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border);
-      display: inline-flex;
       align-items: center;
       gap: 6px;
-      max-width: 100%;
-    }
-
-    .badge-third-party {
-      background: rgba(245, 158, 11, 0.14);
-      color: #d97706;
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      font-weight: 700;
-    }
-
-    .badge-user-author {
-      background: rgba(0, 168, 104, 0.08);
-      color: var(--primary);
-      border: 1px solid rgba(0, 168, 104, 0.2);
-    }
-
-    /* Comportamento Desktop padrão dos elementos híbridos */
-    @media (min-width: 769px) {
-      .cat-circle {
-        display: none !important;
-      }
-      .desktop-cat-badge {
-        display: inline-flex !important;
-      }
-      .mobile-tx-meta {
-        display: none !important;
-      }
-    }
-
-    /* 31. TIMELINE MOBILE FLEXBOX (ESTILO NUBANK EM SMARTPHONES) */
-    @media (max-width: 768px) {
-      .transactions-table-wrapper {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        overflow-x: visible !important;
-      }
-
-      .transactions-table-wrapper table {
-        display: block !important;
-        width: 100% !important;
-      }
-
-      .transactions-table-wrapper thead.desktop-thead {
-        display: none !important;
-      }
-
-      .transactions-table-wrapper tbody {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 8px !important;
-        width: 100% !important;
-      }
-
-      .transactions-table-wrapper tbody tr.tx-row-item {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        background: var(--bg-card) !important;
-        border: 1px solid var(--border-subtle) !important;
-        border-radius: 16px !important;
-        padding: 12px 14px !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
-        gap: 0 !important;
-        position: relative !important;
-        transition: transform 0.12s ease, background-color 0.15s ease !important;
-        touch-action: manipulation;
-      }
-
-      body.dark-theme .transactions-table-wrapper tbody tr.tx-row-item {
-        background: #131926 !important;
-        border-color: rgba(255, 255, 255, 0.06) !important;
-      }
-
-      .transactions-table-wrapper tbody tr.tx-row-item:active {
-        transform: scale(0.985) !important;
-      }
-
-      /* Oculta colunas redundantes que já estão condensadas na timeline mobile */
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-date,
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-type,
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-bank,
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-installment {
-        display: none !important;
-      }
-
-      /* ESQUERDA: ÍCONE CIRCULAR DA CATEGORIA COM FUNDO SUAVE */
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-cat {
-        order: 1 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 44px !important;
-        height: 44px !important;
-        min-width: 44px !important;
-        padding: 0 !important;
-        border: none !important;
-        margin-right: 12px !important;
-      }
-
-      .desktop-cat-badge {
-        display: none !important;
-      }
-
-      .cat-circle {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 44px !important;
-        height: 44px !important;
-        min-width: 44px !important;
-        border-radius: 50% !important;
-        font-size: 1.25rem !important;
-        flex-shrink: 0 !important;
-      }
-
-      /* CENTRO: TÍTULO FORTE EM CIMA, METADADOS DISCRETOS EMBAIXO */
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-desc {
-        order: 2 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        flex: 1 !important;
-        min-width: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        gap: 3px !important;
-      }
-
-      .tx-title {
-        font-size: 0.94rem !important;
-        font-weight: 700 !important;
-        color: var(--text-main) !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-      }
-
-      .mobile-tx-meta {
-        display: flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        font-size: 0.74rem !important;
-        color: var(--text-muted) !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-      }
-
-      /* DIREITA: VALOR EM DESTAQUE */
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-value {
-        order: 3 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-end !important;
-        justify-content: center !important;
-        text-align: right !important;
-        padding: 0 !important;
-        border: none !important;
-        margin-left: 8px !important;
-        flex-shrink: 0 !important;
-      }
-
-      .tx-value-amount {
-        font-size: 1.05rem !important;
-        font-weight: 800 !important;
-      }
-
-      /* AÇÕES DISCRETAS */
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-actions {
-        order: 4 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 2px !important;
-        padding: 0 !important;
-        border: none !important;
-        margin-left: 6px !important;
-        flex-shrink: 0 !important;
-      }
-
-      .transactions-table-wrapper tbody tr.tx-row-item td.col-actions .btn-icon {
-        min-width: 32px !important;
-        min-height: 32px !important;
-        padding: 4px 6px !important;
-        font-size: 0.82rem !important;
-        border: none !important;
-        background: transparent !important;
-      }
-    }
-
-    /* 32. REFINAMENTO DO MODAL DE TRANSAÇÃO (INPUT HERO & FRICÇÃO ZERO) */
-    .hero-amount-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 16px 12px 18px;
-      margin-bottom: 16px;
-      background: var(--bg-card-subtle);
-      border-radius: 16px;
-      border: 1px solid var(--border-subtle);
-    }
-
-    .hero-amount-label {
-      font-size: 0.74rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    .hero-amount-box {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .hero-currency-prefix {
-      font-size: clamp(1.4rem, 3.5vw, 1.85rem);
-      font-weight: 700;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-    }
-
-    .hero-amount-input {
-      background: transparent !important;
-      border: none !important;
-      outline: none !important;
-      font-family: var(--font-mono) !important;
-      font-size: clamp(2.2rem, 5.5vw, 2.9rem) !important;
-      font-weight: 800 !important;
-      color: var(--text-main) !important;
-      text-align: left !important;
-      width: auto !important;
-      min-width: 140px !important;
-      max-width: 280px !important;
-      padding: 0 !important;
-      box-shadow: none !important;
-      font-feature-settings: "tnum" 1, "cv05" 1;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.02em;
-    }
-
-    .segmented-control {
-      display: flex;
-      background: var(--bg-card-subtle);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 4px;
-      gap: 4px;
-      margin-bottom: 16px;
-    }
-
-    .segmented-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 0.84rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
-      touch-action: manipulation;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .segmented-btn.active {
-      background: var(--bg-card);
-      color: var(--text-main);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      font-weight: 700;
-    }
-
-    .segmented-btn[data-type="SAÍDA"].active {
-      color: var(--danger) !important;
-    }
-
-    .segmented-btn[data-type="ENTRADA"].active {
-      color: var(--success) !important;
-    }
-
-    .segmented-btn[data-type="RESERVA"].active {
-      color: var(--warning) !important;
-    }
-
-    .advanced-options-toggle-wrapper {
-      margin: 12px 0 8px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .btn-toggle-advanced {
-      background: transparent;
-      border: none;
-      color: var(--primary);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: var(--radius-sm);
-      transition: background-color 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .btn-toggle-advanced:hover {
-      background: var(--primary-light);
-    }
-
-    .advanced-options-content {
-      background: var(--bg-card-subtle);
-      padding: 14px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-      margin-bottom: 14px;
-    }
-
-    /* 33. TELAS VAZIAS EMPÁTICAS (EMPTY STATES) */
-    .empty-state-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 44px 20px;
-      background: transparent;
-      width: 100%;
-    }
-
-    .empty-state-icon {
-      font-size: 3.2rem;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
-    }
-
-    .empty-state-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-bottom: 6px;
-    }
-
-    .empty-state-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      max-width: 320px;
-      margin-bottom: 18px;
-      line-height: 1.45;
-    }
-
-    /* 34. MICRO-INTERAÇÕES ACTIVESTATES (APPLE FEEL) */
-    .btn:active,
-    .month-pill:active,
-    .nav-btn:active,
-    .btn-nav-item:active,
-    .sidebar-item-btn:active,
-    .btn-icon:active,
-    .auth-tab-btn:active,
-    .segmented-btn:active {
-      transform: scale(0.98) !important;
-    }
-
-  
-    /* CENTRALIZAÇÃO PERFEITA DO VALOR (MODAL E TABELA DESKTOP) */
-    .hero-amount-container {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
-      padding: 18px 16px 20px !important;
-      margin-bottom: 16px !important;
-      background: var(--bg-card-subtle) !important;
-      border-radius: 20px !important;
-      border: 1px solid var(--border-subtle) !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-
-    .hero-amount-label {
-      font-size: 0.74rem !important;
-      font-weight: 700 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.08em !important;
-      color: var(--text-muted) !important;
-      margin-bottom: 8px !important;
-      text-align: center !important;
-    }
-
-    .hero-amount-box {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
-      width: 100% !important;
-      margin: 0 auto !important;
-      gap: 8px !important;
-    }
-
-    .hero-currency-prefix {
-      font-size: clamp(1.6rem, 4vw, 2.2rem) !important;
-      font-weight: 800 !important;
-      color: var(--text-muted) !important;
-      font-family: var(--font-mono) !important;
-      line-height: 1 !important;
-    }
-
-    .hero-amount-input {
-      background: transparent !important;
-      border: none !important;
-      outline: none !important;
-      font-family: var(--font-mono) !important;
-      font-size: clamp(2.4rem, 6.5vw, 3.2rem) !important;
-      font-weight: 800 !important;
-      color: var(--text-main) !important;
-      text-align: center !important;
-      width: 100% !important;
-      max-width: 320px !important;
-      padding: 0 !important;
-      margin: 0 auto !important;
-      box-shadow: none !important;
-      font-feature-settings: "tnum" 1, "cv05" 1 !important;
-      font-variant-numeric: tabular-nums !important;
-      letter-spacing: -0.02em !important;
-      line-height: 1.1 !important;
-    }
-
-    /* Centralização de valor nas colunas de tabela desktop */
-    .transactions-table-wrapper th.col-value,
-    .transactions-table-wrapper td.col-value {
-      text-align: center !important;
-    }
-
-    .tx-value-amount {
-      text-align: center !important;
-      display: inline-block !important;
-    }
-
-    /* CHIPS RÁPIDOS PARA FLUIDEZ MÁXIMA */
-    .quick-chips-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 4px;
-      margin-bottom: 14px;
-    }
-
-    .quick-chips-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .quick-chips-list {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .quick-chips-list::-webkit-scrollbar {
-      display: none;
-    }
-
-    .chip-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.1s ease;
-      touch-action: manipulation;
-      white-space: nowrap;
       flex-shrink: 0;
     }
 
-    .chip-btn:hover {
-      background: var(--bg-card-hover);
-      color: var(--text-main);
-      border-color: var(--primary);
+    .bank-inv-amount {
+      font-size: 0.96rem;
+      font-weight: 800;
     }
 
-    .chip-btn:active {
-      transform: scale(0.94) !important;
+    .btn-icon-mini {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 2px 4px;
+      font-size: 0.78rem;
+      cursor: pointer;
     }
 
-  
-    /* ============================================================
-       REFINAMENTO SÊNIOR DE LAYOUT, FLUIDEZ & APROVEITAMENTO DE ESPAÇO
-       ============================================================ */
-
-    /* 35. CABEÇALHO DE NAVEGAÇÃO DE MÊS (SETAS NAS EXTREMIDADES SUPERIORES) */
-    .month-navigation-header {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      width: 100% !important;
-      padding: 4px 0 16px !important;
-      margin-bottom: 8px !important;
-      position: relative !important;
+    .bank-card-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 0.72rem;
+      color: var(--text-muted);
     }
 
-    .btn-month-nav-arrow {
-      width: 44px !important;
-      height: 44px !important;
-      min-width: 44px !important;
-      border-radius: var(--radius-md) !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      font-size: 1.5rem !important;
-      font-weight: 700 !important;
-      background: var(--bg-card) !important;
-      border: 1px solid var(--border) !important;
-      color: var(--text-main) !important;
-      cursor: pointer !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease !important;
-      touch-action: manipulation;
+    .bank-split-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
-    .btn-month-nav-arrow:hover {
-      background: var(--bg-card-hover) !important;
-      border-color: var(--primary) !important;
-      color: var(--primary) !important;
+    .split-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: 0.7rem;
     }
 
-    .btn-month-nav-arrow:active {
-      transform: scale(0.92) !important;
+    .split-third {
+      background: rgba(245, 158, 11, 0.12);
+      color: #d97706;
+      border-color: transparent;
     }
 
-    .btn-month-prev {
-      margin-right: auto !important;
+    .bank-debt-info {
+      font-size: 0.7rem;
+      color: var(--text-muted);
     }
 
-    .btn-month-next {
-      margin-left: auto !important;
+    .card-total-debt-summary-pro {
+      background: var(--card-debt-balloon-bg);
+      border: 1px solid var(--card-debt-balloon-border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+      flex-wrap: wrap;
     }
 
-    .current-month-heading {
-      font-size: clamp(1.25rem, 2.5vw, 1.6rem) !important;
-      font-weight: 800 !important;
-      text-align: center !important;
-      flex: 1 !important;
-      margin: 0 16px !important;
-      letter-spacing: -0.02em !important;
-      color: var(--text-main) !important;
-      white-space: nowrap !important;
+    .summary-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--card-debt-balloon-text);
     }
 
-    /* 36. CHECKLIST DE DESPESAS FIXAS (VISUAL MODERNO IDÊNTICO AO EXTRATO NUBANK/APPLE) */
+    .summary-amount {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--card-debt-balloon-text);
+    }
+
+    /* 8. CHECKLIST DE DESPESAS FIXAS (SEM SOBREPOSIÇÃO EM MOBILE/TABLET) */
+    .fixed-checklist-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .fixed-filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      width: 100%;
+    }
+
+    .fixed-filter-pills::-webkit-scrollbar { display: none; }
+
+    .fixed-filter-pill {
+      background: var(--bg-card-subtle);
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .fixed-filter-pill.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
     .fixed-item-card {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      background: var(--bg-card) !important;
-      border: 1px solid var(--border-subtle) !important;
-      border-radius: 16px !important;
-      padding: 12px 14px !important;
-      margin-bottom: 8px !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
-      transition: transform 0.12s ease, background-color 0.15s ease !important;
-      gap: 12px !important;
-    }
-
-    body.dark-theme .fixed-item-card {
-      background: #131926 !important;
-      border-color: rgba(255, 255, 255, 0.05) !important;
-    }
-
-    .fixed-item-card:hover {
-      background: var(--bg-card-hover) !important;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      gap: 10px;
+      min-width: 0;
     }
 
     .fixed-item-card.is-paid {
-      opacity: 0.85;
+      opacity: 0.72;
     }
 
     .fixed-item-left {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       flex-shrink: 0;
     }
 
     .fixed-circle-icon {
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.15rem;
-      font-weight: 800;
-      flex-shrink: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
     }
 
     .fixed-item-center {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
       flex: 1;
       min-width: 0;
     }
@@ -2623,24 +929,52 @@
       align-items: center;
       gap: 6px;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .fixed-item-title {
-      font-size: 0.92rem;
+      font-size: 0.86rem;
       font-weight: 700;
       color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 220px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .expense-paid {
+      text-decoration: line-through;
+      color: var(--text-dim);
     }
 
     .fixed-item-meta {
-      font-size: 0.73rem;
+      font-size: 0.71rem;
       color: var(--text-muted);
-      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    .fixed-temp-progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+      max-width: 180px;
+    }
+
+    .fixed-temp-progress-track {
+      flex: 1;
+      height: 3px;
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 999px;
       overflow: hidden;
-      text-overflow: ellipsis;
+    }
+
+    .fixed-temp-progress-fill {
+      height: 100%;
+      background: #8b5cf6;
+      border-radius: 999px;
+    }
+
+    .fixed-temp-progress-fill.is-last-month {
+      background: var(--success);
     }
 
     .fixed-item-right {
@@ -2652,230 +986,762 @@
     }
 
     .fixed-item-val {
-      font-size: 0.98rem;
+      font-size: 0.9rem;
       font-weight: 800;
-      font-family: var(--font-mono);
-      font-feature-settings: "tnum" 1, "cv05" 1;
-      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
     .fixed-item-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
 
     .btn-fixed-toggle {
       border: none;
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: 6px;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background-color 0.15s ease, transform 0.1s ease;
-      touch-action: manipulation;
     }
 
     .btn-fixed-toggle.btn-unpaid {
       background: var(--primary);
-      color: #ffffff;
-      box-shadow: 0 2px 6px var(--primary-glow);
+      color: #fff;
     }
 
     .btn-fixed-toggle.btn-paid {
-      background: rgba(148, 163, 184, 0.18);
+      background: rgba(148, 163, 184, 0.2);
       color: var(--text-muted);
     }
 
-    .btn-fixed-toggle:active {
-      transform: scale(0.92);
+    .btn-del-fixed, .btn-edit-fixed {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 3px 5px;
+      border-radius: 6px;
+      color: var(--text-muted);
     }
 
-    .btn-del-fixed,
-    .btn-edit-fixed {
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.82rem;
-      min-width: 32px;
-      min-height: 32px;
+    /* 9. EXTRATO DE MOVIMENTAÇÕES (TABELA DESKTOP & TIMELINE MOBILE/TABLET) */
+    .card-highlighted {
+      border: 1px solid rgba(0, 168, 104, 0.3);
+    }
+
+    .transactions-summary-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      background: var(--bg-card-subtle);
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 10px;
+    }
+
+    .tx-summary-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .tx-summary-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tx-summary-val {
+      font-size: 0.92rem;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1 1 220px;
+      min-height: 38px;
+      padding: 7px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.84rem;
+    }
+
+    .filter-selects-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      flex: 2 1 340px;
+    }
+
+    .filter-selects-group select {
+      flex: 1 1 120px;
+      min-height: 38px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      width: auto;
+    }
+
+    .table-container, .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.84rem;
+    }
+
+    th {
+      background: var(--bg-card-subtle);
+      color: var(--text-muted);
+      font-weight: 700;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-card-hover); }
+
+    .tx-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: block;
+      line-height: 1.25;
+    }
+
+    .tx-value-amount {
+      font-weight: 800;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+
+    .badge-bank-pill {
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      transition: background-color 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
-      touch-action: manipulation;
+      gap: 5px;
     }
 
-    .btn-edit-fixed:hover {
-      background: rgba(14, 165, 233, 0.12);
-      border-color: rgba(14, 165, 233, 0.25);
+    .bank-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
-    .btn-del-fixed:hover {
-      background: rgba(239, 68, 68, 0.12);
-      border-color: rgba(239, 68, 68, 0.25);
+    /* Desktop vs Mobile/Tablet Híbrido para Tabela de Movimentações */
+    @media (min-width: 961px) {
+      .cat-circle { display: none !important; }
+      .desktop-cat-badge { display: inline-flex !important; }
+      .mobile-tx-meta { display: none !important; }
     }
 
-    .btn-edit-fixed:active,
-    .btn-del-fixed:active {
-      transform: scale(0.92);
+    /* Em telas <= 960px (Tablets e Celulares), usa Cards estilo Nubank sem sobreposição */
+    @media (max-width: 960px) {
+      .transactions-table-wrapper {
+        background: transparent !important;
+        border: none !important;
+        overflow-x: visible !important;
+      }
+
+      .transactions-table-wrapper table,
+      .transactions-table-wrapper tbody {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        width: 100% !important;
+      }
+
+      .transactions-table-wrapper thead {
+        display: none !important;
+      }
+
+      .transactions-table-wrapper tbody tr.tx-row-item {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        background: var(--bg-card-subtle) !important;
+        border: 1px solid var(--border-subtle) !important;
+        border-radius: 12px !important;
+        padding: 10px 12px !important;
+        gap: 10px !important;
+        width: 100% !important;
+      }
+
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-date,
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-type,
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-bank,
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-installment {
+        display: none !important;
+      }
+
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-cat {
+        order: 1 !important;
+        padding: 0 !important;
+        border: none !important;
+        flex-shrink: 0 !important;
+      }
+
+      .desktop-cat-badge { display: none !important; }
+
+      .cat-circle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        border-radius: 50% !important;
+        font-size: 1.05rem !important;
+      }
+
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-desc {
+        order: 2 !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+      }
+
+      .tx-title {
+        font-size: 0.86rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      .mobile-tx-meta {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 4px 6px !important;
+        font-size: 0.71rem !important;
+        color: var(--text-muted) !important;
+        margin-top: 2px !important;
+      }
+
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-value {
+        order: 3 !important;
+        padding: 0 !important;
+        border: none !important;
+        text-align: right !important;
+        flex-shrink: 0 !important;
+      }
+
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-actions {
+        order: 4 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 2px !important;
+        padding: 0 !important;
+        border: none !important;
+        flex-shrink: 0 !important;
+      }
+
+      .transactions-table-wrapper tbody tr.tx-row-item td.col-actions .btn-icon {
+        min-width: 28px !important;
+        min-height: 28px !important;
+        padding: 3px !important;
+        border: none !important;
+      }
     }
 
-    /* BADGES E BARRA DE PROGRESSO DE DESPESA FIXA TEMPORÁRIA */
-    .badge-temp {
-      background: rgba(139, 92, 246, 0.14);
-      color: #8b5cf6;
-      border: 1px solid rgba(139, 92, 246, 0.28);
-      font-variant-numeric: tabular-nums;
+    /* 10. FORMULÁRIOS E MODAIS ENXUTOS (ERGONOMIA MOBILE & TABLET) */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+      min-width: 0;
+    }
+
+    .form-group label {
+      font-size: 0.76rem;
       font-weight: 700;
-    }
-
-    body.dark-theme .badge-temp {
-      background: rgba(139, 92, 246, 0.2);
-      color: #c4b5fd;
-      border-color: rgba(167, 139, 250, 0.35);
-    }
-
-    .badge-temp-last {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--success);
-      border: 1px solid rgba(16, 185, 129, 0.32);
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-    }
-
-    .badge-fixed-regular {
-      background: rgba(148, 163, 184, 0.12);
       color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      font-weight: 600;
     }
 
-    .fixed-temp-progress-wrap {
+    .form-control, input, select, textarea {
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.88rem;
+      outline: none;
+      max-width: 100%;
+    }
+
+    .form-control:focus, input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: end;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 460px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow-lg);
+      max-height: min(92vh, 92dvh);
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
       gap: 8px;
-      margin-top: 4px;
-      max-width: 240px;
     }
 
-    .fixed-temp-progress-track {
-      flex: 1;
+    .modal-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--text-main);
+      min-width: 0;
+    }
+
+    .modal-close {
+      background: var(--bg-card-subtle);
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .modal-handle-bar {
+      width: 36px;
       height: 4px;
-      background: rgba(148, 163, 184, 0.2);
+      background: var(--border);
       border-radius: 999px;
-      overflow: hidden;
+      margin: 0 auto 8px;
+      display: none;
     }
 
-    .fixed-temp-progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #8b5cf6, #0ea5e9);
-      transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    /* Segmented Control e Hero Input Alinhado (R$ colado ao valor) */
+    .segmented-control {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+      margin-bottom: 10px;
     }
 
-    .fixed-temp-progress-fill.is-last-month {
-      background: linear-gradient(90deg, #10b981, #059669);
+    .segmented-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 6px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
     }
 
-    /* FILTROS RÁPIDOS E PROGRESSO DO CHECKLIST DE FIXAS */
-    .fixed-checklist-toolbar {
+    .segmented-btn.active {
+      background: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .hero-amount-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px 12px;
+      margin-bottom: 10px;
+      background: var(--bg-card-subtle);
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .hero-amount-label {
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .hero-amount-box {
+      display: inline-flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 6px;
+      cursor: text;
+    }
+
+    .hero-currency-prefix {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      user-select: none;
+    }
+
+    .hero-amount-input {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      font-family: var(--font-mono) !important;
+      font-size: 1.95rem !important;
+      font-weight: 800 !important;
+      color: var(--text-main) !important;
+      text-align: left !important;
+      width: 4.5ch !important;
+      min-width: 4ch !important;
+      max-width: 14ch !important;
+      min-height: 34px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      line-height: 1.1 !important;
+    }
+
+    /* Seletor Inline de Perfil / Repetição (Substitui o menu avançado colapsável) */
+    .inline-pill-selector {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
     }
 
-    .fixed-filter-pills {
+    .inline-pill-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .inline-pill-group {
+      display: inline-flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .inline-pill-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .inline-pill-btn.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .inline-pill-btn.active[data-author="TERCEIROS"] {
+      background: var(--warning);
+      color: #fff;
+    }
+
+    .quick-chips-wrapper {
       display: flex;
       align-items: center;
-      gap: 4px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding-bottom: 2px;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
-    .fixed-filter-pills::-webkit-scrollbar {
+    .quick-chips-label {
       display: none;
     }
 
-    .fixed-filter-pill {
+    .quick-chips-list {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      width: 100%;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .quick-chips-list::-webkit-scrollbar { display: none; }
+
+    .chip-btn {
       background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
       color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      border-radius: 999px;
       padding: 4px 10px;
+      border-radius: 999px;
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
-      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
-      touch-action: manipulation;
+      flex-shrink: 0;
     }
 
-    .fixed-filter-pill.active {
+    /* Painel Compacto de Parcelamento e Competência */
+    .competence-date-card {
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    .competence-date-card.is-different-month {
+      border-color: rgba(14, 165, 233, 0.4);
+      background: rgba(14, 165, 233, 0.05);
+    }
+
+    .competence-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .competence-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .competence-badge.is-retro {
+      background: var(--info-light);
+      color: var(--info);
+    }
+
+    .date-quick-pills {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-top: 6px;
+    }
+
+    .date-quick-pills::-webkit-scrollbar { display: none; }
+
+    .date-pill-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 0.69rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .date-pill-btn.active {
       background: var(--primary);
-      color: #ffffff;
+      color: #fff;
       border-color: var(--primary);
-      box-shadow: 0 2px 6px var(--primary-glow);
     }
 
-    .fixed-filter-pill:active {
-      transform: scale(0.95);
+    .installment-wizard-card {
+      background: rgba(2, 132, 199, 0.05);
+      border: 1px solid rgba(2, 132, 199, 0.22);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    /* SELETOR INTERATIVO DE DURAÇÃO (N MESES) NO MODAL */
+    .installment-val-mode-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      background: var(--bg-card);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .inst-mode-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 5px 6px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .inst-mode-btn.active {
+      background: var(--info);
+      color: #fff;
+    }
+
+    .installment-timeline-strip {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-top: 2px;
+    }
+
+    .installment-timeline-strip::-webkit-scrollbar { display: none; }
+
+    .inst-timeline-chip {
+      flex-shrink: 0;
+      padding: 3px 7px;
+      border-radius: 6px;
+      font-size: 0.66rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .inst-timeline-chip.is-current-view {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Seletor de Duração Temporária no Modal de Fixa */
     .duration-selector-card {
-      background: rgba(139, 92, 246, 0.06);
-      border: 1px solid rgba(139, 92, 246, 0.24);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 14px;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-
-    body.dark-theme .duration-selector-card {
-      background: rgba(139, 92, 246, 0.1);
-      border-color: rgba(139, 92, 246, 0.28);
+      background: rgba(139, 92, 246, 0.05);
+      border: 1px solid rgba(139, 92, 246, 0.22);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
     }
 
     .duration-stepper-row {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 8px;
-      margin-bottom: 10px;
+      gap: 8px;
+      margin: 8px 0;
     }
 
     .duration-step-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      border: 1px solid var(--border-subtle);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
       background: var(--bg-card);
       color: var(--text-main);
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
-      transition: background-color 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
-      touch-action: manipulation;
-      user-select: none;
-    }
-
-    .duration-step-btn:hover {
-      border-color: #8b5cf6;
-      color: #8b5cf6;
-    }
-
-    .duration-step-btn:active {
-      transform: scale(0.92);
     }
 
     .duration-input-box {
@@ -2883,605 +1749,430 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
       background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      height: 44px;
-      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      height: 38px;
     }
 
     .duration-number-input {
-      width: 56px;
-      border: none;
-      background: transparent;
+      width: 50px !important;
+      min-height: 32px !important;
+      border: none !important;
+      background: transparent !important;
       text-align: center;
-      font-size: 1.25rem;
+      font-size: 1.1rem !important;
       font-weight: 800;
-      font-family: var(--font-mono);
-      font-variant-numeric: tabular-nums;
-      color: #8b5cf6;
-      outline: none;
-    }
-
-    body.dark-theme .duration-number-input {
-      color: #c4b5fd;
-    }
-
-    .duration-unit-label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-muted);
+      color: #8b5cf6 !important;
+      padding: 0 !important;
     }
 
     .duration-pills-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      gap: 5px;
     }
 
     .duration-pill-btn {
-      height: 34px;
-      border-radius: 8px;
-      border: 1px solid var(--border-subtle);
+      height: 30px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
       background: var(--bg-card);
       color: var(--text-muted);
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      font-variant-numeric: tabular-nums;
       cursor: pointer;
-      transition: all 0.15s ease;
-      touch-action: manipulation;
     }
 
     .duration-pill-btn.active {
       background: #8b5cf6;
-      color: #ffffff;
+      color: #fff;
       border-color: #8b5cf6;
-      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35);
-    }
-
-    .duration-pill-btn:active {
-      transform: scale(0.94);
     }
 
     .fixed-preview-banner {
       background: var(--bg-card-subtle);
-      border: 1px solid var(--border-subtle);
+      border: 1px solid var(--border);
       border-left: 3px solid var(--primary);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.8rem;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.75rem;
       color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .fixed-preview-banner.is-temp { border-left-color: #8b5cf6; }
+
+    .advanced-options-toggle-wrapper {
+      margin: 6px 0;
       display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 14px;
-      font-variant-numeric: tabular-nums;
+      justify-content: center;
     }
 
-    .fixed-preview-banner.is-temp {
-      border-left-color: #8b5cf6;
-    }
-
-    /* PAINEL INTELIGENTE DE PARCELAMENTO & COMPETÊNCIA RETROATIVA (UX APPLE/NUBANK) */
-    .competence-date-card {
-      background: var(--bg-card-subtle);
-      border: 1px solid var(--border-subtle);
-      border-radius: 14px;
-      padding: 10px 12px;
-      margin-bottom: 12px;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-    }
-
-    .competence-date-card.is-different-month {
-      border-color: rgba(14, 165, 233, 0.45);
-      background: rgba(14, 165, 233, 0.06);
-    }
-
-    .competence-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-
-    .competence-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(0, 168, 104, 0.12);
-      color: var(--primary);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .competence-badge.is-retro {
-      background: rgba(14, 165, 233, 0.16);
-      color: #0284c7;
-    }
-
-    body.dark-theme .competence-badge.is-retro {
-      color: #38bdf8;
-    }
-
-    .date-quick-pills {
-      display: flex;
-      gap: 5px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      margin-top: 8px;
-      padding-bottom: 2px;
-    }
-
-    .date-quick-pills::-webkit-scrollbar {
-      display: none;
-    }
-
-    .date-pill-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .date-pill-btn:hover {
-      border-color: var(--primary);
-      color: var(--text-main);
-    }
-
-    .date-pill-btn.active {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
-    }
-
-    .installment-wizard-card {
-      background: rgba(2, 132, 199, 0.06);
-      border: 1px solid rgba(2, 132, 199, 0.28);
-      border-radius: 14px;
-      padding: 12px 14px;
-      margin-bottom: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    body.dark-theme .installment-wizard-card {
-      background: rgba(2, 132, 199, 0.11);
-      border-color: rgba(56, 189, 248, 0.28);
-    }
-
-    .installment-val-mode-toggle {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      background: var(--bg-card);
-      padding: 4px;
-      border-radius: 10px;
-      border: 1px solid var(--border-subtle);
-    }
-
-    .inst-mode-btn {
-      border: none;
+    .btn-toggle-advanced {
       background: transparent;
+      border: none;
       color: var(--text-muted);
       font-size: 0.75rem;
-      font-weight: 700;
-      padding: 7px 8px;
-      border-radius: 7px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s ease;
-      touch-action: manipulation;
-    }
-
-    .inst-mode-btn.active {
-      background: #0284c7;
-      color: #ffffff;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
-    }
-
-    .installment-timeline-strip {
-      display: flex;
-      gap: 5px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding: 4px 0 2px 0;
-    }
-
-    .installment-timeline-strip::-webkit-scrollbar {
-      display: none;
-    }
-
-    .inst-timeline-chip {
-      flex-shrink: 0;
       padding: 4px 8px;
-      border-radius: 8px;
-      font-size: 0.69rem;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
+    }
+
+    .advanced-options-content {
+      background: var(--bg-card-subtle);
+      padding: 10px;
+      border-radius: 10px;
       border: 1px solid var(--border-subtle);
-      background: var(--bg-card);
-      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .btn-choice {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      line-height: 1.25;
+      align-items: flex-start;
+      text-align: left;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      line-height: 1.35;
     }
 
-    .inst-timeline-chip.is-past {
-      opacity: 0.78;
-      border-style: dashed;
+    /* 11. SIDEBAR, BOTTOM NAV, AUTH, TOAST & EMPTY STATES */
+    .view-section { display: none; }
+    .view-section.active { display: block; }
+
+    .chart-container {
+      position: relative;
+      height: 250px;
+      width: 100%;
     }
 
-    .inst-timeline-chip.is-current-view {
-      background: rgba(0, 168, 104, 0.15);
-      border-color: var(--primary);
-      color: var(--primary);
-      transform: scale(1.03);
-    }
-
-    .empty-fixed-state {
-      padding: 28px 16px;
+    .empty-fixed-state, .empty-state-card {
+      padding: 24px 14px;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
     }
 
-    .empty-fixed-state span {
-      font-size: 2rem;
-    }
+    .empty-state-icon { font-size: 2.2rem; }
+    .empty-state-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
+    .empty-state-desc { font-size: 0.78rem; color: var(--text-muted); max-width: 280px; }
 
-    /* 37. REFINAMENTO PROPORCIONAL DAS FATURAS DE CARTÃO DE CRÉDITO */
-    .bank-card-pro {
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .sidebar-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(340px, 88vw);
+      height: 100dvh;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border);
+      z-index: 1010;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      overflow-y: auto;
+    }
+    .sidebar-drawer.active { transform: translateX(0); }
+
+    .sidebar-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-user-block { display: flex; align-items: center; gap: 10px; }
+    .sidebar-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+    .sidebar-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+    .sidebar-section-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .sidebar-item-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 12px;
       background: var(--bg-card-subtle);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      transition: border-color 0.15s ease, background-color 0.15s ease;
-    }
-
-    .bank-card-pro:hover {
-      border-color: rgba(0, 168, 104, 0.25);
-    }
-
-    .bank-card-top-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .bank-card-brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    .bank-name-label {
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--text-main);
-      white-space: nowrap;
-    }
-
-    .color-picker-input-mini {
-      width: 22px;
-      height: 22px;
-      min-width: 22px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      cursor: pointer;
-      background: transparent;
-      padding: 0;
-    }
-
-    .bank-card-amount-block {
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .bank-inv-title {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .bank-inv-amount {
-      font-size: 1.05rem;
-      font-weight: 800;
-    }
-
-    .btn-icon-mini {
-      background: transparent;
       border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 3px 6px;
-      border-radius: 6px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-icon-mini:hover {
-      border-color: var(--primary);
+      border-radius: 10px;
       color: var(--text-main);
-    }
-
-    .bank-card-bottom-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-      padding-top: 6px;
-      border-top: 1px dashed var(--border-subtle);
-      font-size: 0.74rem;
-    }
-
-    .bank-split-pills {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .split-pill {
-      background: rgba(0, 168, 104, 0.08);
-      color: var(--primary);
-      padding: 2px 7px;
-      border-radius: 6px;
+      font-size: 0.82rem;
       font-weight: 600;
-      white-space: nowrap;
+      cursor: pointer;
+      margin-bottom: 6px;
     }
+    .sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border); }
+    .cloud-info-card { padding: 10px 12px; background: var(--bg-card-subtle); border-radius: 10px; font-size: 0.76rem; color: var(--text-muted); }
 
-    .split-third {
-      background: rgba(245, 158, 11, 0.12) !important;
-      color: #d97706 !important;
-    }
-
-    .bank-debt-info {
-      color: var(--text-muted);
-      display: flex;
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: calc(58px + var(--safe-bottom));
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 0 8px var(--safe-bottom);
+      z-index: 900;
+      justify-content: space-around;
       align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      margin-left: auto;
     }
 
-    /* Resumo Geral de Dívidas Proporcional */
-    .card-total-debt-summary-pro {
-      background: var(--card-debt-balloon-bg) !important;
-      border: 1px solid var(--card-debt-balloon-border) !important;
-      border-radius: 12px !important;
-      padding: 10px 14px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      gap: 10px !important;
-      margin-top: 6px !important;
-    }
-
-    .summary-text-group {
+    .mobile-nav-item {
+      background: transparent;
+      border: none;
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .summary-title {
-      font-size: 0.74rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      color: var(--card-debt-balloon-text);
-      white-space: nowrap;
-    }
-
-    .summary-sub {
-      font-size: 0.7rem;
-      color: var(--card-debt-balloon-sub);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .summary-amount {
-      font-size: 1.15rem !important;
-      font-weight: 800 !important;
-      color: var(--card-debt-balloon-text) !important;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    /* 38. OTIMIZAÇÃO DE ESPAÇO E PREVENÇÃO DE QUEBRAS FEIAS */
-    .income-row {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      white-space: nowrap;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+    .mobile-nav-item.active { color: var(--primary); }
+    .m-nav-icon { font-size: 1.15rem; line-height: 1; margin-bottom: 2px; }
+    .m-nav-center-action { position: relative; top: -10px; }
+    .m-nav-fab-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px var(--primary-glow);
+      border: 2px solid var(--bg-main);
     }
 
-    .income-desc {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: 140px;
+    .toast-container {
+      position: fixed;
+      top: calc(14px + var(--safe-top));
+      right: 14px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: min(92vw, 360px);
+      pointer-events: none;
+    }
+    .toast-item {
+      background: #0f172a;
+      color: #fff;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: all 0.2s ease;
+    }
+    .toast-item.visible { opacity: 1; transform: translateY(0); }
+
+    #authScreen {
+      min-height: 92dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .auth-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow-lg);
+    }
+    .auth-header { text-align: center; margin-bottom: 18px; }
+    .auth-logo {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 10px;
+      border-radius: 14px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .auth-title { font-size: 1.2rem; font-weight: 800; }
+    .auth-subtitle { font-size: 0.78rem; color: var(--text-muted); }
+    .auth-tabs {
+      display: flex;
+      background: var(--bg-card-subtle);
+      border-radius: 10px;
+      padding: 3px;
+      margin-bottom: 16px;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 7px;
+      border: none;
+      background: transparent;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .auth-tab-btn.active { background: var(--bg-card); color: var(--primary); }
+    .auth-error {
+      background: var(--danger-light);
+      color: var(--danger);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 12px;
+      display: none;
+      align-items: center;
+      gap: 6px;
     }
 
-    /* Sem quebras de palavras em títulos e badges */
-    .card-title, .kpi-value, .badge {
-      white-space: nowrap;
-    }
-    .kpi-sub {
-      white-space: normal !important;
-      word-break: normal !important;
-      overflow-wrap: normal !important;
-    }
-    .btn:not(.btn-choice) {
-      white-space: nowrap;
+    .tab-pills { display: flex; gap: 6px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    .tab-pill-btn { padding: 6px 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; border-radius: 8px; cursor: pointer; }
+    .tab-pill-btn.active { background: var(--primary); color: #fff; }
+    .color-picker-input { width: 30px; height: 30px; border: none; border-radius: 6px; cursor: pointer; background: transparent; }
+
+    /* =========================================================================
+       12. RESPONSIVIDADE ESPECÍFICA: TABLETS (680px - 1100px) & SMARTPHONES (<= 679px)
+       ========================================================================= */
+
+    /* Tablets e Notebooks Compactos (<= 1100px) */
+    @media (max-width: 1100px) {
+      .grid-5 {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+      /* Em tablets, Cartões e Despesas Fixas ficam 1 por linha (100% da largura) para NUNCA esmagar os itens */
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    .grid-5 {
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)) !important;
-      gap: 12px !important;
-      margin-bottom: 20px !important;
+    /* Smartphones e Telas Móveis (<= 768px) */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px 10px calc(74px + var(--safe-bottom));
+      }
+
+      #dashboardMainContainer .mobile-bottom-nav {
+        display: flex;
+      }
+
+      .header-nav-group,
+      .user-badge-details,
+      .main-nav > div:first-child {
+        display: none !important;
+      }
+
+      .main-nav {
+        margin-bottom: 6px;
+      }
+
+      .year-selector-widget {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      /* KPIs no Celular: 2 colunas bem proporcionadas + 5º card ocupando a linha inteira */
+      .grid-5 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .grid-5 > .card:last-child {
+        grid-column: span 2;
+      }
+
+      .card-kpi-centered {
+        padding: 10px 10px;
+      }
+
+      .card-kpi-centered .card-header {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+      }
+
+      .kpi-value {
+        font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+      }
+
+      .transactions-summary-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 8px 10px;
+      }
+
+      .filter-selects-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+      }
+
+      .form-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .modal {
+        border-radius: 20px 20px 0 0;
+        max-width: 100%;
+        max-height: 88dvh;
+        padding: 14px 14px calc(18px + var(--safe-bottom));
+      }
+
+      .modal-handle-bar {
+        display: block;
+      }
+
+      /* Previne auto-zoom no iOS mantendo layout enxuto */
+      .form-control, input, select, textarea {
+        font-size: 16px;
+      }
     }
 
-    .grid-2 {
-      gap: 14px !important;
-      margin-bottom: 20px !important;
+    /* Telas muito estreitas (<= 360px) */
+    @media (max-width: 360px) {
+      .grid-5 {
+        grid-template-columns: 1fr;
+      }
+      .grid-5 > .card:last-child {
+        grid-column: span 1;
+      }
     }
-
-  
-    /* ============================================================
-       CENTRALIZAÇÃO COMPLETA DA NAVEGAÇÃO E DOS 5 CARDS DE KPIS
-       ============================================================ */
-    .month-navigation-header {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 16px !important;
-      width: 100% !important;
-      padding: 4px 0 16px !important;
-      margin: 0 auto 8px !important;
-      text-align: center !important;
-    }
-
-    .btn-month-prev,
-    .btn-month-next {
-      margin: 0 !important;
-      flex-shrink: 0 !important;
-    }
-
-    .current-month-heading {
-      font-size: clamp(1.25rem, 2.8vw, 1.65rem) !important;
-      font-weight: 800 !important;
-      text-align: center !important;
-      margin: 0 8px !important;
-      letter-spacing: -0.02em !important;
-      color: var(--text-main) !important;
-      white-space: nowrap !important;
-      flex: 0 1 auto !important;
-    }
-
-    .card-kpi-centered {
-      text-align: center !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: flex-start !important;
-    }
-
-    .card-kpi-centered .card-header {
-      width: 100% !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 8px !important;
-      text-align: center !important;
-      flex-wrap: wrap !important;
-      margin-bottom: 8px !important;
-    }
-
-    .card-kpi-centered .card-title {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
-      gap: 6px !important;
-      margin: 0 !important;
-    }
-
-    .card-kpi-centered .kpi-value {
-      text-align: center !important;
-      width: 100% !important;
-      display: block !important;
-      margin: 4px auto 6px !important;
-    }
-
-    .card-kpi-centered .kpi-sub {
-      text-align: center !important;
-      width: 100% !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      flex-wrap: wrap !important;
-      gap: 4px !important;
-      margin: 0 auto !important;
-    }
-
-    .card-kpi-centered #monthIncomesList {
-      width: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
-      margin: 0 auto !important;
-    }
-
-    .income-row-centered {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 8px !important;
-      text-align: center !important;
-      width: 100% !important;
-      font-size: 0.8rem !important;
-      white-space: nowrap !important;
-    }
-
-    .card-kpi-centered .progress-track {
-      margin: 8px auto 6px !important;
-      max-width: 220px !important;
-      width: 100% !important;
-    }
-
-  
-    .kpi-sub-lines {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 3px !important;
-      width: 100% !important;
-      font-size: 0.76rem !important;
-      line-height: 1.35 !important;
-    }
-    .kpi-sub-line {
-      white-space: nowrap !important;
-      text-align: center !important;
-    }
-    .modal {
-      max-width: 540px !important;
-      width: 100% !important;
-      box-sizing: border-box !important;
-    }
-
   </style>
 </head>
 <body>
@@ -3806,45 +2497,43 @@
       <button type="button" class="btn btn-month-nav-arrow btn-month-next" onclick="nextMonth()" title="Próximo Mês" id="btnNextMonth">›</button>
     </div>
 
-    <!-- KPIS DO MÊS SELECIONADO (5 VISUALIZADORES: ENTRADAS, FIXAS, RESTANTE DO SALÁRIO, DINHEIRO NOS BANCOS, META) -->
-    <div class="grid grid-5 kpi-grid-centered" style="margin-bottom: 24px;">
-      <!-- ENTRADAS COM LISTA DE FONTES -->
+    <!-- KPIS DO MÊS SELECIONADO (5 CARDS MINIMALISTAS E SEM SOBREPOSIÇÃO) -->
+    <div class="grid grid-5 kpi-grid-centered">
+      <!-- 1. ENTRADAS -->
       <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">💵 Entradas do Mês</span>
-          <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.75rem;" onclick="openIncomesModal()">+ Entrada</button>
+          <span class="card-title">💵 Entradas</span>
+          <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.7rem; min-height: 26px;" onclick="openIncomesModal()">+ Gerenciar</button>
         </div>
         <div class="kpi-value val-pos" id="monthIncomeTotal">R$ 1.000,00</div>
-        <div id="monthIncomesList" style="font-size: 0.8rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 3px; max-height: 85px; overflow-y: auto;">
-          <!-- Lista descrita de entradas -->
-        </div>
+        <div id="monthIncomesList" class="kpi-sub"></div>
       </div>
 
-      <!-- DESPESAS FIXAS -->
+      <!-- 2. DESPESAS FIXAS -->
       <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">📌 Despesas Fixas</span>
+          <span class="card-title">📌 Fixas</span>
           <span class="badge badge-danger" id="monthFixedStatusBadge">R$ 0,00</span>
         </div>
         <div class="kpi-value val-neg" id="monthFixedTotal">R$ 0,00</div>
-        <div class="kpi-sub" id="monthFixedPaidSub">0 pagas de 0 cadastradas</div>
+        <div class="kpi-sub" id="monthFixedPaidSub">0/0 pagas</div>
       </div>
 
-      <!-- SALDO RESTANTE DO SALÁRIO -->
+      <!-- 3. SALÁRIO LIVRE -->
       <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">💼 Restante do Salário</span>
-          <span class="badge badge-info">Salário Livre</span>
+          <span class="card-title">💼 Salário Livre</span>
+          <span class="badge badge-info">Proventos</span>
         </div>
         <div class="kpi-value" id="monthSalaryRemaining" style="color: var(--accent-sky);">R$ 1.000,00</div>
-        <div class="kpi-sub">Salário Fixo - Despesas Fixas</div>
+        <div class="kpi-sub">Entradas − Fixas (Titular)</div>
       </div>
 
-      <!-- NOVO VISUALIZADOR: DINHEIRO NOS BANCOS -->
-      <div class="card card-kpi-centered" id="cardBankMoney" style="border-top: 3px solid #38bdf8;">
+      <!-- 4. SALDO NOS BANCOS -->
+      <div class="card card-kpi-centered" id="cardBankMoney">
         <div class="card-header">
-          <span class="card-title">🏦 Dinheiro nos Bancos</span>
-          <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.75rem;" onclick="openEditBankMoneyModal()" title="Configurar Saldo Inicial na Conta">⚙️ Saldo</button>
+          <span class="card-title">🏦 Nos Bancos</span>
+          <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.7rem; min-height: 26px;" onclick="openEditBankMoneyModal()">⚙️ Saldo</button>
         </div>
         <div class="kpi-value val-pos" id="monthBankMoneyTotal" style="color: #38bdf8;">R$ 0,00</div>
         <div class="kpi-sub" id="monthBankMoneySub">
@@ -3852,51 +2541,44 @@
         </div>
       </div>
 
-      <!-- RESERVA / META -->
+      <!-- 5. RESERVA & META -->
       <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">🎯 Meta & Reserva</span>
-          <span class="badge badge-warning" id="monthGoalBadge">Resta R$ 800,00</span>
+          <span class="card-title">🎯 Reserva</span>
+          <span class="badge badge-warning" id="monthGoalBadge">Meta</span>
         </div>
         <div class="kpi-value" id="monthSavedTotal" style="color: var(--warning);">R$ 0,00</div>
         <div class="progress-track">
           <div class="progress-fill" id="monthGoalProgress" style="width: 0%;"></div>
         </div>
-        <div class="kpi-sub">Meta: <strong id="monthGoalTargetText">R$ 800,00</strong> | Na Conta: <span id="monthInAccount">R$ 0,00</span></div>
+        <div class="kpi-sub">Meta: <strong id="monthGoalTargetText">R$ 800,00</strong> <span id="monthInAccount" style="display:none;">R$ 0,00</span></div>
       </div>
     </div>
 
     <!-- SEÇÕES DO MÊS: CARTÕES & DESPESAS FIXAS -->
-    <div class="grid grid-2" style="margin-bottom: 24px;">
+    <div class="grid grid-2">
       <!-- FATURAS DE CARTÃO DINÂMICAS -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">💳 Faturas de Cartão de Crédito</span>
-          <span class="badge badge-primary" id="monthCardsTotalBadge">Total: R$ 0,00</span>
+          <span class="card-title">💳 Cartões de Crédito</span>
+          <span class="badge badge-primary" id="monthCardsTotalBadge">R$ 0,00</span>
         </div>
-
-        <div id="dynamicCardsContainer">
-          <!-- Renderizado dinamicamente com base nos cartões cadastrados -->
-        </div>
-        <p style="font-size: 0.78rem; color: var(--text-dim); margin-top: 8px;">
-          * As faturas somam automaticamente os lançamentos deste mês nos cartões cadastrados.
-        </p>
+        <div id="dynamicCardsContainer"></div>
       </div>
 
       <!-- CHECKLIST DE DESPESAS FIXAS -->
       <div class="card">
-        <div class="card-header" style="margin-bottom: 10px;">
-          <div style="display: flex; flex-direction: column; gap: 2px;">
-            <span class="card-title">✅ Checklist de Despesas Fixas</span>
-            <span id="fixedChecklistSummaryText" style="font-size: 0.74rem; color: var(--text-muted); font-variant-numeric: tabular-nums;">Acompanhe contas contínuas, temporárias e faturas</span>
+        <div class="card-header">
+          <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+            <span class="card-title">✅ Despesas Fixas</span>
+            <span id="fixedChecklistSummaryText" class="badge badge-fixed-regular">0/0</span>
           </div>
           <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem; border-color: rgba(139, 92, 246, 0.4); color: #8b5cf6;" onclick="openAddFixedModal('temporary')" title="Adicionar despesa fixa com prazo definido (N meses)">⏳ + Temporária</button>
-            <button class="btn btn-primary" style="padding: 5px 12px; font-size: 0.76rem;" onclick="openAddFixedModal('annual')">+ Nova Fixa</button>
+            <button class="btn btn-outline" style="padding: 4px 9px; font-size: 0.72rem; min-height: 30px; color: #8b5cf6; border-color: rgba(139,92,246,0.35);" onclick="openAddFixedModal('temporary')">⏳ Temporária</button>
+            <button class="btn btn-primary" style="padding: 4px 10px; font-size: 0.72rem; min-height: 30px;" onclick="openAddFixedModal('annual')">+ Fixa</button>
           </div>
         </div>
 
-        <!-- BARRA DE FILTROS RÁPIDOS DO CHECKLIST (UX 1-TOQUE) -->
         <div class="fixed-checklist-toolbar">
           <div class="fixed-filter-pills" id="fixedFilterPills">
             <button type="button" class="fixed-filter-pill active" data-filter="ALL" onclick="setFixedExpenseFilter('ALL')">Todas</button>
@@ -3906,75 +2588,53 @@
           </div>
         </div>
 
-        <div id="fixedExpensesList">
-          <!-- Renderizado dinamicamente -->
-        </div>
+        <div id="fixedExpensesList"></div>
       </div>
     </div>
 
-    <!-- ======================================================== -->
-    <!-- SUPER DESTAQUE: MOVIMENTAÇÕES MENSAIS                    -->
-    <!-- ======================================================== -->
-    <div class="card card-highlighted" style="margin-bottom: 30px;">
+    <!-- EXTRATO DE MOVIMENTAÇÕES MENSAIS -->
+    <div class="card card-highlighted" style="margin-bottom: 24px;">
       <div class="card-header">
-        <div class="card-title" style="font-size: 1.25rem;">
-          <span style="font-size: 1.6rem; color: var(--accent-sky);">⚡</span>
-          <div>
-            <div style="color: var(--text-main); font-weight: 800;">Extrato de Movimentações Mensais</div>
-            <div style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">
-              Lançamentos detalhados de despesas, entradas e transferências para reserva
-            </div>
-          </div>
-        </div>
-        <button class="btn btn-primary" onclick="openNewTransactionModal()" style="padding: 10px 22px; font-size: 0.95rem;">
-          <span>+</span> Lançar Movimentação
+        <span class="card-title" style="font-size: 1rem;">⚡ Movimentações do Mês</span>
+        <button class="btn btn-primary" onclick="openNewTransactionModal()" style="padding: 7px 14px; font-size: 0.82rem;">
+          <span>+</span> Lançar
         </button>
       </div>
 
-      <!-- STRIP DE RESUMO DAS MOVIMENTAÇÕES -->
       <div class="transactions-summary-strip">
         <div class="tx-summary-item">
-          <span class="tx-summary-label">Total de Lançamentos</span>
+          <span class="tx-summary-label">Lançamentos</span>
           <span class="tx-summary-val" id="txCountBadge">0</span>
         </div>
         <div class="tx-summary-item">
-          <span class="tx-summary-label">Total Entradas</span>
+          <span class="tx-summary-label">Entradas</span>
           <span class="tx-summary-val val-pos" id="txIncomeSum">R$ 0,00</span>
         </div>
         <div class="tx-summary-item">
-          <span class="tx-summary-label">Total Saídas</span>
+          <span class="tx-summary-label">Saídas</span>
           <span class="tx-summary-val val-neg" id="txExpenseSum">R$ 0,00</span>
         </div>
         <div class="tx-summary-item">
-          <span class="tx-summary-label">Saldo do Extrato</span>
+          <span class="tx-summary-label">Saldo Extrato</span>
           <span class="tx-summary-val" id="txNetSum">R$ 0,00</span>
         </div>
       </div>
 
-      <!-- FILTRO DE BUSCA E CATEGORIA -->
       <div class="filter-bar">
-        <input type="text" id="txSearch" class="search-input" placeholder="🔍 Buscar por descrição..." oninput="debouncedFilterTransactions()">
-        
-        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <select id="txFilterType" class="form-control" style="width: auto; padding: 7px 12px;" onchange="filterTransactions()">
-            <option value="ALL">Todos os Tipos</option>
-            <option value="SAÍDA">Saídas (Despesas)</option>
-            <option value="ENTRADA">Entradas (Receitas)</option>
-            <option value="RESERVA">Reservas (Caixinha)</option>
+        <input type="text" id="txSearch" class="search-input" placeholder="🔍 Buscar lançamento..." oninput="debouncedFilterTransactions()">
+        <div class="filter-selects-group">
+          <select id="txFilterType" class="form-control" onchange="filterTransactions()">
+            <option value="ALL">Tipo: Todos</option>
+            <option value="SAÍDA">Saídas</option>
+            <option value="ENTRADA">Entradas</option>
+            <option value="RESERVA">Reservas</option>
           </select>
-
-          <select id="txFilterCategory" class="form-control" style="width: auto; padding: 7px 12px;" onchange="filterTransactions()">
-            <!-- Preenchido dinamicamente -->
-          </select>
-
-          <select id="txFilterBank" class="form-control" style="width: auto; padding: 7px 12px;" onchange="filterTransactions()">
-            <!-- Preenchido dinamicamente -->
-          </select>
-
-          <select id="txFilterAuthor" class="form-control" style="width: auto; padding: 7px 12px;" onchange="filterTransactions()" title="Filtrar por Autor da Compra (Perfil)">
-            <option value="ALL">Todos os Perfis (Titular e Terceiros)</option>
-            <option value="USUÁRIO">👤 Apenas Titular / Usuário</option>
-            <option value="TERCEIROS">👥 Apenas Terceiros</option>
+          <select id="txFilterCategory" class="form-control" onchange="filterTransactions()"></select>
+          <select id="txFilterBank" class="form-control" onchange="filterTransactions()"></select>
+          <select id="txFilterAuthor" class="form-control" onchange="filterTransactions()">
+            <option value="ALL">Perfil: Todos</option>
+            <option value="USUÁRIO">👤 Titular</option>
+            <option value="TERCEIROS">👥 Terceiros</option>
           </select>
         </div>
       </div>
@@ -4186,7 +2846,7 @@
 
   
 
-<!-- ==================== MODAL: NOVA OU EDITAR MOVIMENTAÇÃO (UX DE FRICÇÃO ZERO) ==================== -->
+<!-- ==================== MODAL: NOVA OU EDITAR MOVIMENTAÇÃO (DESIGN CLEAN & ZERO POLUIÇÃO) ==================== -->
 <div class="modal-overlay" id="modalTransaction" onclick="if (event.target === this) closeModal('modalTransaction')">
   <div class="modal modal-bottom-sheet">
     <div class="modal-handle-bar"></div>
@@ -4199,16 +2859,16 @@
       <input type="hidden" id="txId">
       <input type="hidden" id="txType" value="SAÍDA">
 
-      <!-- SEGMENTED CONTROL: TIPO DE OPERAÇÃO -->
+      <!-- 1. TIPO DE OPERAÇÃO -->
       <div class="segmented-control" id="txTypeSegmented">
-        <button type="button" class="segmented-btn active" data-type="SAÍDA" onclick="setTxType('SAÍDA')">💸 Saída (Gasto)</button>
-        <button type="button" class="segmented-btn" data-type="ENTRADA" onclick="setTxType('ENTRADA')">💰 Entrada (Ganho)</button>
-        <button type="button" class="segmented-btn" data-type="RESERVA" onclick="setTxType('RESERVA')">🏦 Reserva (Caixinha)</button>
+        <button type="button" class="segmented-btn active" data-type="SAÍDA" onclick="setTxType('SAÍDA')">💸 Saída</button>
+        <button type="button" class="segmented-btn" data-type="ENTRADA" onclick="setTxType('ENTRADA')">💰 Entrada</button>
+        <button type="button" class="segmented-btn" data-type="RESERVA" onclick="setTxType('RESERVA')">🏦 Reserva</button>
       </div>
 
-      <!-- INPUT FINANCEIRO REVERSO EM DESTAQUE (HERO AMOUNT) -->
-      <div class="hero-amount-container">
-        <span class="hero-amount-label">Valor do Lançamento</span>
+      <!-- 2. VALOR CENTRALIZADO E COMPACTO (R$ COLADO AO NÚMERO) -->
+      <div class="hero-amount-container" onclick="document.getElementById('txValueDisplay').focus()">
+        <span class="hero-amount-label" id="lblHeroAmount">Valor do Lançamento</span>
         <div class="hero-amount-box">
           <span class="hero-currency-prefix">R$</span>
           <input type="text" id="txValueDisplay" class="hero-amount-input" inputmode="numeric" placeholder="0,00" value="0,00" oninput="handleCurrencyMask(this)" autocomplete="off">
@@ -4216,139 +2876,106 @@
         <input type="hidden" id="txValue" value="0.00">
       </div>
 
-      <!-- DESCRIÇÃO PRINCIPAL COM SUGESTÕES RÁPIDAS (FLUIDEZ MÁXIMA) -->
+      <!-- 3. DESCRIÇÃO + ATALHOS CONTEXTUAIS (FILTRADOS PELO TIPO) -->
       <div class="form-group" style="margin-bottom: 6px;">
-        <label>Descrição do Lançamento</label>
-        <input type="text" id="txDescription" class="form-control" placeholder="Ex: Supermercado, Almoço, Pagamento..." required autocomplete="off">
+        <label for="txDescription">Descrição</label>
+        <input type="text" id="txDescription" class="form-control" placeholder="Ex: Supermercado, Uber, Almoço..." required autocomplete="off">
       </div>
 
-      <!-- CHIPS DE PREENCHIMENTO RÁPIDO (1 TOQUE) -->
-      <div class="quick-chips-wrapper">
-        <span class="quick-chips-label">Atalhos frequentes:</span>
-        <div class="quick-chips-list">
-          <button type="button" class="chip-btn" onclick="setQuickDesc('Supermercado', 'SAÍDA', 'Compras')">🛒 Supermercado</button>
-          <button type="button" class="chip-btn" onclick="setQuickDesc('Almoço', 'SAÍDA', 'Alimentação')">🍔 Almoço</button>
-          <button type="button" class="chip-btn" onclick="setQuickDesc('Uber', 'SAÍDA', 'Uber')">🚗 Uber</button>
-          <button type="button" class="chip-btn" onclick="setQuickDesc('Farmácia', 'SAÍDA', 'Farmácia')">💊 Farmácia</button>
-          <button type="button" class="chip-btn" onclick="setQuickDesc('Pagamento Recebido', 'ENTRADA', 'Pagamento')">💰 Pagamento</button>
-          <button type="button" class="chip-btn" onclick="setQuickDesc('Transferência Pix', 'ENTRADA', 'Pagamento')">⚡ Pix Entrada</button>
-          <button type="button" class="chip-btn" onclick="setQuickDesc('Reserva Emergência', 'RESERVA', 'Reserva')">🏦 Caixinha</button>
+      <div class="quick-chips-wrapper" id="txQuickChipsContainer">
+        <div class="quick-chips-list" id="txQuickChipsList">
+          <button type="button" class="chip-btn" data-chiptype="SAÍDA" onclick="setQuickDesc('Supermercado', 'SAÍDA', 'Compras')">🛒 Mercado</button>
+          <button type="button" class="chip-btn" data-chiptype="SAÍDA" onclick="setQuickDesc('Almoço', 'SAÍDA', 'Alimentação')">🍔 Almoço</button>
+          <button type="button" class="chip-btn" data-chiptype="SAÍDA" onclick="setQuickDesc('Uber', 'SAÍDA', 'Uber')">🚗 Uber</button>
+          <button type="button" class="chip-btn" data-chiptype="SAÍDA" onclick="setQuickDesc('Farmácia', 'SAÍDA', 'Farmácia')">💊 Farmácia</button>
+          <button type="button" class="chip-btn" data-chiptype="ENTRADA" style="display:none;" onclick="setQuickDesc('Pagamento Recebido', 'ENTRADA', 'Pagamento')">💰 Pagamento</button>
+          <button type="button" class="chip-btn" data-chiptype="ENTRADA" style="display:none;" onclick="setQuickDesc('Transferência Pix', 'ENTRADA', 'Pagamento')">⚡ Pix Recebido</button>
+          <button type="button" class="chip-btn" data-chiptype="RESERVA" style="display:none;" onclick="setQuickDesc('Reserva Emergência', 'RESERVA', 'Reserva')">🏦 Caixinha</button>
         </div>
       </div>
 
-      <!-- CAMPOS ESSENCIAIS LADO A LADO -->
+      <!-- 4. CATEGORIA E CONTA/CARTÃO (RÓTULOS CURTOS DE 1 LINHA = 100% ALINHADOS) -->
       <div class="form-row">
         <div class="form-group">
-          <label id="lblTxCategory">Categoria</label>
-          <select id="txCategory" class="form-control" required>
-            <!-- Preenchido dinamicamente -->
-          </select>
+          <label id="lblTxCategory" for="txCategory">Categoria</label>
+          <select id="txCategory" class="form-control" required></select>
         </div>
         <div class="form-group">
-          <label id="lblTxBank">Conta / Meio</label>
-          <select id="txBank" class="form-control" required onchange="handleBankChange()">
-            <!-- Preenchido dinamicamente -->
-          </select>
+          <label id="lblTxBank" for="txBank">Conta / Cartão</label>
+          <select id="txBank" class="form-control" required onchange="handleBankChange()"></select>
         </div>
       </div>
 
-      <div class="form-group" style="margin-bottom: 10px;">
-        <label id="lblTxInstallment">Forma de Pagamento</label>
-        <select id="txInstallment" class="form-control" required onchange="handleInstallmentSelectChange()">
-          <!-- Preenchido dinamicamente -->
+      <!-- 5. PAGAMENTO E DATA LADO A LADO (SEM CAIXAS GIGANTES DESNECESSÁRIAS) -->
+      <div class="form-row" id="txCompetenceCard">
+        <div class="form-group">
+          <label id="lblTxInstallment" for="txInstallment">Pagamento</label>
+          <select id="txInstallment" class="form-control" required onchange="handleInstallmentSelectChange()"></select>
+        </div>
+        <div class="form-group">
+          <label for="txDate">
+            <span id="lblTxDateField">Data</span>
+            <span id="txCompetenceBadge" class="competence-badge" style="font-size: 0.62rem; padding: 1px 6px;">Atual</span>
+          </label>
+          <input type="date" id="txDate" class="form-control" required onchange="onTxDateChange()">
+        </div>
+      </div>
+
+      <!-- 6. PAINEL CONDICIONAL ENXUTO DE PARCELAS (SÓ APARECE QUANDO PARCELADO 2X..24X) -->
+      <div id="txInstallmentConfigPanel" class="installment-wizard-card" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+          <span style="font-size: 0.74rem; font-weight: 800; color: var(--info);">💳 Opções do Parcelamento</span>
+          <span id="txInstallmentMathBadge" class="font-mono" style="font-size: 0.72rem; font-weight: 700; color: var(--text-main);"></span>
+        </div>
+
+        <input type="hidden" id="txInstallmentValueMode" value="total">
+        <div class="installment-val-mode-toggle" id="txInstValModeGroup">
+          <button type="button" class="inst-mode-btn active" data-valmode="total" onclick="setTxInstallmentValueMode('total')">💳 Valor Total</button>
+          <button type="button" class="inst-mode-btn" data-valmode="installment" onclick="setTxInstallmentValueMode('installment')">🔢 Valor da Parcela</button>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <label for="txInstallmentCurrentStep" style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; margin: 0;">
+            Parcela em <span id="lblCurrentMonthInWizard">mês</span>:
+          </label>
+          <select id="txInstallmentCurrentStep" class="form-control" style="font-size: 0.78rem; padding: 4px 8px; min-height: 32px; flex: 1;" onchange="onInstallmentCurrentStepChange()"></select>
+        </div>
+
+        <div id="txInstallmentSummaryLine" style="font-size: 0.7rem; color: var(--text-muted); text-align: center;"></div>
+        <div id="txInstallmentTimeline" style="display: none;"></div>
+      </div>
+
+      <!-- 7. SELETOR DIRETO DE TITULAR / TERCEIROS (VISÍVEL EM SAÍDAS, SEM MENU ESCONDIDO) -->
+      <div class="inline-pill-selector" id="rowTxAuthor">
+        <span class="inline-pill-label" id="lblTxAuthor">Quem realizou o gasto?</span>
+        <input type="hidden" id="txAuthor" value="USUÁRIO">
+        <div class="inline-pill-group" id="txAuthorPillGroup">
+          <button type="button" class="inline-pill-btn active" data-author="USUÁRIO" onclick="setTxAuthorPill('USUÁRIO')">👤 Titular</button>
+          <button type="button" class="inline-pill-btn" data-author="TERCEIROS" onclick="setTxAuthorPill('TERCEIROS')">👥 Terceiros</button>
+        </div>
+      </div>
+
+      <!-- 8. SELETOR DIRETO DE REPETIÇÃO (VISÍVEL APENAS EM ENTRADAS) -->
+      <div class="inline-pill-selector" id="rowTxIncomeScope" style="display: none;">
+        <span class="inline-pill-label" id="lblTxIncomeScope">Repetir entrada:</span>
+        <select id="txIncomeScope" class="form-control" style="width: auto; min-height: 32px; padding: 4px 8px; font-size: 0.78rem;">
+          <option value="current">Só neste mês</option>
+          <option value="from_now_on">Deste mês até Dez</option>
+          <option value="all">Todos os 12 meses</option>
         </select>
       </div>
 
-      <!-- PAINEL INTELIGENTE DE COMPRA PARCELADA & RETROATIVA (APARECE AUTOMATICAMENTE AO ESCOLHER PARCELADO) -->
-      <div id="txInstallmentConfigPanel" class="installment-wizard-card" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <span style="font-size: 0.8rem; font-weight: 800; color: #0284c7;">💳 Configuração Inteligente de Parcelas</span>
-          <span id="txInstallmentMathBadge" class="font-mono" style="font-size: 0.73rem; font-weight: 700; color: var(--text-main);"></span>
-        </div>
-
-        <!-- MODO DO VALOR DIGITADO: VALOR TOTAL vs VALOR DA PARCELA -->
-        <div>
-          <label style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 4px; display: block;">O valor digitado acima refere-se a:</label>
-          <input type="hidden" id="txInstallmentValueMode" value="total">
-          <div class="installment-val-mode-toggle" id="txInstValModeGroup">
-            <button type="button" class="inst-mode-btn active" data-valmode="total" onclick="setTxInstallmentValueMode('total')">💳 Valor Total da Compra</button>
-            <button type="button" class="inst-mode-btn" data-valmode="installment" onclick="setTxInstallmentValueMode('installment')">🔢 Valor de Cada Parcela</button>
-          </div>
-        </div>
-
-        <!-- SELETOR RÁPIDO: QUAL PARCELA CAI NO MÊS ATUAL / QUANDO FOI FEITA A COMPRA? -->
-        <div>
-          <label for="txInstallmentCurrentStep" style="font-size: 0.74rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; display: block;">
-            ⏪ Comprou meses atrás? Qual parcela cai em <span id="lblCurrentMonthInWizard">este mês</span>?
-          </label>
-          <select id="txInstallmentCurrentStep" class="form-control" style="font-size: 0.82rem; padding: 8px 10px;" onchange="onInstallmentCurrentStepChange()">
-            <!-- Preenchido dinamicamente (1ª de N, 2ª de N, etc.) -->
-          </select>
-        </div>
-
-        <!-- LINHA DO TEMPO VISUAL DAS PARCELAS -->
-        <div>
-          <div id="txInstallmentSummaryLine" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;"></div>
-          <div id="txInstallmentTimeline" class="installment-timeline-strip"></div>
-        </div>
+      <!-- Mantidos ocultos para compatibilidade com chamadas legadas -->
+      <div id="txDateQuickPills" style="display: none;"></div>
+      <div id="txAdvancedOptions" style="display: none;">
+        <span id="btnAdvancedToggleLabel"></span>
+        <span id="advancedOptionsIcon"></span>
       </div>
 
-      <!-- SELETOR SEMPRE VISÍVEL DE DATA / MÊS DE COMPETÊNCIA (COM ATALHOS RETROATIVOS 1-TOQUE) -->
-      <div id="txCompetenceCard" class="competence-date-card">
-        <div class="competence-header-row">
-          <label for="txDate" id="lblTxDateField" style="margin: 0; font-size: 0.78rem; font-weight: 700; color: var(--text-main);">📅 Data da Compra / 1ª Parcela</label>
-          <span id="txCompetenceBadge" class="competence-badge">📍 Neste Mês</span>
-        </div>
-        <input type="date" id="txDate" class="form-control" style="padding: 8px 12px; font-size: 0.88rem;" required onchange="onTxDateChange()">
-        <div class="date-quick-pills" id="txDateQuickPills">
-          <button type="button" class="date-pill-btn active" data-offset="0" onclick="setTxDateByMonthOffset(0)">📍 Mês Aberto</button>
-          <button type="button" class="date-pill-btn" data-offset="-1" onclick="setTxDateByMonthOffset(-1)">⏪ Mês Passado</button>
-          <button type="button" class="date-pill-btn" data-offset="-2" onclick="setTxDateByMonthOffset(-2)">⏪ Há 2 Meses</button>
-          <button type="button" class="date-pill-btn" data-offset="-3" onclick="setTxDateByMonthOffset(-3)">⏪ Há 3 Meses</button>
-          <button type="button" class="date-pill-btn" data-offset="-4" onclick="setTxDateByMonthOffset(-4)">⏪ Há 4 Meses</button>
-          <button type="button" class="date-pill-btn" data-offset="-6" onclick="setTxDateByMonthOffset(-6)">⏪ Há 6 Meses</button>
-        </div>
-      </div>
-
-      <!-- TOGGLE PARA OPÇÕES AVANÇADAS (AUTOR E REPETIÇÃO) -->
-      <div class="advanced-options-toggle-wrapper">
-        <button type="button" class="btn-toggle-advanced" onclick="toggleTxAdvancedOptions()">
-          <span id="btnAdvancedToggleLabel">⚙️ Opções Avançadas (Perfil Titular/Terceiros, Repetição)</span>
-          <span id="advancedOptionsIcon" style="transition: transform 0.2s ease;">▾</span>
-        </button>
-      </div>
-
-      <!-- CONTEÚDO AVANÇADO (COLAPSÁVEL) -->
-      <div id="txAdvancedOptions" class="advanced-options-content" style="display: none;">
-
-        <div class="form-group" id="rowTxAuthor">
-          <label id="lblTxAuthor" style="display: flex; align-items: center; justify-content: space-between;">
-            <span>Autor da Transação (Perfil de Fatura)</span>
-            <span id="badgeAuthorHelp" style="font-size: 0.72rem; font-weight: 600; color: var(--primary);">👤 Titular vs 👥 Terceiros</span>
-          </label>
-          <select id="txAuthor" class="form-control">
-            <option value="USUÁRIO" selected>👤 USUÁRIO (Titular — Deduz do Salário / Proventos)</option>
-            <option value="TERCEIROS">👥 TERCEIROS (Somente Leitura / Não Deduz do Salário)</option>
-          </select>
-          <small id="helpTxAuthor" style="font-size: 0.74rem; color: var(--text-muted); margin-top: 4px; display: block; line-height: 1.4;">
-            • <strong>USUÁRIO</strong>: Compra somada à fatura e deduzida do seu saldo salarial.<br>
-            • <strong>TERCEIROS</strong>: Compra somada à fatura para conciliação, mas seu saldo salarial permanece <strong>100% intacto</strong>.
-          </small>
-        </div>
-
-        <div class="form-group" id="rowTxIncomeScope" style="display: none;">
-          <label id="lblTxIncomeScope" style="font-weight: 600; color: var(--accent-sky); font-size: 0.85rem;">Regra de Repetição da Entrada:</label>
-          <select id="txIncomeScope" class="form-control" style="font-size: 0.85rem;">
-            <option value="current">Apenas nesta movimentação (mês atual)</option>
-            <option value="from_now_on">Deste mês em diante (até Dezembro)</option>
-            <option value="all">Em todos os 12 meses do ano</option>
-          </select>
-        </div>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+      <!-- 9. AÇÕES FINAIS -->
+      <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; margin-top: 12px;">
         <button type="button" class="btn btn-outline" onclick="closeModal('modalTransaction')">Cancelar</button>
-        <button type="submit" class="btn btn-primary" id="btnSaveTx" style="min-width: 160px;">Salvar Movimentação</button>
+        <button type="submit" class="btn btn-primary" id="btnSaveTx">Salvar Despesa</button>
       </div>
     </form>
   </div>
@@ -5194,17 +3821,34 @@ function getCategoryIcon(catName) {
   return '⚡';
 }
 
+function syncHeroInputWidth(inputEl) {
+  if (!inputEl || !inputEl.style) return;
+  const len = (inputEl.value || '0,00').length;
+  inputEl.style.setProperty('width', Math.max(4.2, len + 0.4) + 'ch', 'important');
+}
+
+function setTxAuthorPill(authorVal) {
+  const resolved = (authorVal || 'USUÁRIO').toUpperCase();
+  const inputEl = document.getElementById('txAuthor');
+  if (inputEl) inputEl.value = resolved;
+  document.querySelectorAll('#txAuthorPillGroup .inline-pill-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-author') === resolved);
+  });
+}
+
 function handleCurrencyMask(input) {
   let digits = input.value.replace(/\D/g, '');
   if (!digits) {
     input.value = '0,00';
     document.getElementById('txValue').value = '0.00';
+    syncHeroInputWidth(input);
     if (typeof updateTxInstallmentPreview === 'function') updateTxInstallmentPreview();
     return;
   }
   let valNum = parseInt(digits, 10) / 100;
   input.value = valNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   document.getElementById('txValue').value = valNum.toFixed(2);
+  syncHeroInputWidth(input);
   if (typeof updateTxInstallmentPreview === 'function') updateTxInstallmentPreview();
 }
 
@@ -5214,6 +3858,7 @@ function setTxAmount(numVal) {
   const dispEl = document.getElementById('txValueDisplay');
   if (dispEl) {
     dispEl.value = val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    syncHeroInputWidth(dispEl);
   }
   if (typeof updateTxInstallmentPreview === 'function') updateTxInstallmentPreview();
 }
@@ -7699,35 +6344,28 @@ function renderMonthlyView() {
   // Top KPIs
   document.getElementById('monthIncomeTotal').textContent = formatBRL(t.incomeTotal);
   
-  // Renderizar Lista Descritiva de Entradas
+  // Resumo Conciso de Entradas (Sem estourar o card)
   const incomesListContainer = document.getElementById('monthIncomesList');
   incomesListContainer.innerHTML = '';
   if (m.incomes && m.incomes.length > 0) {
-    const incFrag = createSafeFragment();
-    m.incomes.forEach(inc => {
-      const row = document.createElement('div');
-      row.style.display = 'flex';
-      row.style.justifyContent = 'space-between';
-      row.style.alignItems = 'center';
-      row.style.gap = '8px';
-      row.innerHTML = `<span style="min-width: 0;  flex: 1;">${inc.description}:</span> <strong class="val-pos font-mono" style="white-space: nowrap;">${formatBRL(inc.value)}</strong>`;
-      incFrag.appendChild(row);
-    });
-    appendSafeFragment(incomesListContainer, incFrag);
+    if (m.incomes.length === 1) {
+      incomesListContainer.textContent = m.incomes[0].description;
+    } else {
+      incomesListContainer.textContent = `${m.incomes.length} fontes (${m.incomes[0].description}...)`;
+    }
   } else {
-    incomesListContainer.innerHTML = '<span>Nenhuma entrada cadastrada.</span>';
+    incomesListContainer.textContent = 'Sem entradas fixas';
   }
 
   document.getElementById('monthFixedTotal').textContent = formatBRL(t.fixedTotal);
-  document.getElementById('monthFixedStatusBadge').textContent = `${formatBRL(t.fixedPaidTotal)} pagos`;
-  
   const paidCount = m.fixedExpenses.filter(f => f.paid).length;
-  document.getElementById('monthFixedPaidSub').textContent = `${paidCount} pagas de ${m.fixedExpenses.length} cadastradas`;
+  document.getElementById('monthFixedStatusBadge').textContent = `${paidCount}/${m.fixedExpenses.length} pagas`;
+  document.getElementById('monthFixedPaidSub').textContent = `Quitado: ${formatBRL(t.fixedPaidTotal)}`;
 
   document.getElementById('monthSalaryRemaining').textContent = formatBRL(t.salaryRemaining);
   document.getElementById('monthSalaryRemaining').className = `kpi-value ${t.salaryRemaining >= 0 ? 'val-pos' : 'val-neg'}`;
 
-  // Atualizar visualizador: Dinheiro nos Bancos
+  // Atualizar visualizador: Dinheiro nos Bancos (Conciso)
   const bankMoneyEl = document.getElementById('monthBankMoneyTotal');
   if (bankMoneyEl) {
     bankMoneyEl.textContent = formatBRL(t.bankMoney);
@@ -7735,14 +6373,11 @@ function renderMonthlyView() {
   }
   const bankSubEl = document.getElementById('monthBankMoneySub');
   if (bankSubEl) {
-    let subHtml = `<div class="kpi-sub-lines">`;
-    subHtml += `<span class="kpi-sub-line">Saldo Inicial: <strong style="color: var(--primary); font-weight: 700;">${formatBRL(t.baseBankMoney)}</strong></span>`;
-    if (t.extratoInflows > 0) {
-      subHtml += `<span class="kpi-sub-line">Entradas: <strong class="val-pos font-mono">+${formatBRL(t.extratoInflows)}</strong></span>`;
-    }
-    subHtml += `<span class="kpi-sub-line">Débito/PIX: <strong class="val-neg font-mono">-${formatBRL(t.totalDebitPixExpenses)}</strong></span>`;
-    subHtml += `</div>`;
-    bankSubEl.innerHTML = subHtml;
+    const parts = [];
+    if (t.baseBankMoney > 0) parts.push(`Inicial: ${formatBRL(t.baseBankMoney)}`);
+    if (t.extratoInflows > 0) parts.push(`+${formatBRL(t.extratoInflows)}`);
+    parts.push(`Saídas: -${formatBRL(t.totalDebitPixExpenses)}`);
+    bankSubEl.textContent = parts.join(' • ');
   }
 
   document.getElementById('monthSavedTotal').textContent = formatBRL(t.totalSaved);
@@ -7773,55 +6408,44 @@ function renderMonthlyView() {
       bCard.innerHTML = `
         <div class="bank-card-top-row">
           <div class="bank-card-brand">
-            <input type="color" value="${b.color || '#2563eb'}" class="color-picker-input-mini" onchange="updateBankColorByName('${b.name}', this.value)" title="Alterar cor do cartão">
+            <input type="color" value="${b.color || '#2563eb'}" class="color-picker-input-mini" onchange="updateBankColorByName('${b.name}', this.value)" title="Cor">
             <span class="bank-name-label">${b.name}</span>
-            ${cardThirdPartyInvoice > 0 ? '<span class="badge badge-third-party" style="font-size: 0.64rem; padding: 1px 5px;">Terceiros</span>' : ''}
           </div>
           <div class="bank-card-amount-block">
-            <span class="bank-inv-title">Fatura Mês:</span>
             <strong class="val-neg font-mono bank-inv-amount">${formatBRL(cardInvoice)}</strong>
-            <button type="button" class="btn-icon-mini" onclick="openEditBankModalByName('${b.name}')" title="Configurar Cartão">🎨</button>
+            <button type="button" class="btn-icon-mini" onclick="openEditBankModalByName('${b.name}')" title="Personalizar">⚙️</button>
           </div>
         </div>
-
         <div class="bank-card-bottom-row">
           <div class="bank-split-pills">
-            <span class="split-pill">👤 Titular: <strong>${formatBRL(cardUserInvoice)}</strong></span>
-            ${cardThirdPartyInvoice > 0 ? `<span class="split-pill split-third">👥 Terceiros: <strong>${formatBRL(cardThirdPartyInvoice)}</strong></span>` : ''}
+            <span class="split-pill">Titular: <strong>${formatBRL(cardUserInvoice)}</strong></span>
+            ${cardThirdPartyInvoice > 0 ? `<span class="split-pill split-third">Terceiros: <strong>${formatBRL(cardThirdPartyInvoice)}</strong></span>` : ''}
           </div>
-          <div class="bank-debt-info">
-            <span>A Vencer: <strong>${formatBRL(cardFuture)}</strong></span>
-            <span>•</span>
-            <span>Total: <strong class="val-neg">${formatBRL(cardTotalDebt)}</strong></span>
-          </div>
+          ${cardFuture > 0 ? `<div class="bank-debt-info">Futuro: <strong>${formatBRL(cardFuture)}</strong></div>` : ''}
         </div>
       `;
       cardFrag.appendChild(bCard);
     });
     appendSafeFragment(cardsContainer, cardFrag);
 
-    // Bloco resumo consolidado proporcional e limpo
-    const summaryCard = document.createElement('div');
-    summaryCard.className = 'card-total-debt-summary-pro';
-    summaryCard.innerHTML = `
-      <div class="summary-text-group">
-        <span class="summary-title">💳 DÍVIDA TOTAL GERAL EM CARTÕES</span>
-        <span class="summary-sub">Faturas Mês (${formatBRL(t.cardsTotal)}) + Parcelas Futuras (${formatBRL(t.totalFutureCardsDebt)})</span>
-      </div>
-      <strong class="summary-amount val-neg font-mono">${formatBRL(t.totalCardsDebt)}</strong>
-    `;
-    cardsContainer.appendChild(summaryCard);
+    if (t.totalFutureCardsDebt > 0) {
+      const summaryCard = document.createElement('div');
+      summaryCard.className = 'card-total-debt-summary-pro';
+      summaryCard.innerHTML = `
+        <span class="summary-title">Dívida Acumulada (Mês + Parcelas Futuras)</span>
+        <strong class="summary-amount font-mono">${formatBRL(t.totalCardsDebt)}</strong>
+      `;
+      cardsContainer.appendChild(summaryCard);
+    }
   }
-  document.getElementById('monthCardsTotalBadge').textContent = `Faturas: ${formatBRL(t.cardsTotal)} | Total: ${formatBRL(t.totalCardsDebt)}`;
-// Checklist de Despesas Fixas (Visual Moderno Idêntico ao Extrato de Movimentações + Suporte a Despesas Temporárias)
+  document.getElementById('monthCardsTotalBadge').textContent = formatBRL(t.cardsTotal);
+
   const fixedList = document.getElementById('fixedExpensesList');
   fixedList.innerHTML = '';
 
-  const tempCount = m.fixedExpenses.filter(f => f.isTemporary).length;
   const summaryEl = document.getElementById('fixedChecklistSummaryText');
   if (summaryEl) {
-    const pctPaid = m.fixedExpenses.length > 0 ? Math.round((paidCount / m.fixedExpenses.length) * 100) : 0;
-    summaryEl.innerHTML = `${paidCount}/${m.fixedExpenses.length} pagas (${pctPaid}%)${tempCount > 0 ? ` • <strong style="color: #8b5cf6;">⏳ ${tempCount} temporária${tempCount > 1 ? 's' : ''}</strong>` : ''}`;
+    summaryEl.textContent = `${paidCount}/${m.fixedExpenses.length} pagas`;
   }
 
   const activeFilter = window.currentFixedFilter || 'ALL';
@@ -7860,41 +6484,36 @@ function renderMonthlyView() {
       let iconSymbol = f.paid ? '✓' : (isCardInv ? '💳' : (isTemp ? (isLastTempMonth ? '🎉' : '⏳') : '📌'));
 
       let recurrenceBadgeHtml = '';
-      if (isCardInv) {
-        recurrenceBadgeHtml = '<span class="badge badge-primary" style="font-size: 0.65rem; padding: 2px 6px;">Cartão</span>';
-      } else if (isTemp) {
-        if (isLastTempMonth) {
-          recurrenceBadgeHtml = `<span class="badge badge-temp-last" style="font-size: 0.65rem; padding: 2px 7px;" title="Último mês desta despesa fixa temporária!">🎉 Último mês (${tempIdx}/${tempTotal})</span>`;
-        } else {
-          recurrenceBadgeHtml = `<span class="badge badge-temp" style="font-size: 0.65rem; padding: 2px 7px;" title="Despesa Fixa Temporária: Mês ${tempIdx} de ${tempTotal}">⏳ ${tempIdx}/${tempTotal} meses</span>`;
-        }
+      if (isTemp) {
+        recurrenceBadgeHtml = isLastTempMonth
+          ? `<span class="badge badge-temp-last">🎉 ${tempIdx}/${tempTotal}</span>`
+          : `<span class="badge badge-temp">⏳ ${tempIdx}/${tempTotal}</span>`;
       } else if (f.isSingleMonth) {
-        recurrenceBadgeHtml = '<span class="badge badge-fixed-regular" style="font-size: 0.63rem; padding: 2px 6px;">Avulsa no Mês</span>';
+        recurrenceBadgeHtml = '<span class="badge badge-fixed-regular">Avulsa</span>';
       }
 
       let metaHtml = '';
       if (isCardInv) {
         metaHtml = hasThirdParty 
-          ? `<span>👤 Titular: <strong>${formatBRL(f.userValue || 0)}</strong> • 👥 Terceiros: <strong>${formatBRL(f.thirdPartyValue || 0)}</strong></span>` 
-          : `<span>Fatura de Cartão • 100% Titular</span>`;
+          ? `<span>Titular: <strong>${formatBRL(f.userValue || 0)}</strong> • Terceiros: <strong>${formatBRL(f.thirdPartyValue || 0)}</strong></span>` 
+          : `<span>Fatura de Cartão</span>`;
       } else if (isTemp) {
         const pctTemp = Math.min(100, Math.round((tempIdx / Math.max(1, tempTotal)) * 100));
         const remText = tempRem > 0
-          ? `Restam <strong>${tempRem} ${tempRem === 1 ? 'mês' : 'meses'}</strong>${f.tempEndLabel ? ` (até ${f.tempEndLabel})` : ''}`
-          : `<strong style="color: var(--success);">Ciclo encerra neste mês!</strong>`;
+          ? `Restam ${tempRem}m${f.tempEndLabel ? ` (até ${f.tempEndLabel})` : ''}`
+          : `<strong style="color: var(--success);">Último mês</strong>`;
         metaHtml = `
-          <span>Temporária (${tempIdx} de ${tempTotal}) • ${remText}</span>
+          <span>${remText}</span>
           <div class="fixed-temp-progress-wrap">
             <div class="fixed-temp-progress-track">
               <div class="fixed-temp-progress-fill ${isLastTempMonth ? 'is-last-month' : ''}" style="width: ${pctTemp}%;"></div>
             </div>
-            <span class="font-mono" style="font-size: 0.66rem; font-weight: 700; color: ${isLastTempMonth ? 'var(--success)' : '#8b5cf6'};">${pctTemp}%</span>
           </div>
         `;
       } else if (f.isSingleMonth) {
-        metaHtml = `<span>Despesa Fixa Pontual (Apenas ${m.name})</span>`;
+        metaHtml = `<span>Apenas em ${m.name}</span>`;
       } else {
-        metaHtml = `<span>Conta Fixa Mensal Contínua</span>`;
+        metaHtml = `<span>Mensal</span>`;
       }
 
       item.innerHTML = `
@@ -7906,23 +6525,20 @@ function renderMonthlyView() {
         <div class="fixed-item-center">
           <div class="fixed-item-title-row">
             <span class="fixed-item-title ${f.paid ? 'expense-paid' : ''}">${f.name}</span>
-            <span class="badge ${f.paid ? 'badge-success' : 'badge-warning'}" style="font-size: 0.65rem; padding: 2px 6px;">
-              ${f.paid ? 'Pago' : 'Pendente'}
-            </span>
             ${recurrenceBadgeHtml}
           </div>
-          <div class="fixed-item-meta" style="white-space: normal; overflow: visible;">
+          <div class="fixed-item-meta">
             ${metaHtml}
           </div>
         </div>
         <div class="fixed-item-right">
           <strong class="${f.paid ? 'val-neutral' : 'val-neg'} font-mono fixed-item-val">${formatBRL(f.value)}</strong>
           <div class="fixed-item-actions">
-            <button type="button" class="btn-fixed-toggle ${f.paid ? 'btn-paid' : 'btn-unpaid'}" onclick="toggleFixedPaid('${f.id}')" title="${f.paid ? 'Clique para desmarcar' : 'Clique para marcar como pago'}">
-              ${f.paid ? 'Desmarcar' : 'Pagar'}
+            <button type="button" class="btn-fixed-toggle ${f.paid ? 'btn-paid' : 'btn-unpaid'}" onclick="toggleFixedPaid('${f.id}')">
+              ${f.paid ? 'Pago ✓' : 'Pagar'}
             </button>
-            ${!f.cardRefBankId ? `<button type="button" class="btn-icon btn-edit-fixed" onclick="openEditFixedModal('${f.id}')" title="Editar despesa fixa">✏️</button>` : ''}
-            ${!f.cardRefBankId ? `<button type="button" class="btn-icon btn-del-fixed" onclick="deleteFixedExpense('${f.id}')" title="Excluir despesa fixa">🗑️</button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-edit-fixed" onclick="openEditFixedModal('${f.id}')" title="Editar">✏️</button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-del-fixed" onclick="deleteFixedExpense('${f.id}')" title="Excluir">🗑️</button>` : ''}
           </div>
         </div>
       `;
@@ -8144,8 +6760,8 @@ function renderTransactionsTable() {
     const author = (t.author || 'USUÁRIO').toUpperCase();
     const isThirdParty = (author === 'TERCEIROS');
     const authorBadge = isThirdParty 
-      ? `<span class="badge badge-third-party" title="Perfil TERCEIROS: entra na fatura para conciliação, mas NÃO desconta do seu salário">👥 Terceiros</span>`
-      : `<span class="badge badge-user-author" title="Perfil USUÁRIO: deduz do seu salário">👤 Titular</span>`;
+      ? `<span class="badge badge-third-party" title="Não desconta do salário">👥 Terceiros</span>`
+      : '';
 
     const bankObj = appData.banks.find(b => b.name === t.bank);
     const catObj = appData.categories.find(c => c.name === t.category);
@@ -8154,35 +6770,25 @@ function renderTransactionsTable() {
     const catIcon = getCategoryIcon(t.category);
 
     const instInfo = getInstallmentInfo(t);
-    let installmentCell = `<span style="font-size: 0.8rem; color: var(--text-muted);">${t.installment}</span>`;
+    let installmentCell = `<span style="font-size: 0.76rem; color: var(--text-muted);">${t.installment || 'À VISTA'}</span>`;
     let valueCell = `<span class="${valClass} tx-value-amount">${valFormatted}</span>`;
+    let shortInstMeta = (t.installment && t.installment !== 'À VISTA') ? t.installment : '';
 
     if (instInfo) {
+      shortInstMeta = instInfo.remaining > 0 ? `Falta ${formatBRL(instInfo.remaining)}` : 'Última parcela';
       installmentCell = `
-        <div>
-          <span class="badge badge-primary" style="font-size: 0.72rem; padding: 2px 6px;">${t.installment}</span>
-          <div class="installment-details">
-            <span>Total: <strong style="color: var(--text-main); font-family: var(--font-mono);">${formatBRL(instInfo.totalPurchase)}</strong></span> •
-            <span>Falta: <strong style="color: var(--primary); font-weight: 700;">${formatBRL(instInfo.remaining)}</strong></span>
-          </div>
-        </div>
-      `;
-      valueCell = `
-        <div style="display: flex; flex-direction: column; align-items: flex-end;">
-          <span class="${valClass} tx-value-amount">${valFormatted}</span>
-          <span class="tx-installment-sub">(Parcela)</span>
-        </div>
+        <span class="badge badge-primary">${shortInstMeta}</span>
       `;
     }
 
-    const dateFormatted = t.date ? t.date.split('-').reverse().join('/') : '-';
+    const dateFormatted = t.date ? t.date.split('-').reverse().slice(0, 2).join('/') : '-';
 
     tr.innerHTML = `
       <td class="col-cat">
         <div class="cat-circle" style="background: ${catColor}18; color: ${catColor};" title="${t.category}">
           ${catIcon}
         </div>
-        <span class="desktop-cat-badge badge" style="background: ${catColor}20; color: ${catColor}; border: 1px solid ${catColor}40;">
+        <span class="desktop-cat-badge badge" style="background: ${catColor}18; color: ${catColor};">
           ${t.category}
         </span>
       </td>
@@ -8192,8 +6798,8 @@ function renderTransactionsTable() {
           <span>${dateFormatted}</span>
           <span>•</span>
           <span style="color: ${bankColor}; font-weight: 600;">${t.bank}</span>
-          ${t.installment && t.installment !== 'À VISTA' ? `<span>•</span> <span>${t.installment}</span>` : ''}
-          ${isThirdParty ? `<span>•</span> ${authorBadge}` : ''}
+          ${shortInstMeta ? `<span>•</span> <span>${shortInstMeta}</span>` : ''}
+          ${isThirdParty ? authorBadge : ''}
         </div>
       </td>
       <td class="col-date">${dateFormatted}</td>
@@ -8598,17 +7204,29 @@ function handleTypeChange() {
   const matchingCats = appData.categories.filter(c => c.type === type);
   
   if (type === 'SAÍDA') {
-    lblCat.textContent = 'Categoria de Saída (Despesa)';
-    lblBank.textContent = 'Meio de Saída (Cartão, Débito, Dinheiro)';
-    lblInst.textContent = 'Forma de Pagamento da Saída';
+    lblCat.textContent = 'Categoria';
+    lblBank.textContent = 'Conta / Cartão';
+    lblInst.textContent = 'Pagamento';
   } else if (type === 'ENTRADA') {
-    lblCat.textContent = 'Categoria de Entrada (Receita)';
-    lblBank.textContent = 'Meio de Entrada (Conta, Depósito)';
-    lblInst.textContent = 'Forma de Recebimento';
+    lblCat.textContent = 'Categoria';
+    lblBank.textContent = 'Conta Destino';
+    lblInst.textContent = 'Recebimento';
   } else {
-    lblCat.textContent = 'Categoria de Reserva';
-    lblBank.textContent = 'Destino da Reserva';
-    lblInst.textContent = 'Forma de Aplicação';
+    lblCat.textContent = 'Objetivo';
+    lblBank.textContent = 'Onde Guardar';
+    lblInst.textContent = 'Modalidade';
+  }
+
+  // Filtrar chips rápidos para exibir apenas os pertinentes ao tipo selecionado
+  document.querySelectorAll('#txQuickChipsList .chip-btn').forEach(chip => {
+    const cType = chip.getAttribute('data-chiptype');
+    if (cType) chip.style.display = (cType === type) ? 'inline-flex' : 'none';
+  });
+
+  // Exibir seletor de Titular/Terceiros apenas em SAÍDA
+  const rowAuthor = document.getElementById('rowTxAuthor');
+  if (rowAuthor) {
+    rowAuthor.style.display = (type === 'SAÍDA') ? 'flex' : 'none';
   }
 
   if (matchingCats.length === 0) {
@@ -8650,7 +7268,7 @@ function handleTypeChange() {
     matchingBanks.forEach(b => {
       const opt = document.createElement('option');
       opt.value = b.name;
-      opt.textContent = b.isCreditCard ? `${b.name} (Cartão de Crédito)` : b.name;
+      opt.textContent = b.isCreditCard ? `💳 ${b.name}` : b.name;
       selBank.appendChild(opt);
     });
   }
@@ -8661,7 +7279,7 @@ function handleTypeChange() {
   // 4. Exibir seletor de abrangência se for Entrada
   const rowScope = document.getElementById('rowTxIncomeScope');
   if (rowScope) {
-    rowScope.style.display = (type === 'ENTRADA') ? 'block' : 'none';
+    rowScope.style.display = (type === 'ENTRADA') ? 'flex' : 'none';
   }
 }
 
@@ -8858,11 +7476,11 @@ function populateInstallmentCurrentStepOptions(numInstallments) {
     const opt = document.createElement('option');
     opt.value = String(step);
     if (step === 1) {
-      opt.textContent = `1ª de ${numInstallments} em ${curMonthLabel} (Compra feita neste mês — Início: ${startShort})`;
+      opt.textContent = `1ª de ${numInstallments} (Início neste mês: ${startShort})`;
     } else if (step === numInstallments) {
-      opt.textContent = `${step}ª de ${numInstallments} em ${curMonthLabel} (Última parcela! Compra há ${monthsAgo} ${monthsAgo === 1 ? 'mês' : 'meses'} — 1ª em ${startShort})`;
+      opt.textContent = `${step}ª de ${numInstallments} — Última! (1ª em ${startShort})`;
     } else {
-      opt.textContent = `${step}ª de ${numInstallments} em ${curMonthLabel} (Compra há ${monthsAgo} ${monthsAgo === 1 ? 'mês' : 'meses'} — 1ª em ${startShort})`;
+      opt.textContent = `${step}ª de ${numInstallments} (1ª em ${startShort} • há ${monthsAgo}m)`;
     }
     sel.appendChild(opt);
   }
@@ -8897,25 +7515,20 @@ function onTxDateChange() {
     btn.classList.toggle('active', btnOffset === diffFromCurrent);
   });
 
-  // Atualizar Badge e Card de Competência
-  const compCard = document.getElementById('txCompetenceCard');
+  // Atualizar Badge de Competência Conciso
   const compBadge = document.getElementById('txCompetenceBadge');
-  const targetLabel = `${MONTH_NAMES[startM]}/${startY}`;
+  const shortTarget = `${MONTH_NAMES[startM].substring(0, 3)}/${String(startY).slice(-2)}`;
 
-  if (compCard && compBadge) {
+  if (compBadge) {
     if (diffFromCurrent === 0) {
-      compCard.classList.remove('is-different-month');
       compBadge.classList.remove('is-retro');
-      compBadge.textContent = `📍 Mês Atual (${MONTH_NAMES[startM].substring(0, 3)}/${startY})`;
+      compBadge.textContent = shortTarget;
     } else if (diffFromCurrent < 0) {
-      compCard.classList.add('is-different-month');
       compBadge.classList.add('is-retro');
-      const mAgo = Math.abs(diffFromCurrent);
-      compBadge.textContent = `⏪ Retroativo: ${targetLabel} (${mAgo} ${mAgo === 1 ? 'mês' : 'meses'} atrás)`;
+      compBadge.textContent = `⏪ ${shortTarget}`;
     } else {
-      compCard.classList.add('is-different-month');
       compBadge.classList.add('is-retro');
-      compBadge.textContent = `⏩ Agendado: ${targetLabel}`;
+      compBadge.textContent = `⏩ ${shortTarget}`;
     }
   }
 
@@ -8931,20 +7544,20 @@ function handleInstallmentSelectChange() {
   const nInst = (type === 'SAÍDA') ? getSelectedInstallmentsCount() : 0;
   const panel = document.getElementById('txInstallmentConfigPanel');
   const lblDate = document.getElementById('lblTxDateField');
-  const heroLbl = document.querySelector('#modalTransaction .hero-amount-label');
+  const heroLbl = document.getElementById('lblHeroAmount');
 
   if (panel) {
     if (nInst > 1) {
       panel.style.display = 'flex';
-      if (lblDate) lblDate.textContent = `📅 Data da Compra (Mês da 1ª Parcela de ${nInst}x)`;
+      if (lblDate) lblDate.textContent = 'Data (1ª Parc.)';
       populateInstallmentCurrentStepOptions(nInst);
       const valMode = document.getElementById('txInstallmentValueMode')?.value || 'total';
       if (heroLbl) {
-        heroLbl.textContent = valMode === 'installment' ? 'Valor de Cada Parcela (R$)' : 'Valor Total da Compra (R$)';
+        heroLbl.textContent = valMode === 'installment' ? 'Valor da Parcela' : 'Valor Total da Compra';
       }
     } else {
       panel.style.display = 'none';
-      if (lblDate) lblDate.textContent = '📅 Data da Movimentação (Mês de Competência)';
+      if (lblDate) lblDate.textContent = 'Data';
       if (heroLbl) heroLbl.textContent = 'Valor do Lançamento';
     }
   }
@@ -9069,8 +7682,7 @@ function openNewTransactionModal() {
   setTxType('SAÍDA');
   setTxAmount(0);
   
-  const authorSelect = document.getElementById('txAuthor');
-  if (authorSelect) authorSelect.value = 'USUÁRIO';
+  setTxAuthorPill('USUÁRIO');
   
   toggleTxAdvancedOptions(false);
   handleTypeChange();
@@ -9088,11 +7700,8 @@ function editTransaction(txId) {
   handleTypeChange();
 
   document.getElementById('txDate').value = foundTx.date;
-  const authorSelect = document.getElementById('txAuthor');
   const txAuthorVal = (foundTx.author || 'USUÁRIO').toUpperCase();
-  if (authorSelect) {
-    authorSelect.value = txAuthorVal;
-  }
+  setTxAuthorPill(txAuthorVal);
 
   // Se for uma parcela de compra parcelada, restaura a descrição base ou mantém a descrição limpa
   document.getElementById('txDescription').value = foundTx.description;
@@ -10068,12 +8677,14 @@ function handleFixedCurrencyMask(input) {
   if (!digits) {
     input.value = '0,00';
     if (hiddenEl) hiddenEl.value = '0.00';
+    syncHeroInputWidth(input);
     updateFixedExpensePreview();
     return;
   }
   let valNum = parseInt(digits, 10) / 100;
   input.value = valNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   if (hiddenEl) hiddenEl.value = valNum.toFixed(2);
+  syncHeroInputWidth(input);
   updateFixedExpensePreview();
 }
 
@@ -10084,6 +8695,7 @@ function setFixedCurrencyValue(numVal) {
   if (hiddenEl) hiddenEl.value = val.toFixed(2);
   if (dispEl) {
     dispEl.value = val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    syncHeroInputWidth(dispEl);
   }
 }
 
