@@ -20,6 +20,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <!-- Supabase JS Client Oficial via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style id="appThemeAndStyles">
     /* ============================================================
@@ -3245,6 +3246,10 @@
         <span>📊 Exportar Dados para Excel (.xlsx)</span>
         <span style="font-size: 0.78rem; color: #10b981; font-weight: 600;">.xlsx</span>
       </button>
+      <button class="sidebar-item-btn" onclick="closeSidebarMenu(); openVaultRecoveryModal();">
+        <span>🛡️ Restaurar Ponto Anterior (Histórico)</span>
+        <span style="font-size: 0.75rem; color: var(--accent-sky); font-weight: 600;">Auto-Save</span>
+      </button>
       <input type="file" id="importFileInput" accept=".json,.cfcrypt" style="display: none;" onchange="importDataJSON(event)">
     </div>
 
@@ -4446,6 +4451,52 @@
   </div>
 </div>
 
+
+<!-- ==================== MODAL: CONFIGURAR CONEXÃO SUPABASE ==================== -->
+<div class="modal-overlay" id="modalSupabaseConfig" style="z-index: 2100;" onclick="if (event.target === this) closeModal('modalSupabaseConfig')">
+  <div class="modal" style="max-width: 480px;">
+    <div class="modal-handle-bar"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">⚡ Conexão com o Supabase</h3>
+      <button class="modal-close" onclick="closeModal('modalSupabaseConfig')">&times;</button>
+    </div>
+    <form onsubmit="saveSupabaseConfig(event)">
+      <div class="form-group">
+        <label>Project URL do Supabase</label>
+        <input type="url" id="cfgSupabaseUrl" class="form-control" placeholder="https://seu-projeto.supabase.co" required>
+      </div>
+      <div class="form-group">
+        <label>Anon / Public Key</label>
+        <input type="text" id="cfgSupabaseKey" class="form-control font-mono" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI..." required>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modalSupabaseConfig')">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar e Conectar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== MODAL: HISTÓRICO DE RECUPERAÇÃO DE DADOS (VAULT) ==================== -->
+<div class="modal-overlay" id="modalVaultRecovery" style="z-index: 2100;" onclick="if (event.target === this) closeModal('modalVaultRecovery')">
+  <div class="modal" style="max-width: 540px;">
+    <div class="modal-handle-bar"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">🛡️ Cofre de Recuperação Automática</h3>
+      <button class="modal-close" onclick="closeModal('modalVaultRecovery')">&times;</button>
+    </div>
+    <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.45;">
+      O sistema salva pontos de restauração criptografados automaticamente neste dispositivo antes de cada alteração. Selecione um ponto abaixo caso deseje restaurar uma versão anterior:
+    </p>
+    <div id="vaultHistoryList" style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+      <!-- Preenchido via JS -->
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button type="button" class="btn btn-outline" onclick="closeModal('modalVaultRecovery')">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ==========================================
 
@@ -4706,80 +4757,244 @@ const INITIAL_FINANCIAL_DATA = {
 let appData = null;
 let authenticatedUserId = null;
 let activeSessionKey = null;
-let autoLockMinutes = 5;
+let autoLockMinutes = parseInt(localStorage.getItem('cf_auto_lock_minutes') ?? '15', 10); if (isNaN(autoLockMinutes)) autoLockMinutes = 15;
 let autoLockTimer = null;
 let isPrivacyMode = false;
 let failedLoginAttempts = 0;
 let lockoutUntilTime = 0;
 
 // ==========================================
-// MOTOR DE SINCRONIZAÇÃO OTIMIZADA (DEBOUNCE + CONTINGÊNCIA LOCAL)
+// CONTADOR DE INTEGRIDADE E PROTEÇÃO ANTI-WIPE (DATA LOSS PREVENTION)
+// ==========================================
+function countTotalUserArtifacts(dataObj) {
+  if (!dataObj) return 0;
+  let count = 0;
+  const yearsMap = dataObj.years || {};
+  const visitedMonths = new Set();
+
+  SUPPORTED_YEARS.forEach(y => {
+    const mArr = (yearsMap[y] && Array.isArray(yearsMap[y].months)) ? yearsMap[y].months : null;
+    if (mArr) {
+      mArr.forEach(m => {
+        visitedMonths.add(m);
+        count += (m.transactions ? m.transactions.length : 0);
+        count += (m.fixedExpenses ? m.fixedExpenses.filter(f => !f.cardRefBankId).length : 0);
+      });
+    }
+  });
+
+  if (Array.isArray(dataObj.months)) {
+    dataObj.months.forEach(m => {
+      if (!visitedMonths.has(m)) {
+        count += (m.transactions ? m.transactions.length : 0);
+        count += (m.fixedExpenses ? m.fixedExpenses.filter(f => !f.cardRefBankId).length : 0);
+      }
+    });
+  }
+  return count;
+}
+
+function stampDataRevision(dataObj) {
+  if (!dataObj) return;
+  if (!dataObj._meta || typeof dataObj._meta !== 'object') {
+    dataObj._meta = { revision: 0, updatedAt: 0 };
+  }
+  dataObj._meta.revision = (parseInt(dataObj._meta.revision, 10) || 0) + 1;
+  dataObj._meta.updatedAt = Date.now();
+  dataObj._meta.artifactCount = countTotalUserArtifacts(dataObj);
+}
+
+// ==========================================
+// COFRE LOCAL CRIPTOGRAFADO + HISTÓRICO DE PONTOS DE RESTAURAÇÃO (LOCAL-FIRST VAULT)
+// ==========================================
+const LocalVaultEngine = {
+  getVaultKey(userId) {
+    return `cf_vault_${userId}`;
+  },
+  getHistoryKey(userId) {
+    return `cf_vault_history_${userId}`;
+  },
+
+  async saveSnapshot(userId, dataObj, sessionKey, saltB64, avatarColor, displayName, syncedToCloud = false) {
+    if (!userId || !dataObj || !sessionKey) return null;
+    try {
+      const serialized = JSON.stringify(dataObj);
+      const encPayload = await encryptDataAES(serialized, sessionKey);
+      const record = {
+        userId: userId,
+        payload: encPayload,
+        salt: saltB64,
+        avatarColor: avatarColor,
+        displayName: displayName,
+        revision: dataObj._meta?.revision || 1,
+        updatedAt: dataObj._meta?.updatedAt || Date.now(),
+        artifactCount: countTotalUserArtifacts(dataObj),
+        syncedToCloud: !!syncedToCloud
+      };
+
+      localStorage.setItem(this.getVaultKey(userId), JSON.stringify(record));
+      // Mantém compatibilidade com a chave global de contingência
+      localStorage.setItem('cf_contingency_backup', JSON.stringify(record));
+
+      // Salva no histórico rotativo de pontos de restauração (máximo 5 snapshots distintos)
+      if (record.artifactCount > 0) {
+        let history = [];
+        try {
+          const rawHist = localStorage.getItem(this.getHistoryKey(userId));
+          if (rawHist) history = JSON.parse(rawHist) || [];
+        } catch (e) { history = []; }
+
+        const lastEntry = history[0];
+        // Evita duplicar snapshots idênticos em menos de 10 segundos se a contagem for igual
+        if (!lastEntry || lastEntry.artifactCount !== record.artifactCount || (record.updatedAt - lastEntry.updatedAt) > 10000) {
+          history.unshift(record);
+          if (history.length > 5) history = history.slice(0, 5);
+          localStorage.setItem(this.getHistoryKey(userId), JSON.stringify(history));
+        }
+      }
+      return encPayload;
+    } catch (err) {
+      console.warn("Aviso ao gravar no LocalVaultEngine:", err);
+      return null;
+    }
+  },
+
+  loadLatestRecord(userId) {
+    if (!userId) return null;
+    try {
+      const raw = localStorage.getItem(this.getVaultKey(userId));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.userId === userId && parsed.payload) return parsed;
+      }
+      const fallbackRaw = localStorage.getItem('cf_contingency_backup');
+      if (fallbackRaw) {
+        const parsedFb = JSON.parse(fallbackRaw);
+        if (parsedFb && parsedFb.userId === userId && parsedFb.payload) return parsedFb;
+      }
+    } catch (e) {
+      console.warn("Erro ao ler LocalVaultEngine:", e);
+    }
+    return null;
+  },
+
+  loadHistory(userId) {
+    if (!userId) return [];
+    try {
+      const raw = localStorage.getItem(this.getHistoryKey(userId));
+      return raw ? (JSON.parse(raw) || []) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+};
+
+// ==========================================
+// MOTOR DE SINCRONIZAÇÃO ATÔMICA (LOCAL-FIRST + DEBOUNCE + FLUSH IMEDIATO)
 // ==========================================
 const CloudSyncEngine = {
   syncTimeout: null,
   isSyncing: false,
   pendingSync: false,
-  debounceMs: 700,
+  debounceMs: 350,
+  currentSyncPromise: null,
 
   schedule() {
-    if (!supabaseClient || !authenticatedUserId || !appData || !activeSessionKey) return;
+    if (!authenticatedUserId || !appData || !activeSessionKey) return;
     this.pendingSync = true;
+
+    // 1. Gravação imediata no Cofre Local Criptografado (0ms de janela de perda)
+    LocalVaultEngine.saveSnapshot(
+      authenticatedUserId,
+      appData,
+      activeSessionKey,
+      activeUserSalt,
+      activeAvatarColor,
+      activeDisplayName || activeUsername,
+      false
+    );
+
     if (this.syncTimeout) clearTimeout(this.syncTimeout);
     this.syncTimeout = setTimeout(() => {
       this.execute();
     }, this.debounceMs);
   },
 
+  async flushNow() {
+    if (this.syncTimeout) {
+      clearTimeout(this.syncTimeout);
+      this.syncTimeout = null;
+    }
+    if (this.isSyncing && this.currentSyncPromise) {
+      try { await this.currentSyncPromise; } catch (e) {}
+    }
+    if (this.pendingSync) {
+      await this.execute();
+    }
+  },
+
   async execute() {
-    if (this.isSyncing) return;
+    if (this.isSyncing) {
+      this.pendingSync = true;
+      return this.currentSyncPromise;
+    }
     if (!supabaseClient || !authenticatedUserId || !appData || !activeSessionKey) return;
 
     this.isSyncing = true;
     this.pendingSync = false;
 
-    try {
-      const encPayload = await encryptDataAES(JSON.stringify(appData), activeSessionKey);
-      
-      // Salva snapshot de contingência local criptografado para resiliência offline
+    this.currentSyncPromise = (async () => {
       try {
-        localStorage.setItem('cf_contingency_backup', JSON.stringify({
-          userId: authenticatedUserId,
-          payload: encPayload,
-          salt: activeUserSalt,
-          avatarColor: activeAvatarColor,
-          displayName: activeDisplayName || activeUsername,
-          timestamp: Date.now()
-        }));
-      } catch (locErr) {
-        console.warn("Storage local de contingência indisponível:", locErr);
-      }
+        const encPayload = await LocalVaultEngine.saveSnapshot(
+          authenticatedUserId,
+          appData,
+          activeSessionKey,
+          activeUserSalt,
+          activeAvatarColor,
+          activeDisplayName || activeUsername,
+          false
+        ) || await encryptDataAES(JSON.stringify(appData), activeSessionKey);
 
-      const { error } = await supabaseClient
-        .from('user_financial_data')
-        .upsert({
-          user_id: authenticatedUserId,
-          encrypted_data: encPayload,
-          salt: activeUserSalt,
-          avatar_color: activeAvatarColor,
-          display_name: activeDisplayName || activeUsername,
-          updated_at: new Date().toISOString()
-        });
+        const { error } = await supabaseClient
+          .from('user_financial_data')
+          .upsert({
+            user_id: authenticatedUserId,
+            encrypted_data: encPayload,
+            salt: activeUserSalt,
+            avatar_color: activeAvatarColor,
+            display_name: activeDisplayName || activeUsername,
+            updated_at: new Date().toISOString()
+          });
 
-      if (!error) {
-        updateCloudStatusBadge(true);
-      } else {
-        console.warn("Aviso ao sincronizar no Supabase:", error.message);
+        if (!error) {
+          updateCloudStatusBadge(true);
+          // Marca o snapshot local como sincronizado com a nuvem
+          await LocalVaultEngine.saveSnapshot(
+            authenticatedUserId,
+            appData,
+            activeSessionKey,
+            activeUserSalt,
+            activeAvatarColor,
+            activeDisplayName || activeUsername,
+            true
+          );
+        } else {
+          console.warn("Aviso ao sincronizar no Supabase:", error.message);
+          updateCloudStatusBadge(false);
+        }
+      } catch (err) {
+        console.error("Erro no processamento da sincronização:", err);
         updateCloudStatusBadge(false);
+      } finally {
+        this.isSyncing = false;
+        this.currentSyncPromise = null;
+        if (this.pendingSync) {
+          this.schedule();
+        }
       }
-    } catch (err) {
-      console.error("Erro no processamento da sincronização:", err);
-      updateCloudStatusBadge(false);
-    } finally {
-      this.isSyncing = false;
-      if (this.pendingSync) {
-        this.schedule();
-      }
-    }
+    })();
+
+    return this.currentSyncPromise;
   }
 };
 
@@ -4787,8 +5002,14 @@ async function persistData() {
   invalidateTotalsCache();
   if (appData) {
     if (!appData.years || typeof appData.years !== 'object') appData.years = {};
-    appData.years[currentYear] = { months: appData.months };
+    if (!appData.years[currentYear]) {
+      appData.years[currentYear] = { months: appData.months };
+    } else {
+      appData.years[currentYear].months = appData.months;
+    }
+    appData.months = appData.years[currentYear].months;
     appData.year = currentYear;
+    stampDataRevision(appData);
   }
 
   // ATUALIZAÇÃO OTIMISTA IMEDIATA (0ms de latência percebida na interface)
@@ -4797,14 +5018,81 @@ async function persistData() {
   populateDropdowns();
   renderAll();
 
-  // Sincronização em nuvem assíncrona com Debounce de alta performance
+  // Sincronização Local-First imediata + Nuvem assíncrona
   CloudSyncEngine.schedule();
 }
 
+function openVaultRecoveryModal() {
+  if (!authenticatedUserId || !activeSessionKey) {
+    showToast("⚠️ Faça login para acessar o Cofre de Recuperação.", 3000);
+    return;
+  }
+  const listEl = document.getElementById('vaultHistoryList');
+  if (!listEl) return;
+  listEl.innerHTML = '';
+
+  const history = LocalVaultEngine.loadHistory(authenticatedUserId);
+  if (history.length === 0) {
+    listEl.innerHTML = '<div class="empty-fixed-state"><span>🛡️</span><p>Nenhum ponto de restauração anterior registrado neste dispositivo ainda.</p></div>';
+  } else {
+    history.forEach((snap, idx) => {
+      const dt = new Date(snap.updatedAt || Date.now()).toLocaleString('pt-BR');
+      const card = document.createElement('div');
+      card.className = 'fixed-item-card';
+      card.innerHTML = `
+        <div class="fixed-item-left">
+          <div class="fixed-circle-icon" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">🛡️</div>
+        </div>
+        <div class="fixed-item-center">
+          <div class="fixed-item-title-row">
+            <strong class="fixed-item-title">Revisão #${snap.revision || (history.length - idx)}</strong>
+            <span class="badge ${snap.syncedToCloud ? 'badge-success' : 'badge-warning'}" style="font-size: 0.65rem;">
+              ${snap.syncedToCloud ? 'Sincronizado' : 'Salvo no Aparelho'}
+            </span>
+          </div>
+          <div class="fixed-item-meta">
+            <span>📅 ${dt} • <strong>${snap.artifactCount || 0}</strong> lançamentos registrados</span>
+          </div>
+        </div>
+        <div class="fixed-item-right">
+          <button type="button" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.76rem;" onclick="restoreFromVaultSnapshot(${idx})">
+            Restaurar
+          </button>
+        </div>
+      `;
+      listEl.appendChild(card);
+    });
+  }
+  openModal('modalVaultRecovery');
+}
+
+async function restoreFromVaultSnapshot(idx) {
+  if (!authenticatedUserId || !activeSessionKey) return;
+  const history = LocalVaultEngine.loadHistory(authenticatedUserId);
+  const snap = history[idx];
+  if (!snap || !snap.payload) return;
+
+  if (!confirm("Deseja restaurar este ponto de recuperação? Os dados atuais serão substituídos por esta versão.")) {
+    return;
+  }
+
+  try {
+    const decStr = await decryptDataAES(snap.payload, activeSessionKey);
+    const restoredData = JSON.parse(decStr);
+    appData = restoredData;
+    ensureMultiYearStructure();
+    closeModal('modalVaultRecovery');
+    await persistData();
+    await CloudSyncEngine.flushNow();
+    showToast("✅ Ponto de restauração recuperado e sincronizado com sucesso!", 3500);
+  } catch (err) {
+    showToast("⚠️ Não foi possível descriptografar este snapshot com a chave atual.", 3500);
+  }
+}
+
 function updateMyAvatarColor(hex) {
-  const curUser = getActiveUser();
-  if (!curUser) return;
-  curUser.avatarColor = hex;
+  if (!hex) return;
+  activeAvatarColor = hex;
   const avatarEl = document.getElementById('profileModalAvatar');
   if (avatarEl) avatarEl.style.backgroundColor = hex;
   persistData();
@@ -4829,22 +5117,62 @@ async function changeMyPassword() {
   }
 
   try {
-    const { error: pwdErr } = await supabaseClient.auth.updateUser({ password: newPwd });
-    if (pwdErr) {
-      alert("Erro ao atualizar senha no Supabase: " + pwdErr.message);
-      return;
-    }
-
+    showToast("🔐 Re-criptografando cofre financeiro e atualizando senha...", 3000);
+    // 1. Prepara a nova chave e cifra os dados ANTES de alterar a senha no Auth
     const salt = window.crypto.getRandomValues(new Uint8Array(16));
     const newSaltB64 = bufToBase64(salt);
     const newKey = await deriveKeyPBKDF2(newPwd, salt);
+    stampDataRevision(appData);
     const newEncData = await encryptDataAES(JSON.stringify(appData), newKey);
+
+    // 2. Grava primeiro o novo payload criptografado no banco para nunca deixar a conta órfã
+    const { error: dbErr } = await supabaseClient
+      .from('user_financial_data')
+      .upsert({
+        user_id: authenticatedUserId,
+        encrypted_data: newEncData,
+        salt: newSaltB64,
+        avatar_color: activeAvatarColor,
+        display_name: activeDisplayName || activeUsername,
+        updated_at: new Date().toISOString()
+      });
+
+    if (dbErr) {
+      alert("❌ Erro ao gravar nova criptografia no banco: " + dbErr.message + ". Sua senha NÃO foi alterada.");
+      return;
+    }
+
+    // 3. Atualiza a senha no Supabase Auth
+    const { error: pwdErr } = await supabaseClient.auth.updateUser({ password: newPwd });
+    if (pwdErr) {
+      // Rollback do cofre para a chave anterior se o Auth recusar a senha
+      const oldEncData = await encryptDataAES(JSON.stringify(appData), activeSessionKey);
+      await supabaseClient.from('user_financial_data').upsert({
+        user_id: authenticatedUserId,
+        encrypted_data: oldEncData,
+        salt: activeUserSalt,
+        avatar_color: activeAvatarColor,
+        display_name: activeDisplayName || activeUsername,
+        updated_at: new Date().toISOString()
+      });
+      alert("Erro ao atualizar senha no Supabase Auth: " + pwdErr.message);
+      return;
+    }
 
     activeSessionKey = newKey;
     activeUserSalt = newSaltB64;
+    await saveSessionKeyToTab(newKey);
+    await LocalVaultEngine.saveSnapshot(
+      authenticatedUserId,
+      appData,
+      activeSessionKey,
+      activeUserSalt,
+      activeAvatarColor,
+      activeDisplayName || activeUsername,
+      true
+    );
 
-    await persistData();
-    alert("✅ Senha alterada com sucesso no Supabase! Seus dados foram re-criptografados com a nova chave.");
+    showToast("✅ Senha alterada e cofre re-criptografado com sucesso!", 4000);
   } catch (err) {
     alert("❌ Falha ao alterar senha: " + err.message);
   }
@@ -4987,7 +5315,7 @@ async function deriveKeyPBKDF2(password, saltUint8) {
     },
     keyMaterial,
     { name: 'AES-GCM', length: 256 },
-    false,
+    true,
     ['encrypt', 'decrypt']
   );
 }
@@ -5018,6 +5346,42 @@ async function decryptDataAES(encryptedObj, key) {
   );
 
   return new TextDecoder().decode(decrypted);
+}
+
+async function saveSessionKeyToTab(key) {
+  if (!key || typeof sessionStorage === 'undefined' || !window.crypto?.subtle?.exportKey) return;
+  try {
+    const jwk = await window.crypto.subtle.exportKey('jwk', key);
+    sessionStorage.setItem('cf_tab_session_jwk', JSON.stringify(jwk));
+    sessionStorage.setItem('cf_tab_session_meta', JSON.stringify({
+      userId: authenticatedUserId,
+      username: activeUsername,
+      displayName: activeDisplayName,
+      salt: activeUserSalt,
+      avatarColor: activeAvatarColor
+    }));
+  } catch (e) {}
+}
+
+async function restoreSessionKeyFromTab() {
+  if (typeof sessionStorage === 'undefined' || !window.crypto?.subtle?.importKey) return null;
+  try {
+    const rawJwk = sessionStorage.getItem('cf_tab_session_jwk');
+    const rawMeta = sessionStorage.getItem('cf_tab_session_meta');
+    if (!rawJwk || !rawMeta) return null;
+    const jwk = JSON.parse(rawJwk);
+    const meta = JSON.parse(rawMeta);
+    const key = await window.crypto.subtle.importKey(
+      'jwk',
+      jwk,
+      { name: 'AES-GCM', length: 256 },
+      true,
+      ['encrypt', 'decrypt']
+    );
+    return { key, meta };
+  } catch (e) {
+    return null;
+  }
 }
 
 // ========================================================
@@ -5051,12 +5415,14 @@ function openAutoLockModal() {
 function saveAutoLockSettings(e) {
   e.preventDefault();
   autoLockMinutes = parseInt(document.getElementById('selAutoLockMinutes').value, 10);
+  try { localStorage.setItem('cf_auto_lock_minutes', String(autoLockMinutes)); } catch (err) {}
   const lbl = document.getElementById('lblAutoLockTime');
   if (lbl) {
     lbl.textContent = autoLockMinutes > 0 ? `${autoLockMinutes}m` : 'Off';
   }
   closeModal('modalAutoLock');
   resetInactivityTimer();
+  showToast("⏱️ Configuração de bloqueio automático salva!", 2500);
 }
 
 // ========================================================
@@ -5385,9 +5751,22 @@ function initServiceWorkerAndOffline() {
     updateCloudStatusBadge(false);
   });
 
+  // No iOS Safari e Android Chrome, visibilitychange e pagehide garantem o flush antes do app ser suspenso
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && CloudSyncEngine && CloudSyncEngine.pendingSync) {
+      CloudSyncEngine.flushNow();
+    }
+  });
+
+  window.addEventListener('pagehide', () => {
+    if (CloudSyncEngine && CloudSyncEngine.pendingSync) {
+      CloudSyncEngine.flushNow();
+    }
+  });
+
   window.addEventListener('beforeunload', () => {
     if (CloudSyncEngine && CloudSyncEngine.pendingSync) {
-      CloudSyncEngine.execute();
+      CloudSyncEngine.flushNow();
     }
   });
 }
@@ -5403,6 +5782,45 @@ function loadData() {
   initServiceWorkerAndOffline();
   initTouchGestures();
   updateCloudStatusBadge(!!supabaseClient);
+}
+
+async function reconcileCloudAndLocalData(userId, cloudData, pwdInput) {
+  const localRecord = LocalVaultEngine.loadLatestRecord(userId);
+  if (!localRecord || !localRecord.payload || !localRecord.salt) {
+    return { data: cloudData, recoveredFromLocal: false };
+  }
+
+  try {
+    const localSaltBuf = base64ToBuf(localRecord.salt);
+    const localKey = await deriveKeyPBKDF2(pwdInput, localSaltBuf);
+    const localDecStr = await decryptDataAES(localRecord.payload, localKey);
+    const localData = JSON.parse(localDecStr);
+
+    if (!cloudData) {
+      return { data: localData, recoveredFromLocal: true };
+    }
+
+    const cloudRev = parseInt(cloudData._meta?.revision, 10) || 0;
+    const localRev = parseInt(localData._meta?.revision, 10) || 0;
+    const cloudTime = parseInt(cloudData._meta?.updatedAt, 10) || 0;
+    const localTime = parseInt(localData._meta?.updatedAt, 10) || (localRecord.updatedAt || 0);
+    const cloudCount = countTotalUserArtifacts(cloudData);
+    const localCount = countTotalUserArtifacts(localData);
+
+    // 1. Proteção Anti-Wipe: Se a nuvem veio zerada mas o aparelho tem lançamentos reais do usuário
+    if (cloudCount === 0 && localCount > 0) {
+      return { data: localData, recoveredFromLocal: true };
+    }
+
+    // 2. Se o snapshot local tem revisão maior ou timestamp mais recente (alterações que não subiram antes de fechar a aba)
+    if ((localRev > cloudRev || (localTime > cloudTime && localRecord.syncedToCloud === false)) && localCount >= cloudCount) {
+      return { data: localData, recoveredFromLocal: true };
+    }
+  } catch (e) {
+    console.warn("Nota ao comparar snapshot local:", e);
+  }
+
+  return { data: cloudData, recoveredFromLocal: false };
 }
 
 async function handleLogin(e) {
@@ -5456,34 +5874,65 @@ async function handleLogin(e) {
     const authUser = authData.user;
     authenticatedUserId = authUser.id;
 
-    // Busca os dados financeiros na tabela user_financial_data
-    const { data: row, error: dbErr } = await supabaseClient
+    // Busca os dados financeiros na tabela user_financial_data com Retry de Segurança (evita falso null em Cold Start / RLS)
+    let { data: row, error: dbErr } = await supabaseClient
       .from('user_financial_data')
       .select('*')
       .eq('user_id', authUser.id)
       .maybeSingle();
 
+    if (!row && !dbErr) {
+      // Aguarda 650ms e revalida a sessão para descartar falso negativo de propagação de token JWT/RLS
+      await new Promise(res => setTimeout(res, 650));
+      await supabaseClient.auth.getSession();
+      const retryRes = await supabaseClient
+        .from('user_financial_data')
+        .select('*')
+        .eq('user_id', authUser.id)
+        .maybeSingle();
+      row = retryRes.data;
+      dbErr = retryRes.error;
+    }
+
     if (dbErr) {
       console.error("Erro ao buscar dados no Supabase:", dbErr);
-      showAuthError("Erro ao carregar dados do Supabase. Verifique se o script schema.sql foi executado no Supabase.");
+      showAuthError("Erro ao carregar dados do Supabase. Verifique sua conexão ou se o projeto está ativo.");
       return;
     }
 
+    let recoveredFromLocal = false;
+
     if (!row) {
-      appData = JSON.parse(JSON.stringify(INITIAL_FINANCIAL_DATA));
+      // Verifica primeiro se há dados salvos no Cofre Local deste dispositivo antes de inicializar um template vazio!
+      const localCheck = await reconcileCloudAndLocalData(authUser.id, null, pwdInput);
+      if (localCheck.data) {
+        appData = localCheck.data;
+        recoveredFromLocal = true;
+      } else {
+        appData = JSON.parse(JSON.stringify(INITIAL_FINANCIAL_DATA));
+      }
       const salt = window.crypto.getRandomValues(new Uint8Array(16));
       activeUserSalt = bufToBase64(salt);
       activeSessionKey = await deriveKeyPBKDF2(pwdInput, salt);
       activeAvatarColor = '#2563eb';
       activeDisplayName = usernameInput;
       activeUsername = usernameInput.toLowerCase();
+      syncWithDeviceDate();
+      ensureMultiYearStructure();
       await persistData();
+      await CloudSyncEngine.flushNow();
     } else {
       const saltBuf = base64ToBuf(row.salt);
       const key = await deriveKeyPBKDF2(pwdInput, saltBuf);
       try {
         const decryptedStr = await decryptDataAES(row.encrypted_data, key);
-        appData = JSON.parse(decryptedStr);
+        const cloudData = JSON.parse(decryptedStr);
+
+        // Compara com o Cofre Local para recuperar eventuais edições feitas offline ou antes de fechar a aba
+        const reconciled = await reconcileCloudAndLocalData(authUser.id, cloudData, pwdInput);
+        appData = reconciled.data;
+        recoveredFromLocal = reconciled.recoveredFromLocal;
+
         activeSessionKey = key;
         activeUserSalt = row.salt;
         activeAvatarColor = row.avatar_color || '#2563eb';
@@ -5496,16 +5945,37 @@ async function handleLogin(e) {
       }
     }
 
+    // CORREÇÃO CRÍTICA: Sincroniza data do dispositivo e unifica ponteiros de memória ANTES de renderizar ou salvar!
+    syncWithDeviceDate();
+    ensureMultiYearStructure();
+
+    // Salva snapshot atualizado no cofre local e na sessão da aba
+    await saveSessionKeyToTab(activeSessionKey);
+    await LocalVaultEngine.saveSnapshot(
+      authenticatedUserId,
+      appData,
+      activeSessionKey,
+      activeUserSalt,
+      activeAvatarColor,
+      activeDisplayName || activeUsername,
+      !recoveredFromLocal
+    );
+
+    if (recoveredFromLocal) {
+      CloudSyncEngine.schedule();
+      showToast("🛡️ Alterações locais recentes recuperadas e sincronizadas com a nuvem!", 4000);
+    }
+
     failedLoginAttempts = 0;
     sessionStorage.setItem('cf_auth_username', activeUsername);
     document.getElementById('loginPassword').value = '';
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('dashboardMainContainer').style.display = 'block';
-    syncWithDeviceDate();
     document.querySelectorAll('.month-pill').forEach((el, i) => el.classList.toggle('active', i === currentMonthIdx));
     const bNav = document.getElementById('mobileBottomNav'); if (bNav && window.innerWidth <= 768) bNav.style.display = 'flex';
     updateCloudStatusBadge(true);
     resetInactivityTimer();
+    applyThemeStyles();
     renderUserHeader();
     populateDropdowns();
     renderAll();
@@ -5515,7 +5985,7 @@ async function handleLogin(e) {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.textContent = 'Entrar no Dashboard ➔';
+      btn.textContent = 'Acessar Conta';
     }
   }
 }
@@ -5580,6 +6050,7 @@ async function handleRegister(e) {
     authenticatedUserId = authUser.id;
 
     const userData = JSON.parse(JSON.stringify(INITIAL_FINANCIAL_DATA));
+    stampDataRevision(userData);
     const salt = window.crypto.getRandomValues(new Uint8Array(16));
     const saltB64 = bufToBase64(salt);
     const key = await deriveKeyPBKDF2(pwd, salt);
@@ -5604,22 +6075,25 @@ async function handleRegister(e) {
 
     appData = userData;
     activeSessionKey = key;
+    syncWithDeviceDate();
     ensureMultiYearStructure();
     activeUsername = name.toLowerCase();
     activeDisplayName = name;
     activeUserSalt = saltB64;
     activeAvatarColor = color;
 
+    await saveSessionKeyToTab(key);
+    await LocalVaultEngine.saveSnapshot(authUser.id, appData, key, saltB64, color, name, true);
     sessionStorage.setItem('cf_auth_username', activeUsername);
 
     document.getElementById('formAuthRegister').reset();
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('dashboardMainContainer').style.display = 'block';
-    syncWithDeviceDate();
     document.querySelectorAll('.month-pill').forEach((el, i) => el.classList.toggle('active', i === currentMonthIdx));
     const bNav = document.getElementById('mobileBottomNav'); if (bNav && window.innerWidth <= 768) bNav.style.display = 'flex';
     updateCloudStatusBadge(true);
     resetInactivityTimer();
+    applyThemeStyles();
     renderUserHeader();
     populateDropdowns();
     renderAll();
@@ -5629,12 +6103,21 @@ async function handleRegister(e) {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.textContent = 'Criar Minha Conta ➔';
+      btn.textContent = 'Criar Minha Conta';
     }
   }
 }
 
 async function logout(msg) {
+  // CORREÇÃO CRÍTICA: Garante o envio imediato de qualquer sincronização pendente ANTES de limpar a memória!
+  try {
+    if (CloudSyncEngine && (CloudSyncEngine.pendingSync || CloudSyncEngine.isSyncing)) {
+      await CloudSyncEngine.flushNow();
+    }
+  } catch (flushErr) {
+    console.warn("Aviso ao finalizar sync antes do logout:", flushErr);
+  }
+
   if (supabaseClient) {
     try {
       await supabaseClient.auth.signOut();
@@ -5647,7 +6130,12 @@ async function logout(msg) {
   activeDisplayName = '';
   if (autoLockTimer) clearTimeout(autoLockTimer);
 
-  sessionStorage.removeItem('cf_auth_username');
+  try {
+    sessionStorage.removeItem('cf_auth_username');
+    sessionStorage.removeItem('cf_tab_session_jwk');
+    sessionStorage.removeItem('cf_tab_session_meta');
+  } catch (e) {}
+
   document.getElementById('dashboardMainContainer').style.display = 'none';
   const bNav = document.getElementById('mobileBottomNav'); if (bNav) bNav.style.display = 'none';
   document.getElementById('authScreen').style.display = 'flex';
@@ -5659,45 +6147,8 @@ async function logout(msg) {
 }
 
 async function updateAccountPassword() {
-  if (!supabaseClient) {
-    showToast("⚠️ Supabase não conectado.", 3000);
-    return;
-  }
-  const newPwd = prompt("Digite sua nova senha para o Supabase (mínimo 6 caracteres):");
-  if (!newPwd) return;
-  if (newPwd.length < 6) {
-    showToast("⚠️ A senha deve ter no mínimo 6 caracteres.", 3000);
-    return;
-  }
-  const confirmPwd = prompt("Confirme a nova senha:");
-  if (newPwd !== confirmPwd) {
-    showToast("⚠️ As senhas digitadas não coincidem.", 3000);
-    return;
-  }
-
-  try {
-    showToast("Atualizando senha no Supabase...", 2000);
-    const { error } = await supabaseClient.auth.updateUser({ password: newPwd });
-    if (error) {
-      showToast("Erro ao atualizar senha: " + error.message, 4000);
-      return;
-    }
-    // Re-derivar chave com a nova senha para manter a sessão ativa sem deslogar
-    if (activeUserSalt) {
-      const salt = base64ToBuf(activeUserSalt);
-      activeSessionKey = await deriveKeyPBKDF2(newPwd, salt);
-      await persistData();
-    }
-    showToast("✅ Senha atualizada com sucesso no Supabase!", 3500);
-  } catch (err) {
-    showToast("Erro ao processar alteração de senha: " + err.message, 4000);
-  }
+  return changeMyPassword();
 }
-
-
-
-
-
 
 function resetToTemplate() {
   if (confirm("Deseja realmente restaurar os dados originais padrão? (Todas as alterações em todos os anos de 2026 a 2031 serão resetadas)")) {
@@ -5896,6 +6347,43 @@ function invalidateTotalsCache() {
   TotalsCacheEngine.invalidate();
 }
 
+function getEmptyMonthTotals() {
+  return {
+    incomeTotal: 0,
+    cardTotalsMap: {},
+    cardUserTotalsMap: {},
+    cardThirdPartyTotalsMap: {},
+    cardFutureDebtsMap: {},
+    cardFutureDebtsMapUser: {},
+    cardFutureDebtsMapThirdParty: {},
+    cardTotalDebtsMap: {},
+    cardTotalDebtsMapUser: {},
+    cardTotalDebtsMapThirdParty: {},
+    cardsTotal: 0,
+    cardsTotalUser: 0,
+    cardsTotalThirdParty: 0,
+    totalFutureCardsDebt: 0,
+    totalCardsDebt: 0,
+    variableExpenses: 0,
+    totalDebitPixExpenses: 0,
+    extratoInflows: 0,
+    fixedSalaryTotal: 0,
+    baseBankMoney: 0,
+    baseOriginLabel: 'Saldo Inicial',
+    bankMoney: 0,
+    fixedTotal: 0,
+    fixedPaidTotal: 0,
+    userFixedDeduction: 0,
+    salaryRemaining: 0,
+    totalSaved: 0,
+    remainingForGoal: 0,
+    goalProgressPct: 0,
+    totalAllOutflows: 0,
+    totalUserOutflows: 0,
+    netBalance: 0
+  };
+}
+
 function getMonthTotals(mIdx) {
   if (!appData || !appData.months) return getEmptyMonthTotals();
   const cacheKey = `${currentYear}_${mIdx}`;
@@ -6007,37 +6495,50 @@ function getMonthTotals(mIdx) {
     }
   });
 
-  // 2. Cálculo da Dívida Futura dos Cartões (meses mIdx + 1 até 11)
+  // 2. Cálculo da Dívida Futura dos Cartões (meses mIdx + 1 até 11 do ano atual + anos futuros 2026..2031)
   let totalFutureCardsDebt = 0;
   let totalFutureCardsDebtUser = 0;
   let totalFutureCardsDebtThirdParty = 0;
 
-  for (let futureM = mIdx + 1; futureM < 12; futureM++) {
-    const fMonth = appData.months[futureM];
-    if (fMonth && fMonth.transactions) {
-      fMonth.transactions.forEach(t => {
-        if (t.type === 'SAÍDA') {
-          const isCard = cardBanks.some(b => b.name === t.bank);
-          const isDebitPix = !isCard || t.installment === 'PIX' || t.installment === 'DÉBITO' || t.installment === 'DINHEIRO';
-          if (isCard && !isDebitPix) {
-            const val = parseFloat(t.value) || 0;
-            const author = (t.author || 'USUÁRIO').toUpperCase();
-            const isUserAuthor = (author === 'USUÁRIO');
+  function accumulateFutureMonthTransactions(fMonth) {
+    if (!fMonth || !fMonth.transactions) return;
+    fMonth.transactions.forEach(t => {
+      if (t.type === 'SAÍDA') {
+        const isCard = cardBanks.some(b => b.name === t.bank);
+        const isDebitPix = !isCard || t.installment === 'PIX' || t.installment === 'DÉBITO' || t.installment === 'DINHEIRO';
+        if (isCard && !isDebitPix) {
+          const val = parseFloat(t.value) || 0;
+          const author = (t.author || 'USUÁRIO').toUpperCase();
+          const isUserAuthor = (author === 'USUÁRIO');
 
-            cardFutureDebtsMap[t.bank] = (cardFutureDebtsMap[t.bank] || 0) + val;
-            totalFutureCardsDebt += val;
+          cardFutureDebtsMap[t.bank] = (cardFutureDebtsMap[t.bank] || 0) + val;
+          totalFutureCardsDebt += val;
 
-            if (isUserAuthor) {
-              cardFutureDebtsMapUser[t.bank] = (cardFutureDebtsMapUser[t.bank] || 0) + val;
-              totalFutureCardsDebtUser += val;
-            } else {
-              cardFutureDebtsMapThirdParty[t.bank] = (cardFutureDebtsMapThirdParty[t.bank] || 0) + val;
-              totalFutureCardsDebtThirdParty += val;
-            }
+          if (isUserAuthor) {
+            cardFutureDebtsMapUser[t.bank] = (cardFutureDebtsMapUser[t.bank] || 0) + val;
+            totalFutureCardsDebtUser += val;
+          } else {
+            cardFutureDebtsMapThirdParty[t.bank] = (cardFutureDebtsMapThirdParty[t.bank] || 0) + val;
+            totalFutureCardsDebtThirdParty += val;
           }
         }
-      });
-    }
+      }
+    });
+  }
+
+  for (let futureM = mIdx + 1; futureM < 12; futureM++) {
+    accumulateFutureMonthTransactions(appData.months[futureM]);
+  }
+
+  // Soma também parcelas que vencem nos anos seguintes (ex: compras parceladas no fim do ano)
+  if (appData.years) {
+    SUPPORTED_YEARS.forEach(y => {
+      if (y > currentYear && appData.years[y] && Array.isArray(appData.years[y].months)) {
+        for (let fm = 0; fm < 12; fm++) {
+          accumulateFutureMonthTransactions(appData.years[y].months[fm]);
+        }
+      }
+    });
   }
 
   // Dívida total por cartão = fatura do mês atual + parcelas futuras
@@ -6211,15 +6712,75 @@ function getAnnualTotals() {
 // ==========================================
 // GESTÃO PLURIANUAL (2026 A 2031 - 6 ANOS)
 // ==========================================
+function reconcileMonthArrays(monthsA, monthsB) {
+  if (!Array.isArray(monthsA) || monthsA.length !== 12) return monthsB;
+  if (!Array.isArray(monthsB) || monthsB.length !== 12) return monthsA;
+  if (monthsA === monthsB) return monthsA;
+
+  for (let i = 0; i < 12; i++) {
+    const mA = monthsA[i];
+    const mB = monthsB[i];
+    if (!mA || !mB) continue;
+
+    // 1. Reconciliar transações por ID único (garante zero perda entre appData.months e appData.years[y].months)
+    const txMap = new Map();
+    (mB.transactions || []).forEach(t => { if (t && t.id) txMap.set(t.id, t); });
+    (mA.transactions || []).forEach(t => { if (t && t.id) txMap.set(t.id, t); });
+    mA.transactions = Array.from(txMap.values());
+
+    // 2. Reconciliar despesas fixas (preservando status paid = true)
+    const fixedMap = new Map();
+    (mB.fixedExpenses || []).forEach(f => {
+      const key = f.cardRefBankId ? ('card_' + f.cardRefBankId) : (f.id || f.name);
+      if (key) fixedMap.set(key, f);
+    });
+    (mA.fixedExpenses || []).forEach(f => {
+      const key = f.cardRefBankId ? ('card_' + f.cardRefBankId) : (f.id || f.name);
+      if (key) {
+        const prev = fixedMap.get(key);
+        if (prev && prev.paid && !f.paid) f.paid = true;
+        fixedMap.set(key, f);
+      }
+    });
+    mA.fixedExpenses = Array.from(fixedMap.values());
+
+    // 3. Reconciliar fontes de entrada (incomes)
+    if ((!mA.incomes || mA.incomes.length === 0) && mB.incomes && mB.incomes.length > 0) {
+      mA.incomes = mB.incomes;
+    } else if (Array.isArray(mA.incomes) && Array.isArray(mB.incomes) && mB.incomes.length > mA.incomes.length) {
+      const incMap = new Map();
+      mA.incomes.forEach(inc => incMap.set(inc.id || inc.description, inc));
+      mB.incomes.forEach(inc => {
+        if (!incMap.has(inc.id || inc.description)) incMap.set(inc.id || inc.description, inc);
+      });
+      mA.incomes = Array.from(incMap.values());
+    }
+
+    // 4. Preservar saldos configurados
+    if (!mA.inAccount && mB.inAccount) mA.inAccount = mB.inAccount;
+    if (!mA.totalSaved && mB.totalSaved) mA.totalSaved = mB.totalSaved;
+    if ((mA.goal === undefined || mA.goal === 800) && mB.goal && mB.goal !== 800) mA.goal = mB.goal;
+  }
+  return monthsA;
+}
+
 function ensureMultiYearStructure() {
   if (!appData) return;
   if (!appData.years || typeof appData.years !== 'object') {
     appData.years = {};
   }
-  // Migração segura para dados legados que tinham apenas appData.months
-  if (!appData.years[2026] && appData.months) {
-    appData.years[2026] = { months: appData.months };
+
+  const savedYear = SUPPORTED_YEARS.includes(parseInt(appData.year, 10)) ? parseInt(appData.year, 10) : 2026;
+
+  // Reconciliação Anti-Split-Brain: funde com segurança appData.months e appData.years[savedYear].months
+  if (Array.isArray(appData.months) && appData.months.length === 12) {
+    if (!appData.years[savedYear] || !Array.isArray(appData.years[savedYear].months)) {
+      appData.years[savedYear] = { months: appData.months };
+    } else {
+      appData.years[savedYear].months = reconcileMonthArrays(appData.months, appData.years[savedYear].months);
+    }
   }
+
   // Garante a inicialização de todos os 6 anos (2026 a 2031)
   SUPPORTED_YEARS.forEach(y => {
     if (!appData.years[y] || !Array.isArray(appData.years[y].months) || appData.years[y].months.length !== 12) {
@@ -6228,9 +6789,10 @@ function ensureMultiYearStructure() {
   });
 
   if (!SUPPORTED_YEARS.includes(currentYear)) {
-    currentYear = 2026;
+    currentYear = savedYear;
   }
 
+  // Unifica a referência em memória: qualquer escrita em appData.months ou appData.years[currentYear].months altera o MESMO objeto!
   appData.months = appData.years[currentYear].months;
   appData.year = currentYear;
   updateYearUI();
@@ -6361,37 +6923,44 @@ function getAnnualTotalsForYear(year) {
       });
     }
 
-    // Fixed
-    let fixedSum = 0;
-    if (m.fixedExpenses) {
-      m.fixedExpenses.forEach(f => {
-        const val = parseFloat(f.value) || 0;
-        fixedSum += val;
-      });
-    }
-    annualFixed += fixedSum;
-
-    // Transactions / Cards
+    // Transactions / Cards & Reserves
     let cardExp = 0;
     let varExp = 0;
+    let manualRes = 0;
     if (m.transactions) {
       m.transactions.forEach(t => {
         const val = parseFloat(t.value) || 0;
+        const author = (t.author || 'USUÁRIO').toUpperCase();
+        const isUserAuthor = (author === 'USUÁRIO');
         if (t.type === 'SAÍDA') {
           const isCard = cardBanks.some(b => b.name === t.bank);
           const isDebitPix = !isCard || t.installment === 'PIX' || t.installment === 'DÉBITO' || t.installment === 'DINHEIRO';
           if (isCard && !isDebitPix) {
             cardExp += val;
-          } else {
+          } else if (isUserAuthor) {
             varExp += val;
           }
+        } else if (t.type === 'RESERVA') {
+          manualRes += val;
         }
       });
     }
+
+    // Fixed (exclui itens espelho de cartão para evitar dupla contagem com cardExp)
+    let nonCardFixedSum = 0;
+    if (m.fixedExpenses) {
+      m.fixedExpenses.forEach(f => {
+        if (!f.cardRefBankId) {
+          nonCardFixedSum += parseFloat(f.value) || 0;
+        }
+      });
+    }
+    const totalMonthFixed = nonCardFixedSum + cardExp;
+    annualFixed += totalMonthFixed;
     annualCards += cardExp;
-    const mOutflows = fixedSum + cardExp + varExp;
+    const mOutflows = totalMonthFixed + varExp;
     annualOutflows += mOutflows;
-    annualSaved += parseFloat(m.totalSaved) || 0;
+    annualSaved += (parseFloat(m.totalSaved) || 0) + manualRes;
   });
 
   const annualNet = annualIncome - annualOutflows;
@@ -7400,8 +7969,11 @@ function openNewTransactionModal() {
   document.getElementById('modalTxTitle').textContent = 'Nova Movimentação';
   document.getElementById('btnSaveTx').textContent = 'Salvar Movimentação';
   
+  const now = new Date();
+  const isCurrentMonthAndYear = (currentYear === now.getFullYear() && currentMonthIdx === now.getMonth());
+  const defaultDay = isCurrentMonthAndYear ? String(now.getDate()).padStart(2, '0') : '01';
   const mNum = String(currentMonthIdx + 1).padStart(2, '0');
-  document.getElementById('txDate').value = `${currentYear}-${mNum}-01`;
+  document.getElementById('txDate').value = `${currentYear}-${mNum}-${defaultDay}`;
   setTxType('SAÍDA');
   setTxAmount(0);
   
@@ -7444,9 +8016,21 @@ function editTransaction(txId) {
   document.getElementById('txCategory').value = foundTx.category;
   document.getElementById('txBank').value = foundTx.bank;
   handleBankChange();
-  document.getElementById('txInstallment').value = foundTx.installment || 'À VISTA';
 
-  // Se for de Terceiros ou tiver data diferente, expande as opções avançadas
+  const selInst = document.getElementById('txInstallment');
+  const instVal = foundTx.installment || 'À VISTA';
+  if (selInst) {
+    // Se a transação possui rótulo dinâmico de parcela (ex: 'PARCELADO: RESTAM 5'), preserva a opção no select
+    if (!Array.from(selInst.options).some(o => o.value === instVal)) {
+      const customOpt = document.createElement('option');
+      customOpt.value = instVal;
+      customOpt.textContent = instVal;
+      selInst.insertBefore(customOpt, selInst.firstChild);
+    }
+    selInst.value = instVal;
+  }
+
+  // Se for de Terceiros, expande as opções avançadas para visibilidade imediata
   if (txAuthorVal === 'TERCEIROS') {
     toggleTxAdvancedOptions(true);
   } else {
@@ -7461,38 +8045,54 @@ function editTransaction(txId) {
 
 function saveTransaction(e) {
   e.preventDefault();
+  ensureMultiYearStructure();
+
   const editId = document.getElementById('txId').value;
   const date = document.getElementById('txDate').value;
   const type = document.getElementById('txType').value;
-  const description = document.getElementById('txDescription').value;
+  const description = document.getElementById('txDescription').value.trim();
   const value = parseFloat(document.getElementById('txValue').value) || 0;
   if (value <= 0) { alert('Informe um valor maior que zero para a movimentação.'); return; }
   const category = document.getElementById('txCategory').value;
   const bank = document.getElementById('txBank').value;
-  const installment = document.getElementById('txInstallment').value;
+  const installment = document.getElementById('txInstallment').value || 'À VISTA';
   const author = (document.getElementById('txAuthor')?.value || 'USUÁRIO').toUpperCase();
 
   let monthTarget = currentMonthIdx;
+  let yearTarget = currentYear;
+  let dayStr = '01';
   if (date) {
     const parts = date.split('-');
     if (parts.length === 3) {
+      const parsedYear = parseInt(parts[0], 10);
       const parsedMonth = parseInt(parts[1], 10) - 1;
+      dayStr = parts[2] || '01';
       if (parsedMonth >= 0 && parsedMonth < 12) {
         monthTarget = parsedMonth;
+      }
+      if (SUPPORTED_YEARS.includes(parsedYear)) {
+        yearTarget = parsedYear;
       }
     }
   }
 
   if (editId) {
+    let originalTx = null;
+    let origMonth = currentMonthIdx;
     for (let m = 0; m < 12; m++) {
       const idx = appData.months[m].transactions.findIndex(x => x.id === editId);
       if (idx !== -1) {
+        originalTx = appData.months[m].transactions[idx];
+        origMonth = m;
         appData.months[m].transactions.splice(idx, 1);
         break;
       }
     }
 
-    appData.months[monthTarget].transactions.push({
+    // Se a data não foi explicitamente mudada para outro mês quando era uma entrada recorrente, mantém no mês editado
+    const targetMonthsArr = (appData.years && appData.years[yearTarget]) ? appData.years[yearTarget].months : appData.months;
+    const updatedTx = {
+      ...(originalTx || {}),
       id: editId,
       date,
       type,
@@ -7502,10 +8102,32 @@ function saveTransaction(e) {
       bank,
       installment,
       author
-    });
+    };
+
+    // Se a transação pertencia a um grupo de parcelamento e o usuário alterou Autor, Banco ou Categoria, sincroniza no grupo
+    if (originalTx && originalTx.purchaseGroupId) {
+      const grpId = originalTx.purchaseGroupId;
+      SUPPORTED_YEARS.forEach(y => {
+        const yMonths = appData.years?.[y]?.months;
+        if (Array.isArray(yMonths)) {
+          yMonths.forEach(mObj => {
+            (mObj.transactions || []).forEach(t => {
+              if (t.purchaseGroupId === grpId && t.id !== editId) {
+                t.author = author;
+                t.bank = bank;
+                t.category = category;
+              }
+            });
+          });
+        }
+      });
+    }
+
+    targetMonthsArr[monthTarget].transactions.push(updatedTx);
 
     closeModal('modalTransaction');
     persistData();
+    showToast("✅ Movimentação atualizada com sucesso!", 2500);
     return;
   }
 
@@ -7521,27 +8143,22 @@ function saveTransaction(e) {
         const totalMonthIndex = monthTarget + i;
         const targetYearOffset = Math.floor(totalMonthIndex / 12);
         const targetM = totalMonthIndex % 12;
-        const targetYear = currentYear + targetYearOffset;
+        const targetY = yearTarget + targetYearOffset;
 
-        if (targetYear <= SUPPORTED_YEARS[SUPPORTED_YEARS.length - 1]) {
-          if (!appData.years[targetYear]) {
-            appData.years[targetYear] = { months: createDefaultYearMonths(targetYear) };
+        if (targetY <= SUPPORTED_YEARS[SUPPORTED_YEARS.length - 1]) {
+          if (!appData.years[targetY]) {
+            appData.years[targetY] = { months: createDefaultYearMonths(targetY) };
           }
 
           const remainingInstallmentsAfter = numInstallments - (i + 1);
           const remainingDebtAfter = parseFloat((remainingInstallmentsAfter * installmentValue).toFixed(2));
           const currentLabel = (i === numInstallments - 1) ? 'ÚLTIMA PARCELA' : `PARCELADO: RESTAM ${remainingInstallmentsAfter}`;
           
-          let installmentDate = date;
-          if (date && date.includes('-')) {
-            const parts = date.split('-');
-            const day = parts[2] || '01';
-            const mStr = String(targetM + 1).padStart(2, '0');
-            installmentDate = `${targetYear}-${mStr}-${day}`;
-          }
+          const mStr = String(targetM + 1).padStart(2, '0');
+          const installmentDate = `${targetY}-${mStr}-${dayStr}`;
 
-          appData.years[targetYear].months[targetM].transactions.push({
-            id: 'tx_' + Date.now() + '_' + i,
+          appData.years[targetY].months[targetM].transactions.push({
+            id: 'tx_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 4),
             date: installmentDate,
             type: type,
             description: `${description} (${i + 1}/${numInstallments})`,
@@ -7561,11 +8178,16 @@ function saveTransaction(e) {
         }
       }
 
+      // Garante que appData.months aponte para a referência atualizada
+      appData.months = appData.years[currentYear].months;
       closeModal('modalTransaction');
       persistData();
+      showToast(`✅ Compra parcelada em ${numInstallments}x registrada com sucesso!`, 2800);
       return;
     }
   }
+
+  const targetYearMonths = (appData.years && appData.years[yearTarget]) ? appData.years[yearTarget].months : appData.months;
 
   if (type === 'ENTRADA') {
     const scopeEl = document.getElementById('txIncomeScope');
@@ -7573,52 +8195,60 @@ function saveTransaction(e) {
 
     if (incomeScope === 'from_now_on') {
       for (let m = monthTarget; m < 12; m++) {
-        appData.months[m].transactions.push({
-          id: 'tx_' + Date.now() + '_' + m,
-          date,
+        const mStr = String(m + 1).padStart(2, '0');
+        targetYearMonths[m].transactions.push({
+          id: 'tx_' + Date.now() + '_' + m + '_' + Math.random().toString(36).substr(2, 4),
+          date: `${yearTarget}-${mStr}-${dayStr}`,
           type,
           description,
           value,
           category,
           bank,
-          installment
+          installment,
+          author
         });
       }
       closeModal('modalTransaction');
       persistData();
+      showToast("✅ Entrada recorrente registrada até Dezembro!", 2500);
       return;
     } else if (incomeScope === 'all') {
       for (let m = 0; m < 12; m++) {
-        appData.months[m].transactions.push({
-          id: 'tx_' + Date.now() + '_' + m,
-          date,
+        const mStr = String(m + 1).padStart(2, '0');
+        targetYearMonths[m].transactions.push({
+          id: 'tx_' + Date.now() + '_' + m + '_' + Math.random().toString(36).substr(2, 4),
+          date: `${yearTarget}-${mStr}-${dayStr}`,
           type,
           description,
           value,
           category,
           bank,
-          installment
+          installment,
+          author
         });
       }
       closeModal('modalTransaction');
       persistData();
+      showToast("✅ Entrada registrada em todos os 12 meses!", 2500);
       return;
     }
   }
 
-  appData.months[monthTarget].transactions.push({
-    id: 'tx_' + Date.now(),
+  targetYearMonths[monthTarget].transactions.push({
+    id: 'tx_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
     date,
     type,
     description,
     value,
     category,
     bank,
-    installment
+    installment,
+    author
   });
 
   closeModal('modalTransaction');
   persistData();
+  showToast("✅ Movimentação salva com sucesso!", 2500);
 }
 
 let pendingDeleteTx = null;
@@ -7879,15 +8509,20 @@ function saveEditedBank(e) {
 
   if (newName && newName !== origName) {
     bank.name = newName;
-    appData.months.forEach(m => {
-      m.transactions.forEach(t => {
-        if (t.bank === origName) t.bank = newName;
-      });
-      m.fixedExpenses.forEach(f => {
-        if (f.cardRefBankId === bank.id) {
-          f.name = `Fatura ${newName}`;
-        }
-      });
+    SUPPORTED_YEARS.forEach(y => {
+      const yMonths = appData.years?.[y]?.months;
+      if (Array.isArray(yMonths)) {
+        yMonths.forEach(m => {
+          (m.transactions || []).forEach(t => {
+            if (t.bank === origName) t.bank = newName;
+          });
+          (m.fixedExpenses || []).forEach(f => {
+            if (f.cardRefBankId === bank.id) {
+              f.name = `Fatura ${newName}`;
+            }
+          });
+        });
+      }
     });
   }
 
@@ -7973,10 +8608,15 @@ function editCategory(idx) {
   const oldName = cat.name;
   cat.name = newName.trim();
 
-  appData.months.forEach(m => {
-    m.transactions.forEach(t => {
-      if (t.category === oldName) t.category = cat.name;
-    });
+  SUPPORTED_YEARS.forEach(y => {
+    const yMonths = appData.years?.[y]?.months;
+    if (Array.isArray(yMonths)) {
+      yMonths.forEach(m => {
+        (m.transactions || []).forEach(t => {
+          if (t.category === oldName) t.category = cat.name;
+        });
+      });
+    }
   });
 
   renderCategoriesManager();
@@ -8122,15 +8762,20 @@ function editBank(idx) {
   const oldName = b.name;
   b.name = newName.trim();
 
-  appData.months.forEach(m => {
-    m.transactions.forEach(t => {
-      if (t.bank === oldName) t.bank = b.name;
-    });
-    m.fixedExpenses.forEach(f => {
-      if (f.cardRefBankId === b.id) {
-        f.name = `Fatura ${b.name}`;
-      }
-    });
+  SUPPORTED_YEARS.forEach(y => {
+    const yMonths = appData.years?.[y]?.months;
+    if (Array.isArray(yMonths)) {
+      yMonths.forEach(m => {
+        (m.transactions || []).forEach(t => {
+          if (t.bank === oldName) t.bank = b.name;
+        });
+        (m.fixedExpenses || []).forEach(f => {
+          if (f.cardRefBankId === b.id) {
+            f.name = `Fatura ${b.name}`;
+          }
+        });
+      });
+    }
   });
 
   renderBanksManager();
@@ -8144,8 +8789,13 @@ function deleteBank(idx) {
   }
   const b = appData.banks[idx];
   if (confirm(`Deseja realmente excluir o banco/meio "${b.name}"?`)) {
-    appData.months.forEach(m => {
-      m.fixedExpenses = m.fixedExpenses.filter(f => f.cardRefBankId !== b.id);
+    SUPPORTED_YEARS.forEach(y => {
+      const yMonths = appData.years?.[y]?.months;
+      if (Array.isArray(yMonths)) {
+        yMonths.forEach(m => {
+          m.fixedExpenses = (m.fixedExpenses || []).filter(f => f.cardRefBankId !== b.id);
+        });
+      }
     });
 
     appData.banks.splice(idx, 1);
@@ -8547,14 +9197,14 @@ function exportExcel() {
         const tot = getMonthTotals(idx);
         summaryRows.push([
           m.name,
-          Math.round(tot.incomeTotal * 100) / 100,
+          Math.round((tot.incomeTotal + tot.extratoInflows) * 100) / 100,
           Math.round(tot.fixedTotal * 100) / 100,
-          Math.round(tot.totalCardExpenses * 100) / 100,
+          Math.round(tot.cardsTotal * 100) / 100,
           Math.round(tot.totalDebitPixExpenses * 100) / 100,
-          Math.round(tot.totalOutflows * 100) / 100,
-          Math.round(tot.remaining * 100) / 100,
-          Math.round(tot.goal * 100) / 100,
-          Math.round(tot.saved * 100) / 100,
+          Math.round(tot.totalAllOutflows * 100) / 100,
+          Math.round(tot.salaryRemaining * 100) / 100,
+          Math.round((m.goal || 0) * 100) / 100,
+          Math.round(tot.totalSaved * 100) / 100,
           Math.round(tot.totalCardsDebt * 100) / 100
         ]);
       });
@@ -8584,7 +9234,7 @@ function exportExcel() {
           m.fixedExpenses.forEach(f => {
             fixedRows.push([
               m.name,
-              f.description || '',
+              f.name || f.description || '',
               parseFloat(f.value) || 0,
               f.paid ? 'Pago' : 'Pendente'
             ]);
@@ -8709,14 +9359,14 @@ function exportExcelXMLFallback() {
     const tot = getMonthTotals(idx);
     xml += '   <Row>\r\n';
     xml += `    <Cell><Data ss:Type="String">${escapeXml(m.name)}</Data></Cell>\r\n`;
-    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.incomeTotal}</Data></Cell>\r\n`;
+    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.incomeTotal + tot.extratoInflows}</Data></Cell>\r\n`;
     xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.fixedTotal}</Data></Cell>\r\n`;
-    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.totalCardExpenses}</Data></Cell>\r\n`;
+    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.cardsTotal}</Data></Cell>\r\n`;
     xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.totalDebitPixExpenses}</Data></Cell>\r\n`;
-    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.totalOutflows}</Data></Cell>\r\n`;
-    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.remaining}</Data></Cell>\r\n`;
-    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.goal}</Data></Cell>\r\n`;
-    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.saved}</Data></Cell>\r\n`;
+    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.totalAllOutflows}</Data></Cell>\r\n`;
+    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.salaryRemaining}</Data></Cell>\r\n`;
+    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${m.goal || 0}</Data></Cell>\r\n`;
+    xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.totalSaved}</Data></Cell>\r\n`;
     xml += `    <Cell ss:StyleID="Currency"><Data ss:Type="Number">${tot.totalCardsDebt}</Data></Cell>\r\n`;
     xml += '   </Row>\r\n';
   });
@@ -8763,8 +9413,10 @@ function importDataJSON(e) {
         try {
           const decStr = await decryptDataAES(parsed, key);
           appData = JSON.parse(decStr);
+          ensureMultiYearStructure();
           await persistData();
-          alert("Backup criptografado restaurado e sincronizado com sucesso!");
+          await CloudSyncEngine.flushNow();
+          showToast("✅ Backup criptografado restaurado e sincronizado com sucesso!", 3500);
         } catch(decErr) {
           alert("Senha incorreta para este arquivo de backup criptografado.");
         }
@@ -8773,8 +9425,10 @@ function importDataJSON(e) {
 
       if (parsed && parsed.months && Array.isArray(parsed.months)) {
         appData = parsed;
+        ensureMultiYearStructure();
         await persistData();
-        alert("Dados e configurações importados com sucesso!");
+        await CloudSyncEngine.flushNow();
+        showToast("✅ Dados e configurações importados com sucesso!", 3500);
       } else {
         alert("O arquivo selecionado não contém um formato de backup válido.");
       }
@@ -8830,8 +9484,8 @@ function getInstallmentInfo(t) {
   };
 }
 
-// INICIALIZAÇÃO
-window.addEventListener('DOMContentLoaded', () => {
+// INICIALIZAÇÃO E RESTAURAÇÃO AUTOMÁTICA DE SESSÃO DE ABA (ANTI-F5 / PULL-TO-REFRESH LOSS)
+window.addEventListener('DOMContentLoaded', async () => {
   try {
     syncWithDeviceDate();
     loadData();
@@ -8839,18 +9493,55 @@ window.addEventListener('DOMContentLoaded', () => {
   } catch(e) {
     console.warn("loadData erro:", e);
   }
-  try {
-    populateDropdowns();
-  } catch(e) {
-    console.warn("populateDropdowns erro:", e);
-  }
 
-  // Garante que a tela de autenticação abra limpa e sem travar
   const mainContainer = document.getElementById('dashboardMainContainer');
   const authSc = document.getElementById('authScreen');
+
+  // Verifica se há uma sessão autenticada ativa nesta aba (sobrevive a F5 ou recarregamento mobile)
+  try {
+    const tabSession = await restoreSessionKeyFromTab();
+    if (tabSession && tabSession.key && tabSession.meta && tabSession.meta.userId) {
+      const uid = tabSession.meta.userId;
+      const localSnap = LocalVaultEngine.loadLatestRecord(uid);
+      if (localSnap && localSnap.payload) {
+        const decStr = await decryptDataAES(localSnap.payload, tabSession.key);
+        appData = JSON.parse(decStr);
+        authenticatedUserId = uid;
+        activeSessionKey = tabSession.key;
+        activeUsername = tabSession.meta.username || '';
+        activeDisplayName = tabSession.meta.displayName || activeUsername;
+        activeUserSalt = tabSession.meta.salt || localSnap.salt;
+        activeAvatarColor = tabSession.meta.avatarColor || localSnap.avatarColor || '#2563eb';
+
+        syncWithDeviceDate();
+        ensureMultiYearStructure();
+
+        if (authSc) authSc.style.display = 'none';
+        if (mainContainer) mainContainer.style.display = 'block';
+        document.querySelectorAll('.month-pill').forEach((el, i) => el.classList.toggle('active', i === currentMonthIdx));
+        const bNav = document.getElementById('mobileBottomNav');
+        if (bNav && window.innerWidth <= 768) bNav.style.display = 'flex';
+
+        updateCloudStatusBadge(!!supabaseClient);
+        resetInactivityTimer();
+        applyThemeStyles();
+        renderUserHeader();
+        populateDropdowns();
+        renderAll();
+
+        // Se o snapshot local ainda não havia subido para o Supabase antes do refresh, sincroniza agora!
+        if (!localSnap.syncedToCloud) {
+          CloudSyncEngine.schedule();
+        }
+        return;
+      }
+    }
+  } catch (restoreErr) {
+    console.warn("Sessão anterior não restaurável, solicitando login:", restoreErr);
+  }
+
   if (mainContainer) mainContainer.style.display = 'none';
   if (authSc) authSc.style.display = 'flex';
-
   updateCloudStatusBadge(!!supabaseClient);
 });
 </script>

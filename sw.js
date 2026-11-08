@@ -1,8 +1,8 @@
 // ============================================================
-// CONTROLE FINANCEIRO - SERVICE WORKER (PWA & OFFLINE CACHE)
+// CONTROLE FINANCEIRO - SERVICE WORKER (PWA & NETWORK-FIRST RESILIENCE)
 // ============================================================
 
-const CACHE_NAME = 'controle-financeiro-v2026-v1';
+const CACHE_NAME = 'controle-financeiro-v2026-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -10,10 +10,11 @@ const ASSETS_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE).catch(() => {});
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
@@ -32,15 +33,15 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Ignora requisições de API externas como Supabase ou extensões do navegador
-  if (!event.request.url.startsWith(self.location.origin)) {
+  // Ignora requisições POST/PUT/DELETE ou chamadas de API externas (Supabase)
+  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
+  // Estratégia Network-First com cache: 'no-cache' para garantir que atualizações do código nunca fiquem presas em cache antigo
   event.respondWith(
-    fetch(event.request)
+    fetch(event.request, { cache: 'no-cache' })
       .then((networkResponse) => {
-        // Se a resposta for válida, atualiza o cache
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -50,7 +51,6 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       })
       .catch(() => {
-        // Modo offline: tenta responder a partir do cache local
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) return cachedResponse;
           if (event.request.mode === 'navigate') {
