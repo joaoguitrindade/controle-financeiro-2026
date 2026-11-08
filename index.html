@@ -2691,12 +2691,277 @@
       transform: scale(0.92);
     }
 
-    .btn-del-fixed {
+    .btn-del-fixed,
+    .btn-edit-fixed {
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 0.82rem;
-      padding: 2px 4px;
+      min-width: 32px;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-edit-fixed:hover {
+      background: rgba(14, 165, 233, 0.12);
+      border-color: rgba(14, 165, 233, 0.25);
+    }
+
+    .btn-del-fixed:hover {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+
+    .btn-edit-fixed:active,
+    .btn-del-fixed:active {
+      transform: scale(0.92);
+    }
+
+    /* BADGES E BARRA DE PROGRESSO DE DESPESA FIXA TEMPORÁRIA */
+    .badge-temp {
+      background: rgba(139, 92, 246, 0.14);
+      color: #8b5cf6;
+      border: 1px solid rgba(139, 92, 246, 0.28);
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    body.dark-theme .badge-temp {
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      border-color: rgba(167, 139, 250, 0.35);
+    }
+
+    .badge-temp-last {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .badge-fixed-regular {
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      font-weight: 600;
+    }
+
+    .fixed-temp-progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      max-width: 240px;
+    }
+
+    .fixed-temp-progress-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(148, 163, 184, 0.2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fixed-temp-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #8b5cf6, #0ea5e9);
+      transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .fixed-temp-progress-fill.is-last-month {
+      background: linear-gradient(90deg, #10b981, #059669);
+    }
+
+    /* FILTROS RÁPIDOS E PROGRESSO DO CHECKLIST DE FIXAS */
+    .fixed-checklist-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .fixed-filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+
+    .fixed-filter-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fixed-filter-pill {
+      background: var(--bg-card-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+      touch-action: manipulation;
+    }
+
+    .fixed-filter-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 6px var(--primary-glow);
+    }
+
+    .fixed-filter-pill:active {
+      transform: scale(0.95);
+    }
+
+    /* SELETOR INTERATIVO DE DURAÇÃO (N MESES) NO MODAL */
+    .duration-selector-card {
+      background: rgba(139, 92, 246, 0.06);
+      border: 1px solid rgba(139, 92, 246, 0.24);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    body.dark-theme .duration-selector-card {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: rgba(139, 92, 246, 0.28);
+    }
+
+    .duration-stepper-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      margin-bottom: 10px;
+    }
+
+    .duration-step-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 1.25rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .duration-step-btn:hover {
+      border-color: #8b5cf6;
+      color: #8b5cf6;
+    }
+
+    .duration-step-btn:active {
+      transform: scale(0.92);
+    }
+
+    .duration-input-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      height: 44px;
+      padding: 0 12px;
+    }
+
+    .duration-number-input {
+      width: 56px;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      color: #8b5cf6;
+      outline: none;
+    }
+
+    body.dark-theme .duration-number-input {
+      color: #c4b5fd;
+    }
+
+    .duration-unit-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .duration-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .duration-pill-btn {
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .duration-pill-btn.active {
+      background: #8b5cf6;
+      color: #ffffff;
+      border-color: #8b5cf6;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35);
+    }
+
+    .duration-pill-btn:active {
+      transform: scale(0.94);
+    }
+
+    .fixed-preview-banner {
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--primary);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fixed-preview-banner.is-temp {
+      border-left-color: #8b5cf6;
     }
 
     .empty-fixed-state {
@@ -3454,10 +3719,27 @@
 
       <!-- CHECKLIST DE DESPESAS FIXAS -->
       <div class="card">
-        <div class="card-header">
-          <span class="card-title">✅ Checklist de Despesas Fixas</span>
-          <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.78rem;" onclick="openAddFixedModal()">+ Adicionar Fixa</button>
+        <div class="card-header" style="margin-bottom: 10px;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span class="card-title">✅ Checklist de Despesas Fixas</span>
+            <span id="fixedChecklistSummaryText" style="font-size: 0.74rem; color: var(--text-muted); font-variant-numeric: tabular-nums;">Acompanhe contas contínuas, temporárias e faturas</span>
+          </div>
+          <div style="display: flex; gap: 6px; align-items: center;">
+            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.75rem; border-color: rgba(139, 92, 246, 0.4); color: #8b5cf6;" onclick="openAddFixedModal('temporary')" title="Adicionar despesa fixa com prazo definido (N meses)">⏳ + Temporária</button>
+            <button class="btn btn-primary" style="padding: 5px 12px; font-size: 0.76rem;" onclick="openAddFixedModal('annual')">+ Nova Fixa</button>
+          </div>
         </div>
+
+        <!-- BARRA DE FILTROS RÁPIDOS DO CHECKLIST (UX 1-TOQUE) -->
+        <div class="fixed-checklist-toolbar">
+          <div class="fixed-filter-pills" id="fixedFilterPills">
+            <button type="button" class="fixed-filter-pill active" data-filter="ALL" onclick="setFixedExpenseFilter('ALL')">Todas</button>
+            <button type="button" class="fixed-filter-pill" data-filter="PENDING" onclick="setFixedExpenseFilter('PENDING')">Pendentes</button>
+            <button type="button" class="fixed-filter-pill" data-filter="TEMPORARY" onclick="setFixedExpenseFilter('TEMPORARY')">⏳ Temporárias</button>
+            <button type="button" class="fixed-filter-pill" data-filter="PAID" onclick="setFixedExpenseFilter('PAID')">Pagas ✓</button>
+          </div>
+        </div>
+
         <div id="fixedExpensesList">
           <!-- Renderizado dinamicamente -->
         </div>
@@ -4417,37 +4699,146 @@
   </div>
 </div>
 
-<!-- ==================== MODAL: ADICIONAR DESPESA FIXA ==================== -->
-<div class="modal-overlay" id="modalFixedExpense">
-  <div class="modal">
+<!-- ==================== MODAL: ADICIONAR / EDITAR DESPESA FIXA (UX FRICÇÃO ZERO + TEMPORÁRIA N MESES) ==================== -->
+<div class="modal-overlay" id="modalFixedExpense" onclick="if (event.target === this) closeModal('modalFixedExpense')">
+  <div class="modal modal-bottom-sheet">
     <div class="modal-handle-bar"></div>
     <div class="modal-header">
-      <h3 class="modal-title">Adicionar Despesa Fixa</h3>
+      <h3 class="modal-title" id="modalFixedTitle">Nova Despesa Fixa</h3>
       <button class="modal-close" onclick="closeModal('modalFixedExpense')">&times;</button>
     </div>
 
-    <form onsubmit="saveNewFixedExpense(event)">
-      <div class="form-group">
-        <label>Nome da Despesa Fixa</label>
-        <input type="text" id="fixedExpenseName" class="form-control" placeholder="Ex: Aluguel, Internet, Curso..." required>
+    <form id="formFixedExpense" onsubmit="saveNewFixedExpense(event)">
+      <input type="hidden" id="fixedExpenseEditId" value="">
+      <input type="hidden" id="fixedExpenseMode" value="annual">
+      <!-- Mantido para retrocompatibilidade com scripts legados -->
+      <input type="checkbox" id="fixedExpenseAllMonths" checked style="display: none;">
+
+      <!-- SEGMENTED CONTROL: MODALIDADE DA DESPESA FIXA -->
+      <div class="segmented-control" id="fixedModeSegmented" style="margin-bottom: 14px;">
+        <button type="button" class="segmented-btn active" data-mode="annual" onclick="setFixedExpenseMode('annual')">🗓️ Fixa Anual</button>
+        <button type="button" class="segmented-btn" data-mode="temporary" onclick="setFixedExpenseMode('temporary')">⏳ Temporária (N meses)</button>
+        <button type="button" class="segmented-btn" data-mode="single" onclick="setFixedExpenseMode('single')">📍 Só no Mês</button>
       </div>
 
-      <div class="form-group">
-        <label>Valor Mensal (R$)</label>
-        <input type="number" step="0.01" id="fixedExpenseValue" class="form-control" placeholder="0,00" required inputmode="decimal">
+      <!-- HERO AMOUNT: INPUT FINANCEIRO REVERSO -->
+      <div class="hero-amount-container" style="margin-bottom: 12px; padding: 12px 14px;">
+        <span class="hero-amount-label">Valor Mensal da Despesa</span>
+        <div class="hero-amount-box">
+          <span class="hero-currency-prefix">R$</span>
+          <input type="text" id="fixedExpenseValueDisplay" class="hero-amount-input" inputmode="numeric" placeholder="0,00" value="0,00" oninput="handleFixedCurrencyMask(this)" autocomplete="off">
+        </div>
+        <input type="hidden" id="fixedExpenseValue" value="0.00">
       </div>
 
-      <div class="form-group">
-        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-          <input type="checkbox" id="fixedExpenseAllMonths" checked style="width: 16px; height: 16px;"> Replicar para todos os 12 meses
-        </label>
+      <!-- NOME DA DESPESA + ATALHOS RÁPIDOS -->
+      <div class="form-group" style="margin-bottom: 6px;">
+        <label>Descrição da Despesa Fixa</label>
+        <input type="text" id="fixedExpenseName" class="form-control" placeholder="Ex: Aluguel, Faculdade, Seguro, Financiamento..." required autocomplete="off" oninput="updateFixedExpensePreview()">
       </div>
 
-      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+      <div class="quick-chips-wrapper" style="margin-bottom: 12px;">
+        <span class="quick-chips-label">Sugestões rápidas:</span>
+        <div class="quick-chips-list">
+          <button type="button" class="chip-btn" onclick="setQuickFixed('Aluguel / Condomínio', 'annual')">🏠 Aluguel</button>
+          <button type="button" class="chip-btn" onclick="setQuickFixed('Internet Fibra', 'annual')">🌐 Internet</button>
+          <button type="button" class="chip-btn" onclick="setQuickFixed('Energia Elétrica', 'annual')">⚡ Energia</button>
+          <button type="button" class="chip-btn" onclick="setQuickFixed('Curso / Pós-Graduação', 'temporary', 6)">🎓 Curso (6m)</button>
+          <button type="button" class="chip-btn" onclick="setQuickFixed('Seguro Auto / Vida', 'temporary', 10)">🛡️ Seguro (10m)</button>
+          <button type="button" class="chip-btn" onclick="setQuickFixed('Plano Academia', 'temporary', 12)">🏋️ Academia (12m)</button>
+          <button type="button" class="chip-btn" onclick="setQuickFixed('Empréstimo / Financiamento', 'temporary', 24)">🏦 Financiamento (24m)</button>
+        </div>
+      </div>
+
+      <!-- PAINEL INTERATIVO: QUANTOS MESES SERÁ DESPESA FIXA (VISÍVEL NO MODO TEMPORÁRIA) -->
+      <div id="fixedDurationSection" class="duration-selector-card" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label style="margin: 0; font-size: 0.82rem; font-weight: 800; color: #8b5cf6;">⏳ Por quantos meses ela será despesa fixa?</label>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Início: <strong id="fixedStartMonthLabel">Jan/2026</strong></span>
+        </div>
+
+        <div class="duration-stepper-row">
+          <button type="button" class="duration-step-btn" onclick="stepFixedDuration(-1)" aria-label="Diminuir meses">&minus;</button>
+          <div class="duration-input-box">
+            <input type="number" id="fixedExpenseDurationMonths" class="duration-number-input" min="1" max="60" value="6" inputmode="numeric" oninput="onFixedDurationInput()">
+            <span class="duration-unit-label" id="fixedDurationUnitText">meses</span>
+          </div>
+          <button type="button" class="duration-step-btn" onclick="stepFixedDuration(1)" aria-label="Aumentar meses">&plus;</button>
+        </div>
+
+        <div class="duration-pills-grid" id="fixedDurationPills">
+          <button type="button" class="duration-pill-btn" data-months="2" onclick="setFixedDurationMonths(2)">2 meses</button>
+          <button type="button" class="duration-pill-btn" data-months="3" onclick="setFixedDurationMonths(3)">3 meses</button>
+          <button type="button" class="duration-pill-btn" data-months="4" onclick="setFixedDurationMonths(4)">4 meses</button>
+          <button type="button" class="duration-pill-btn active" data-months="6" onclick="setFixedDurationMonths(6)">6 meses</button>
+          <button type="button" class="duration-pill-btn" data-months="10" onclick="setFixedDurationMonths(10)">10 meses</button>
+          <button type="button" class="duration-pill-btn" data-months="12" onclick="setFixedDurationMonths(12)">12 meses</button>
+          <button type="button" class="duration-pill-btn" data-months="18" onclick="setFixedDurationMonths(18)">18 meses</button>
+          <button type="button" class="duration-pill-btn" data-months="24" onclick="setFixedDurationMonths(24)">24 meses</button>
+        </div>
+      </div>
+
+      <!-- ESCOPO DE EDIÇÃO (VISÍVEL APENAS AO EDITAR UMA DESPESA EXISTENTE) -->
+      <div id="fixedEditScopeSection" class="form-group" style="display: none; margin-bottom: 12px;">
+        <label style="font-size: 0.8rem; color: var(--text-muted);">Aplicar alterações em:</label>
+        <select id="fixedEditScope" class="form-control" onchange="updateFixedExpensePreview()">
+          <option value="from_current">Deste mês em diante (preservar meses anteriores)</option>
+          <option value="all">Todos os meses vinculados a esta despesa</option>
+          <option value="single">Apenas neste mês</option>
+        </select>
+      </div>
+
+      <!-- RESUMO INTELIGENTE EM TEMPO REAL (LIVE PREVIEW) -->
+      <div id="fixedExpensePreviewBox" class="fixed-preview-banner">
+        <div id="fixedPreviewLine1" style="font-weight: 700; color: var(--text-main);">🗓️ Vigência: Todos os 12 meses de 2026</div>
+        <div id="fixedPreviewLine2" style="font-size: 0.75rem;">Comprometimento total: R$ 0,00 no ano</div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
         <button type="button" class="btn btn-outline" onclick="closeModal('modalFixedExpense')">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Salvar Despesa Fixa</button>
+        <button type="submit" class="btn btn-primary" id="btnSaveFixedExpense" style="flex: 1;">Salvar Despesa Fixa</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- ==================== MODAL: EXCLUIR DESPESA FIXA RECORRENTE / TEMPORÁRIA ==================== -->
+<div class="modal-overlay" id="modalDeleteFixedExpense" style="z-index: 9999;" onclick="if (event.target === this) closeModal('modalDeleteFixedExpense')">
+  <div class="modal modal-bottom-sheet" style="max-width: 500px;">
+    <div class="modal-handle-bar"></div>
+    <div class="modal-header">
+      <h3 class="modal-title" style="color: var(--danger); font-size: 1.08rem; display: flex; align-items: center; gap: 8px;">
+        🗑️ Excluir Despesa Fixa
+      </h3>
+      <button class="modal-close" onclick="closeModal('modalDeleteFixedExpense')">&times;</button>
+    </div>
+    <div style="margin-bottom: 14px;">
+      <p style="font-size: 0.92rem; margin-bottom: 8px; color: var(--text-main);">
+        Você selecionou: <strong id="delFixedTitle" style="color: var(--accent-sky);"></strong> (<span id="delFixedVal" class="val-neg font-mono">R$ 0,00</span>).
+      </p>
+      <p id="delFixedSubtitle" style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">
+        Esta despesa fixa está presente em outros meses. Como deseja removê-la?
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button type="button" class="btn btn-choice" style="background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); text-align: left; padding: 12px 14px; border-radius: 12px;" onclick="executeDeleteFixedExpense('all')">
+          <div style="font-weight: 700; font-size: 0.88rem;">🗓️ Excluir de TODOS os meses e anos</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Remove completamente todas as ocorrências passadas e futuras desta despesa.</div>
+        </button>
+
+        <button type="button" class="btn btn-choice" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); text-align: left; padding: 12px 14px; border-radius: 12px;" onclick="executeDeleteFixedExpense('from_current')">
+          <div style="font-weight: 700; font-size: 0.88rem;">⏩ Encerrar DESTE MÊS EM DIANTE</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Preserva o histórico dos meses anteriores e cancela a cobrança a partir deste mês.</div>
+        </button>
+
+        <button type="button" class="btn btn-choice" style="background: var(--bg-card-subtle); color: var(--text-main); border: 1px solid var(--border-subtle); text-align: left; padding: 12px 14px; border-radius: 12px;" onclick="executeDeleteFixedExpense('single')">
+          <div style="font-weight: 700; font-size: 0.88rem;">📍 Excluir APENAS neste mês</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Remove somente do mês atual, mantendo os outros meses inalterados.</div>
+        </button>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: flex-end;">
+      <button type="button" class="btn btn-outline" onclick="closeModal('modalDeleteFixedExpense')">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -7185,29 +7576,89 @@ function renderMonthlyView() {
     cardsContainer.appendChild(summaryCard);
   }
   document.getElementById('monthCardsTotalBadge').textContent = `Faturas: ${formatBRL(t.cardsTotal)} | Total: ${formatBRL(t.totalCardsDebt)}`;
-// Checklist de Despesas Fixas (Visual Moderno Idêntico ao Extrato de Movimentações)
+// Checklist de Despesas Fixas (Visual Moderno Idêntico ao Extrato de Movimentações + Suporte a Despesas Temporárias)
   const fixedList = document.getElementById('fixedExpensesList');
   fixedList.innerHTML = '';
-  if (m.fixedExpenses.length === 0) {
-    fixedList.innerHTML = '<div class="empty-fixed-state"><span>📌</span><p>Nenhuma despesa fixa cadastrada para este mês.</p></div>';
+
+  const tempCount = m.fixedExpenses.filter(f => f.isTemporary).length;
+  const summaryEl = document.getElementById('fixedChecklistSummaryText');
+  if (summaryEl) {
+    const pctPaid = m.fixedExpenses.length > 0 ? Math.round((paidCount / m.fixedExpenses.length) * 100) : 0;
+    summaryEl.innerHTML = `${paidCount}/${m.fixedExpenses.length} pagas (${pctPaid}%)${tempCount > 0 ? ` • <strong style="color: #8b5cf6;">⏳ ${tempCount} temporária${tempCount > 1 ? 's' : ''}</strong>` : ''}`;
+  }
+
+  const activeFilter = window.currentFixedFilter || 'ALL';
+  const filteredFixed = m.fixedExpenses.filter(f => {
+    if (activeFilter === 'PENDING') return !f.paid;
+    if (activeFilter === 'PAID') return !!f.paid;
+    if (activeFilter === 'TEMPORARY') return !!f.isTemporary;
+    return true;
+  });
+
+  if (filteredFixed.length === 0) {
+    const emptyMsg = m.fixedExpenses.length === 0
+      ? 'Nenhuma despesa fixa cadastrada para este mês.'
+      : 'Nenhum item corresponde ao filtro selecionado.';
+    fixedList.innerHTML = `<div class="empty-fixed-state"><span>📌</span><p>${emptyMsg}</p></div>`;
   } else {
     const fixedFrag = createSafeFragment();
-    m.fixedExpenses.forEach((f) => {
+    filteredFixed.forEach((f) => {
       const isCardInv = !!f.cardRefBankId;
+      const isTemp = !!f.isTemporary;
+      const tempIdx = parseInt(f.tempMonthIndex, 10) || 1;
+      const tempTotal = parseInt(f.tempMonthCount, 10) || 1;
+      const tempRem = (typeof f.tempRemainingMonths === 'number') ? f.tempRemainingMonths : Math.max(0, tempTotal - tempIdx);
+      const isLastTempMonth = isTemp && tempRem === 0;
       const hasThirdParty = isCardInv && (f.thirdPartyValue > 0);
       
       const item = document.createElement('div');
       item.className = `fixed-item-card ${f.paid ? 'is-paid' : 'is-pending'}`;
 
-      let iconBg = f.paid ? 'rgba(0, 168, 104, 0.12)' : (isCardInv ? 'rgba(2, 132, 199, 0.12)' : 'rgba(225, 29, 72, 0.12)');
-      let iconColor = f.paid ? 'var(--success)' : (isCardInv ? '#0284c7' : 'var(--danger)');
-      let iconSymbol = f.paid ? '✓' : (isCardInv ? '💳' : '📌');
+      let iconBg = f.paid
+        ? 'rgba(0, 168, 104, 0.12)'
+        : (isCardInv ? 'rgba(2, 132, 199, 0.12)' : (isTemp ? 'rgba(139, 92, 246, 0.14)' : 'rgba(225, 29, 72, 0.12)'));
+      let iconColor = f.paid
+        ? 'var(--success)'
+        : (isCardInv ? '#0284c7' : (isTemp ? '#8b5cf6' : 'var(--danger)'));
+      let iconSymbol = f.paid ? '✓' : (isCardInv ? '💳' : (isTemp ? (isLastTempMonth ? '🎉' : '⏳') : '📌'));
 
-      let metaHtml = isCardInv 
-        ? (hasThirdParty 
-            ? `<span>👤 Titular: <strong>${formatBRL(f.userValue || 0)}</strong> • 👥 Terceiros: <strong>${formatBRL(f.thirdPartyValue || 0)}</strong></span>` 
-            : `<span>Fatura de Cartão • 100% Titular</span>`)
-        : `<span>Conta Fixa Mensal</span>`;
+      let recurrenceBadgeHtml = '';
+      if (isCardInv) {
+        recurrenceBadgeHtml = '<span class="badge badge-primary" style="font-size: 0.65rem; padding: 2px 6px;">Cartão</span>';
+      } else if (isTemp) {
+        if (isLastTempMonth) {
+          recurrenceBadgeHtml = `<span class="badge badge-temp-last" style="font-size: 0.65rem; padding: 2px 7px;" title="Último mês desta despesa fixa temporária!">🎉 Último mês (${tempIdx}/${tempTotal})</span>`;
+        } else {
+          recurrenceBadgeHtml = `<span class="badge badge-temp" style="font-size: 0.65rem; padding: 2px 7px;" title="Despesa Fixa Temporária: Mês ${tempIdx} de ${tempTotal}">⏳ ${tempIdx}/${tempTotal} meses</span>`;
+        }
+      } else if (f.isSingleMonth) {
+        recurrenceBadgeHtml = '<span class="badge badge-fixed-regular" style="font-size: 0.63rem; padding: 2px 6px;">Avulsa no Mês</span>';
+      }
+
+      let metaHtml = '';
+      if (isCardInv) {
+        metaHtml = hasThirdParty 
+          ? `<span>👤 Titular: <strong>${formatBRL(f.userValue || 0)}</strong> • 👥 Terceiros: <strong>${formatBRL(f.thirdPartyValue || 0)}</strong></span>` 
+          : `<span>Fatura de Cartão • 100% Titular</span>`;
+      } else if (isTemp) {
+        const pctTemp = Math.min(100, Math.round((tempIdx / Math.max(1, tempTotal)) * 100));
+        const remText = tempRem > 0
+          ? `Restam <strong>${tempRem} ${tempRem === 1 ? 'mês' : 'meses'}</strong>${f.tempEndLabel ? ` (até ${f.tempEndLabel})` : ''}`
+          : `<strong style="color: var(--success);">Ciclo encerra neste mês!</strong>`;
+        metaHtml = `
+          <span>Temporária (${tempIdx} de ${tempTotal}) • ${remText}</span>
+          <div class="fixed-temp-progress-wrap">
+            <div class="fixed-temp-progress-track">
+              <div class="fixed-temp-progress-fill ${isLastTempMonth ? 'is-last-month' : ''}" style="width: ${pctTemp}%;"></div>
+            </div>
+            <span class="font-mono" style="font-size: 0.66rem; font-weight: 700; color: ${isLastTempMonth ? 'var(--success)' : '#8b5cf6'};">${pctTemp}%</span>
+          </div>
+        `;
+      } else if (f.isSingleMonth) {
+        metaHtml = `<span>Despesa Fixa Pontual (Apenas ${m.name})</span>`;
+      } else {
+        metaHtml = `<span>Conta Fixa Mensal Contínua</span>`;
+      }
 
       item.innerHTML = `
         <div class="fixed-item-left">
@@ -7221,9 +7672,9 @@ function renderMonthlyView() {
             <span class="badge ${f.paid ? 'badge-success' : 'badge-warning'}" style="font-size: 0.65rem; padding: 2px 6px;">
               ${f.paid ? 'Pago' : 'Pendente'}
             </span>
-            ${isCardInv ? '<span class="badge badge-primary" style="font-size: 0.65rem; padding: 2px 6px;">Cartão</span>' : ''}
+            ${recurrenceBadgeHtml}
           </div>
-          <div class="fixed-item-meta">
+          <div class="fixed-item-meta" style="white-space: normal; overflow: visible;">
             ${metaHtml}
           </div>
         </div>
@@ -7233,7 +7684,8 @@ function renderMonthlyView() {
             <button type="button" class="btn-fixed-toggle ${f.paid ? 'btn-paid' : 'btn-unpaid'}" onclick="toggleFixedPaid('${f.id}')" title="${f.paid ? 'Clique para desmarcar' : 'Clique para marcar como pago'}">
               ${f.paid ? 'Desmarcar' : 'Pagar'}
             </button>
-            ${!f.cardRefBankId ? `<button type="button" class="btn-icon btn-del-fixed" onclick="deleteFixedExpense('${f.id}')" title="Excluir">🗑️</button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-icon btn-edit-fixed" onclick="openEditFixedModal('${f.id}')" title="Editar despesa fixa">✏️</button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-icon btn-del-fixed" onclick="deleteFixedExpense('${f.id}')" title="Excluir despesa fixa">🗑️</button>` : ''}
           </div>
         </div>
       `;
@@ -7255,15 +7707,123 @@ function toggleFixedPaid(expenseId) {
   }
 }
 
+window.currentFixedFilter = 'ALL';
+let pendingDeleteFixedContext = null;
+
+function setFixedExpenseFilter(filterType) {
+  window.currentFixedFilter = filterType || 'ALL';
+  document.querySelectorAll('#fixedFilterPills .fixed-filter-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-filter') === window.currentFixedFilter);
+  });
+  renderMonthlyView();
+}
+
+function findMatchingFixedOccurrences(targetItem) {
+  if (!targetItem) return [];
+  const normName = (targetItem.name || '').trim().toLowerCase();
+  const groupId = targetItem.fixedGroupId || null;
+  const matches = [];
+
+  SUPPORTED_YEARS.forEach(y => {
+    const monthsArr = (y === currentYear)
+      ? appData.months
+      : (appData.years && appData.years[y] ? appData.years[y].months : null);
+    if (!Array.isArray(monthsArr)) return;
+    monthsArr.forEach((mObj, mIdx) => {
+      (mObj.fixedExpenses || []).forEach(f => {
+        if (f.cardRefBankId) return;
+        const sameGroup = groupId && f.fixedGroupId && f.fixedGroupId === groupId;
+        const sameName = !groupId && !f.fixedGroupId && (f.name || '').trim().toLowerCase() === normName;
+        if (sameGroup || sameName || f.id === targetItem.id) {
+          matches.push({ year: y, monthIdx: mIdx, item: f });
+        }
+      });
+    });
+  });
+  return matches;
+}
+
 function deleteFixedExpense(expenseId) {
   const m = appData.months[currentMonthIdx];
   const item = m.fixedExpenses.find(f => f.id === expenseId);
   if (!item) return;
 
+  const occurrences = findMatchingFixedOccurrences(item);
+  if (occurrences.length > 1) {
+    pendingDeleteFixedContext = {
+      expenseId: item.id,
+      name: item.name,
+      value: item.value,
+      fixedGroupId: item.fixedGroupId || null,
+      isTemporary: !!item.isTemporary,
+      occurrencesCount: occurrences.length
+    };
+    const titleEl = document.getElementById('delFixedTitle');
+    const valEl = document.getElementById('delFixedVal');
+    const subEl = document.getElementById('delFixedSubtitle');
+    if (titleEl) titleEl.textContent = item.name;
+    if (valEl) valEl.textContent = formatBRL(item.value);
+    if (subEl) {
+      subEl.textContent = item.isTemporary
+        ? `Esta despesa fixa temporária possui ${occurrences.length} ocorrências agendadas. Como deseja removê-la?`
+        : `Esta despesa fixa aparece em ${occurrences.length} meses. Como deseja removê-la?`;
+    }
+    openModal('modalDeleteFixedExpense');
+    return;
+  }
+
   if (confirm(`Deseja realmente remover a despesa fixa "${item.name}"?`)) {
     m.fixedExpenses = m.fixedExpenses.filter(f => f.id !== expenseId);
     persistData();
+    showToast('🗑️ Despesa fixa removida!', 2200);
   }
+}
+
+function executeDeleteFixedExpense(scope) {
+  if (!pendingDeleteFixedContext) {
+    closeModal('modalDeleteFixedExpense');
+    return;
+  }
+  const { expenseId, name, fixedGroupId } = pendingDeleteFixedContext;
+  const normName = (name || '').trim().toLowerCase();
+  let removedCount = 0;
+
+  if (scope === 'single') {
+    const m = appData.months[currentMonthIdx];
+    const before = m.fixedExpenses.length;
+    m.fixedExpenses = m.fixedExpenses.filter(f => f.id !== expenseId);
+    removedCount = before - m.fixedExpenses.length;
+  } else {
+    SUPPORTED_YEARS.forEach(y => {
+      if (scope === 'from_current' && y < currentYear) return;
+      const monthsArr = (y === currentYear)
+        ? appData.months
+        : (appData.years && appData.years[y] ? appData.years[y].months : null);
+      if (!Array.isArray(monthsArr)) return;
+
+      monthsArr.forEach((mObj, mIdx) => {
+        if (scope === 'from_current' && y === currentYear && mIdx < currentMonthIdx) return;
+        const before = (mObj.fixedExpenses || []).length;
+        mObj.fixedExpenses = (mObj.fixedExpenses || []).filter(f => {
+          if (f.cardRefBankId) return true;
+          const matchGroup = fixedGroupId && f.fixedGroupId === fixedGroupId;
+          const matchName = !fixedGroupId && !f.fixedGroupId && (f.name || '').trim().toLowerCase() === normName;
+          const matchId = f.id === expenseId;
+          return !(matchGroup || matchName || matchId);
+        });
+        removedCount += (before - mObj.fixedExpenses.length);
+      });
+    });
+
+    if (appData.years && appData.years[currentYear]) {
+      appData.years[currentYear].months = appData.months;
+    }
+  }
+
+  pendingDeleteFixedContext = null;
+  closeModal('modalDeleteFixedExpense');
+  persistData();
+  showToast(`🗑️ Despesa removida (${removedCount} ${removedCount === 1 ? 'mês' : 'meses'})!`, 2500);
 }
 
 // RENDER: TABELA DE MOVIMENTAÇÕES MENSAIS
@@ -8834,37 +9394,385 @@ function applyConfigToAllMonths() {
   }
 }
 
-// ADICIONAR DESPESA FIXA
-function openAddFixedModal() {
-  document.getElementById('fixedExpenseName').value = '';
-  document.getElementById('fixedExpenseValue').value = '';
+// =========================================================================
+// GESTÃO AVANÇADA DE DESPESAS FIXAS (CONTÍNUA, TEMPORÁRIA N MESES E AVULSA)
+// =========================================================================
+function handleFixedCurrencyMask(input) {
+  let digits = (input.value || '').replace(/\D/g, '');
+  const hiddenEl = document.getElementById('fixedExpenseValue');
+  if (!digits) {
+    input.value = '0,00';
+    if (hiddenEl) hiddenEl.value = '0.00';
+    updateFixedExpensePreview();
+    return;
+  }
+  let valNum = parseInt(digits, 10) / 100;
+  input.value = valNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (hiddenEl) hiddenEl.value = valNum.toFixed(2);
+  updateFixedExpensePreview();
+}
+
+function setFixedCurrencyValue(numVal) {
+  const val = parseFloat(numVal) || 0;
+  const hiddenEl = document.getElementById('fixedExpenseValue');
+  const dispEl = document.getElementById('fixedExpenseValueDisplay');
+  if (hiddenEl) hiddenEl.value = val.toFixed(2);
+  if (dispEl) {
+    dispEl.value = val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+}
+
+function setFixedExpenseMode(mode) {
+  const resolvedMode = ['annual', 'temporary', 'single'].includes(mode) ? mode : 'annual';
+  const modeInput = document.getElementById('fixedExpenseMode');
+  if (modeInput) modeInput.value = resolvedMode;
+
+  const chkLegacy = document.getElementById('fixedExpenseAllMonths');
+  if (chkLegacy) chkLegacy.checked = (resolvedMode === 'annual');
+
+  document.querySelectorAll('#fixedModeSegmented .segmented-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-mode') === resolvedMode);
+  });
+
+  const durSec = document.getElementById('fixedDurationSection');
+  if (durSec) {
+    durSec.style.display = (resolvedMode === 'temporary') ? 'block' : 'none';
+  }
+
+  const startLbl = document.getElementById('fixedStartMonthLabel');
+  if (startLbl && MONTH_NAMES[currentMonthIdx]) {
+    startLbl.textContent = `${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear}`;
+  }
+
+  updateFixedExpensePreview();
+}
+
+function setFixedDurationMonths(numMonths) {
+  const clamped = Math.max(1, Math.min(60, parseInt(numMonths, 10) || 1));
+  const inputEl = document.getElementById('fixedExpenseDurationMonths');
+  if (inputEl) inputEl.value = clamped;
+
+  const unitEl = document.getElementById('fixedDurationUnitText');
+  if (unitEl) unitEl.textContent = clamped === 1 ? 'mês' : 'meses';
+
+  document.querySelectorAll('#fixedDurationPills .duration-pill-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.getAttribute('data-months'), 10) === clamped);
+  });
+
+  updateFixedExpensePreview();
+}
+
+function stepFixedDuration(delta) {
+  const inputEl = document.getElementById('fixedExpenseDurationMonths');
+  const cur = parseInt(inputEl ? inputEl.value : '6', 10) || 6;
+  setFixedDurationMonths(cur + delta);
+}
+
+function onFixedDurationInput() {
+  const inputEl = document.getElementById('fixedExpenseDurationMonths');
+  if (!inputEl) return;
+  const raw = parseInt(inputEl.value, 10);
+  if (!isNaN(raw) && raw >= 1) {
+    const clamped = Math.min(60, raw);
+    const unitEl = document.getElementById('fixedDurationUnitText');
+    if (unitEl) unitEl.textContent = clamped === 1 ? 'mês' : 'meses';
+    document.querySelectorAll('#fixedDurationPills .duration-pill-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.getAttribute('data-months'), 10) === clamped);
+    });
+  }
+  updateFixedExpensePreview();
+}
+
+function setQuickFixed(desc, mode, monthsCount) {
+  const nameEl = document.getElementById('fixedExpenseName');
+  if (nameEl) nameEl.value = desc;
+  if (mode) setFixedExpenseMode(mode);
+  if (monthsCount) setFixedDurationMonths(monthsCount);
+  updateFixedExpensePreview();
+}
+
+function computeEndMonthYear(startYear, startMonthIdx, durationMonths) {
+  const totalOffset = startMonthIdx + Math.max(1, durationMonths) - 1;
+  const endYear = startYear + Math.floor(totalOffset / 12);
+  const endMonthIdx = totalOffset % 12;
+  return { endYear, endMonthIdx, label: `${MONTH_NAMES[endMonthIdx].substring(0, 3)}/${endYear}` };
+}
+
+function updateFixedExpensePreview() {
+  const mode = document.getElementById('fixedExpenseMode')?.value || 'annual';
+  const val = parseFloat(document.getElementById('fixedExpenseValue')?.value) || 0;
+  const durInput = parseInt(document.getElementById('fixedExpenseDurationMonths')?.value, 10) || 6;
+  const duration = Math.max(1, Math.min(60, durInput));
+  const editId = document.getElementById('fixedExpenseEditId')?.value || '';
+
+  const box = document.getElementById('fixedExpensePreviewBox');
+  const line1 = document.getElementById('fixedPreviewLine1');
+  const line2 = document.getElementById('fixedPreviewLine2');
+  const btnSave = document.getElementById('btnSaveFixedExpense');
+  if (!box || !line1 || !line2) return;
+
+  const startLabel = `${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear}`;
+
+  if (mode === 'temporary') {
+    box.classList.add('is-temp');
+    const { label: endLabel } = computeEndMonthYear(currentYear, currentMonthIdx, duration);
+    const totalCommitment = val * duration;
+    line1.innerHTML = `⏳ Vigência Temporária: <strong>${startLabel} até ${endLabel}</strong> (${duration} ${duration === 1 ? 'mês' : 'meses'})`;
+    line2.innerHTML = `Comprometimento acumulado no período: <strong>${formatBRL(totalCommitment)}</strong> (${duration}x de ${formatBRL(val)})`;
+    if (btnSave) btnSave.textContent = editId ? `Salvar Alterações (${duration}m)` : `Agendar por ${duration} ${duration === 1 ? 'Mês' : 'Meses'}`;
+  } else if (mode === 'annual') {
+    box.classList.remove('is-temp');
+    const totalAnnual = val * 12;
+    line1.innerHTML = `🗓️ Vigência Anual: <strong>Todos os 12 meses de ${currentYear}</strong>`;
+    line2.innerHTML = `Comprometimento anual estimado: <strong>${formatBRL(totalAnnual)}</strong> (12x de ${formatBRL(val)})`;
+    if (btnSave) btnSave.textContent = editId ? 'Salvar Alterações' : 'Salvar Despesa Fixa Anual';
+  } else {
+    box.classList.remove('is-temp');
+    line1.innerHTML = `📍 Vigência Pontual: <strong>Apenas em ${MONTH_NAMES[currentMonthIdx]}/${currentYear}</strong>`;
+    line2.innerHTML = `Impacto único neste mês: <strong>${formatBRL(val)}</strong>`;
+    if (btnSave) btnSave.textContent = editId ? 'Salvar Alterações' : `Salvar Apenas em ${MONTH_NAMES[currentMonthIdx].substring(0, 3)}`;
+  }
+}
+
+function openAddFixedModal(defaultMode) {
+  const editIdEl = document.getElementById('fixedExpenseEditId');
+  if (editIdEl) editIdEl.value = '';
+
+  const titleEl = document.getElementById('modalFixedTitle');
+  if (titleEl) titleEl.textContent = 'Nova Despesa Fixa';
+
+  const nameEl = document.getElementById('fixedExpenseName');
+  if (nameEl) nameEl.value = '';
+
+  setFixedCurrencyValue(0);
+
+  const editScopeSec = document.getElementById('fixedEditScopeSection');
+  if (editScopeSec) editScopeSec.style.display = 'none';
+
+  const modeSegmented = document.getElementById('fixedModeSegmented');
+  if (modeSegmented) modeSegmented.style.display = 'flex';
+
+  const initialMode = (typeof defaultMode === 'string' && ['annual', 'temporary', 'single'].includes(defaultMode))
+    ? defaultMode
+    : 'annual';
+
+  setFixedDurationMonths(6);
+  setFixedExpenseMode(initialMode);
+  openModal('modalFixedExpense');
+}
+
+function openEditFixedModal(expenseId) {
+  const m = appData.months[currentMonthIdx];
+  const item = m.fixedExpenses.find(f => f.id === expenseId);
+  if (!item || item.cardRefBankId) return;
+
+  const editIdEl = document.getElementById('fixedExpenseEditId');
+  if (editIdEl) editIdEl.value = item.id;
+
+  const titleEl = document.getElementById('modalFixedTitle');
+  if (titleEl) titleEl.textContent = 'Editar Despesa Fixa';
+
+  const nameEl = document.getElementById('fixedExpenseName');
+  if (nameEl) nameEl.value = item.name || '';
+
+  setFixedCurrencyValue(item.value || 0);
+
+  const occurrences = findMatchingFixedOccurrences(item);
+  const editScopeSec = document.getElementById('fixedEditScopeSection');
+  if (editScopeSec) {
+    editScopeSec.style.display = occurrences.length > 1 ? 'block' : 'none';
+  }
+
+  if (item.isTemporary) {
+    setFixedDurationMonths(item.tempMonthCount || 6);
+    setFixedExpenseMode('temporary');
+  } else if (item.isSingleMonth || occurrences.length === 1) {
+    setFixedExpenseMode('single');
+  } else {
+    setFixedExpenseMode('annual');
+  }
+
   openModal('modalFixedExpense');
 }
 
 function saveNewFixedExpense(e) {
-  e.preventDefault();
-  const name = document.getElementById('fixedExpenseName').value;
-  const val = parseFloat(document.getElementById('fixedExpenseValue').value) || 0;
-  const allMonths = document.getElementById('fixedExpenseAllMonths').checked;
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
 
-  const newFixed = {
-    id: 'f_' + Date.now(),
+  const name = (document.getElementById('fixedExpenseName')?.value || '').trim();
+  const valInput = document.getElementById('fixedExpenseValue')?.value || '0';
+  const val = Math.round((parseFloat(valInput) || 0) * 100) / 100;
+
+  if (!name) {
+    showToast('⚠️ Informe o nome da despesa fixa.', 2500);
+    return;
+  }
+  if (val <= 0) {
+    showToast('⚠️ Informe um valor maior que R$ 0,00.', 2500);
+    return;
+  }
+
+  const editId = document.getElementById('fixedExpenseEditId')?.value || '';
+  const modeEl = document.getElementById('fixedExpenseMode');
+  const chkLegacy = document.getElementById('fixedExpenseAllMonths');
+  let mode = modeEl ? modeEl.value : (chkLegacy && !chkLegacy.checked ? 'single' : 'annual');
+
+  const rawDuration = parseInt(document.getElementById('fixedExpenseDurationMonths')?.value, 10) || 1;
+  const durationMonths = Math.max(1, Math.min(60, rawDuration));
+
+  // Garantir estrutura plurianual carregada
+  ensureMultiYearStructure();
+
+  // MODO EDIÇÃO DE DESPESA FIXA EXISTENTE
+  if (editId) {
+    const currentMonthObj = appData.months[currentMonthIdx];
+    const existingItem = currentMonthObj.fixedExpenses.find(f => f.id === editId);
+    if (existingItem) {
+      const scope = document.getElementById('fixedEditScope')?.value || 'from_current';
+      const oldGroupId = existingItem.fixedGroupId || null;
+      const oldNormName = (existingItem.name || '').trim().toLowerCase();
+
+      // Se o usuário mudou para temporária ou alterou a duração na edição, recriamos o ciclo a partir do mês atual
+      if (mode === 'temporary' && (!existingItem.isTemporary || existingItem.tempMonthCount !== durationMonths)) {
+        // Remover ocorrências do mês atual em diante do grupo antigo
+        SUPPORTED_YEARS.forEach(y => {
+          if (y < currentYear) return;
+          const mArr = (y === currentYear) ? appData.months : (appData.years[y] ? appData.years[y].months : null);
+          if (!Array.isArray(mArr)) return;
+          mArr.forEach((mObj, mIdx) => {
+            if (y === currentYear && mIdx < currentMonthIdx) return;
+            mObj.fixedExpenses = (mObj.fixedExpenses || []).filter(f => {
+              if (f.cardRefBankId) return true;
+              const matchGroup = oldGroupId && f.fixedGroupId === oldGroupId;
+              const matchName = !oldGroupId && !f.fixedGroupId && (f.name || '').trim().toLowerCase() === oldNormName;
+              const matchId = f.id === editId;
+              return !(matchGroup || matchName || matchId);
+            });
+          });
+        });
+        // Prosseguir abaixo para agendar os N meses da despesa temporária
+      } else {
+        // Atualização de nome e valor conforme o escopo escolhido
+        if (scope === 'single') {
+          existingItem.name = name;
+          existingItem.value = val;
+        } else {
+          SUPPORTED_YEARS.forEach(y => {
+            if (scope === 'from_current' && y < currentYear) return;
+            const mArr = (y === currentYear) ? appData.months : (appData.years[y] ? appData.years[y].months : null);
+            if (!Array.isArray(mArr)) return;
+            mArr.forEach((mObj, mIdx) => {
+              if (scope === 'from_current' && y === currentYear && mIdx < currentMonthIdx) return;
+              (mObj.fixedExpenses || []).forEach(f => {
+                if (f.cardRefBankId) return;
+                const matchGroup = oldGroupId && f.fixedGroupId === oldGroupId;
+                const matchName = !oldGroupId && !f.fixedGroupId && (f.name || '').trim().toLowerCase() === oldNormName;
+                const matchId = f.id === editId;
+                if (matchGroup || matchName || matchId) {
+                  f.name = name;
+                  f.value = val;
+                }
+              });
+            });
+          });
+        }
+        if (appData.years && appData.years[currentYear]) {
+          appData.years[currentYear].months = appData.months;
+        }
+        closeModal('modalFixedExpense');
+        persistData();
+        showToast('✅ Despesa fixa atualizada!', 2200);
+        return;
+      }
+    }
+  }
+
+  // CRIAÇÃO DE NOVA DESPESA FIXA (OU REAGENDAMENTO TEMPORÁRIO)
+  const groupId = 'fgrp_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+
+  if (mode === 'temporary') {
+    const { label: endLabel } = computeEndMonthYear(currentYear, currentMonthIdx, durationMonths);
+    let createdCount = 0;
+
+    for (let i = 0; i < durationMonths; i++) {
+      const totalMonthOffset = currentMonthIdx + i;
+      const yearOffset = Math.floor(totalMonthOffset / 12);
+      const targetMonthIdx = totalMonthOffset % 12;
+      const targetYear = currentYear + yearOffset;
+
+      let targetMonthsArray = null;
+      if (targetYear === currentYear) {
+        targetMonthsArray = appData.months;
+      } else if (appData.years && appData.years[targetYear] && appData.years[targetYear].months) {
+        targetMonthsArray = appData.years[targetYear].months;
+      }
+
+      if (targetMonthsArray && targetMonthsArray[targetMonthIdx]) {
+        targetMonthsArray[targetMonthIdx].fixedExpenses.push({
+          id: `f_${Date.now()}_${i}_${Math.random().toString(36).substring(2, 6)}`,
+          fixedGroupId: groupId,
+          name: name,
+          value: val,
+          paid: false,
+          cardRefBankId: null,
+          isTemporary: true,
+          tempMonthIndex: i + 1,
+          tempMonthCount: durationMonths,
+          tempRemainingMonths: durationMonths - (i + 1),
+          tempStartLabel: `${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear}`,
+          tempEndLabel: endLabel
+        });
+        createdCount++;
+      }
+    }
+
+    if (appData.years && appData.years[currentYear]) {
+      appData.years[currentYear].months = appData.months;
+    }
+
+    closeModal('modalFixedExpense');
+    persistData();
+    showToast(`⏳ Despesa fixa temporária agendada por ${createdCount} ${createdCount === 1 ? 'mês' : 'meses'} (até ${endLabel})!`, 3200);
+    return;
+  }
+
+  if (mode === 'annual') {
+    appData.months.forEach((m, idx) => {
+      m.fixedExpenses.push({
+        id: `f_${Date.now()}_${idx}_${Math.random().toString(36).substring(2, 6)}`,
+        fixedGroupId: groupId,
+        name: name,
+        value: val,
+        paid: false,
+        cardRefBankId: null,
+        isTemporary: false
+      });
+    });
+    if (appData.years && appData.years[currentYear]) {
+      appData.years[currentYear].months = appData.months;
+    }
+    closeModal('modalFixedExpense');
+    persistData();
+    showToast(`🗓️ Despesa fixa adicionada aos 12 meses de ${currentYear}!`, 2500);
+    return;
+  }
+
+  // Modo 'single' (Apenas neste mês)
+  appData.months[currentMonthIdx].fixedExpenses.push({
+    id: `f_${Date.now()}_single_${Math.random().toString(36).substring(2, 6)}`,
+    fixedGroupId: groupId,
     name: name,
     value: val,
     paid: false,
-    cardRefBankId: null
-  };
-
-  if (allMonths) {
-    appData.months.forEach(m => {
-      m.fixedExpenses.push({ ...newFixed, id: 'f_' + Date.now() + '_' + Math.random() });
-    });
-  } else {
-    appData.months[currentMonthIdx].fixedExpenses.push(newFixed);
+    cardRefBankId: null,
+    isTemporary: false,
+    isSingleMonth: true
+  });
+  if (appData.years && appData.years[currentYear]) {
+    appData.years[currentYear].months = appData.months;
   }
-
   closeModal('modalFixedExpense');
   persistData();
+  showToast(`📍 Despesa fixa adicionada em ${MONTH_NAMES[currentMonthIdx]}!`, 2500);
 }
 
 // ==========================================
@@ -9226,15 +10134,21 @@ function exportExcel() {
 
       // 3. ABA DE DESPESAS FIXAS
       const fixedRows = [
-        ["Mês", "Descrição da Despesa Fixa", "Valor (R$)", "Status"]
+        ["Mês", "Descrição da Despesa Fixa", "Modalidade / Prazo", "Valor (R$)", "Status"]
       ];
 
       appData.months.forEach(m => {
         if (m.fixedExpenses && m.fixedExpenses.length > 0) {
           m.fixedExpenses.forEach(f => {
+            const modalidade = f.cardRefBankId
+              ? 'Fatura de Cartão'
+              : (f.isTemporary
+                  ? `Temporária (${f.tempMonthIndex}/${f.tempMonthCount} - até ${f.tempEndLabel || ''})`
+                  : (f.isSingleMonth ? 'Avulsa no Mês' : 'Fixa Anual'));
             fixedRows.push([
               m.name,
               f.name || f.description || '',
+              modalidade,
               parseFloat(f.value) || 0,
               f.paid ? 'Pago' : 'Pendente'
             ]);
