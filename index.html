@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Controle Financeiro">
-  <title>Controle Financeiro - Dashboard Interativo</title>
+  <title>Controle Financeiro 2026–2031 - Dashboard Interativo</title>
   <!-- Google Fonts & Chart.js -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2964,6 +2964,172 @@
       border-left-color: #8b5cf6;
     }
 
+    /* PAINEL INTELIGENTE DE PARCELAMENTO & COMPETÊNCIA RETROATIVA (UX APPLE/NUBANK) */
+    .competence-date-card {
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .competence-date-card.is-different-month {
+      border-color: rgba(14, 165, 233, 0.45);
+      background: rgba(14, 165, 233, 0.06);
+    }
+
+    .competence-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .competence-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(0, 168, 104, 0.12);
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .competence-badge.is-retro {
+      background: rgba(14, 165, 233, 0.16);
+      color: #0284c7;
+    }
+
+    body.dark-theme .competence-badge.is-retro {
+      color: #38bdf8;
+    }
+
+    .date-quick-pills {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-top: 8px;
+      padding-bottom: 2px;
+    }
+
+    .date-quick-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .date-pill-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .date-pill-btn:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+    }
+
+    .date-pill-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .installment-wizard-card {
+      background: rgba(2, 132, 199, 0.06);
+      border: 1px solid rgba(2, 132, 199, 0.28);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    body.dark-theme .installment-wizard-card {
+      background: rgba(2, 132, 199, 0.11);
+      border-color: rgba(56, 189, 248, 0.28);
+    }
+
+    .installment-val-mode-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--bg-card);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .inst-mode-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 7px 8px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .inst-mode-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+    }
+
+    .installment-timeline-strip {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 4px 0 2px 0;
+    }
+
+    .installment-timeline-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .inst-timeline-chip {
+      flex-shrink: 0;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.69rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.25;
+    }
+
+    .inst-timeline-chip.is-past {
+      opacity: 0.78;
+      border-style: dashed;
+    }
+
+    .inst-timeline-chip.is-current-view {
+      background: rgba(0, 168, 104, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: scale(1.03);
+    }
+
     .empty-fixed-state {
       padding: 28px 16px;
       text-align: center;
@@ -3332,7 +3498,7 @@
         </svg>
       </div>
       <h2 class="auth-title">Controle Financeiro</h2>
-      <p class="auth-subtitle">Acesso seguro</p>
+      <p class="auth-subtitle">Acesso seguro • 2026–2031 (6 Anos)</p>
     </div>
 
     <!-- ABAS ENTRAR / CADASTRAR -->
@@ -3596,7 +3762,7 @@
         <button class="nav-btn active" id="btnViewMonthly" onclick="switchView('monthly')">📅 Visão Mensal & Movimentações</button>
       </div>
 
-      <!-- SELETOR DE ANO MULTI-ANO -->
+      <!-- SELETOR DE ANO MULTI-ANO (2026 - 2031) -->
       <div class="year-selector-widget">
         <span class="year-selector-label">Exercício:</span>
         <div class="year-stepper">
@@ -4086,27 +4252,74 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom: 10px;">
         <label id="lblTxInstallment">Forma de Pagamento</label>
-        <select id="txInstallment" class="form-control" required>
+        <select id="txInstallment" class="form-control" required onchange="handleInstallmentSelectChange()">
           <!-- Preenchido dinamicamente -->
         </select>
       </div>
 
-      <!-- TOGGLE PARA OPÇÕES AVANÇADAS (REDUÇÃO DE CARGA COGNITIVA) -->
+      <!-- PAINEL INTELIGENTE DE COMPRA PARCELADA & RETROATIVA (APARECE AUTOMATICAMENTE AO ESCOLHER PARCELADO) -->
+      <div id="txInstallmentConfigPanel" class="installment-wizard-card" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 0.8rem; font-weight: 800; color: #0284c7;">💳 Configuração Inteligente de Parcelas</span>
+          <span id="txInstallmentMathBadge" class="font-mono" style="font-size: 0.73rem; font-weight: 700; color: var(--text-main);"></span>
+        </div>
+
+        <!-- MODO DO VALOR DIGITADO: VALOR TOTAL vs VALOR DA PARCELA -->
+        <div>
+          <label style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 4px; display: block;">O valor digitado acima refere-se a:</label>
+          <input type="hidden" id="txInstallmentValueMode" value="total">
+          <div class="installment-val-mode-toggle" id="txInstValModeGroup">
+            <button type="button" class="inst-mode-btn active" data-valmode="total" onclick="setTxInstallmentValueMode('total')">💳 Valor Total da Compra</button>
+            <button type="button" class="inst-mode-btn" data-valmode="installment" onclick="setTxInstallmentValueMode('installment')">🔢 Valor de Cada Parcela</button>
+          </div>
+        </div>
+
+        <!-- SELETOR RÁPIDO: QUAL PARCELA CAI NO MÊS ATUAL / QUANDO FOI FEITA A COMPRA? -->
+        <div>
+          <label for="txInstallmentCurrentStep" style="font-size: 0.74rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; display: block;">
+            ⏪ Comprou meses atrás? Qual parcela cai em <span id="lblCurrentMonthInWizard">este mês</span>?
+          </label>
+          <select id="txInstallmentCurrentStep" class="form-control" style="font-size: 0.82rem; padding: 8px 10px;" onchange="onInstallmentCurrentStepChange()">
+            <!-- Preenchido dinamicamente (1ª de N, 2ª de N, etc.) -->
+          </select>
+        </div>
+
+        <!-- LINHA DO TEMPO VISUAL DAS PARCELAS -->
+        <div>
+          <div id="txInstallmentSummaryLine" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;"></div>
+          <div id="txInstallmentTimeline" class="installment-timeline-strip"></div>
+        </div>
+      </div>
+
+      <!-- SELETOR SEMPRE VISÍVEL DE DATA / MÊS DE COMPETÊNCIA (COM ATALHOS RETROATIVOS 1-TOQUE) -->
+      <div id="txCompetenceCard" class="competence-date-card">
+        <div class="competence-header-row">
+          <label for="txDate" id="lblTxDateField" style="margin: 0; font-size: 0.78rem; font-weight: 700; color: var(--text-main);">📅 Data da Compra / 1ª Parcela</label>
+          <span id="txCompetenceBadge" class="competence-badge">📍 Neste Mês</span>
+        </div>
+        <input type="date" id="txDate" class="form-control" style="padding: 8px 12px; font-size: 0.88rem;" required onchange="onTxDateChange()">
+        <div class="date-quick-pills" id="txDateQuickPills">
+          <button type="button" class="date-pill-btn active" data-offset="0" onclick="setTxDateByMonthOffset(0)">📍 Mês Aberto</button>
+          <button type="button" class="date-pill-btn" data-offset="-1" onclick="setTxDateByMonthOffset(-1)">⏪ Mês Passado</button>
+          <button type="button" class="date-pill-btn" data-offset="-2" onclick="setTxDateByMonthOffset(-2)">⏪ Há 2 Meses</button>
+          <button type="button" class="date-pill-btn" data-offset="-3" onclick="setTxDateByMonthOffset(-3)">⏪ Há 3 Meses</button>
+          <button type="button" class="date-pill-btn" data-offset="-4" onclick="setTxDateByMonthOffset(-4)">⏪ Há 4 Meses</button>
+          <button type="button" class="date-pill-btn" data-offset="-6" onclick="setTxDateByMonthOffset(-6)">⏪ Há 6 Meses</button>
+        </div>
+      </div>
+
+      <!-- TOGGLE PARA OPÇÕES AVANÇADAS (AUTOR E REPETIÇÃO) -->
       <div class="advanced-options-toggle-wrapper">
         <button type="button" class="btn-toggle-advanced" onclick="toggleTxAdvancedOptions()">
-          <span id="btnAdvancedToggleLabel">⚙️ Opções Avançadas (Data, Autor, Repetição)</span>
+          <span id="btnAdvancedToggleLabel">⚙️ Opções Avançadas (Perfil Titular/Terceiros, Repetição)</span>
           <span id="advancedOptionsIcon" style="transition: transform 0.2s ease;">▾</span>
         </button>
       </div>
 
       <!-- CONTEÚDO AVANÇADO (COLAPSÁVEL) -->
       <div id="txAdvancedOptions" class="advanced-options-content" style="display: none;">
-        <div class="form-group">
-          <label>Data da Movimentação</label>
-          <input type="date" id="txDate" class="form-control" required>
-        </div>
 
         <div class="form-group" id="rowTxAuthor">
           <label id="lblTxAuthor" style="display: flex; align-items: center; justify-content: space-between;">
@@ -4752,9 +4965,21 @@
 
       <!-- PAINEL INTERATIVO: QUANTOS MESES SERÁ DESPESA FIXA (VISÍVEL NO MODO TEMPORÁRIA) -->
       <div id="fixedDurationSection" class="duration-selector-card" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
           <label style="margin: 0; font-size: 0.82rem; font-weight: 800; color: #8b5cf6;">⏳ Por quantos meses ela será despesa fixa?</label>
-          <span style="font-size: 0.72rem; color: var(--text-muted);">Início: <strong id="fixedStartMonthLabel">Jan/2026</strong></span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">1º mês: <strong id="fixedStartMonthLabel">Jan/2026</strong></span>
+        </div>
+        <div style="margin-top: 8px;">
+          <label for="fixedStartOffsetSelect" style="font-size: 0.73rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Quando começou esta despesa temporária?</label>
+          <select id="fixedStartOffsetSelect" class="form-control" style="font-size: 0.8rem; padding: 6px 10px;" onchange="updateFixedExpensePreview()">
+            <option value="0">📍 Começa neste mês (1º mês agora)</option>
+            <option value="-1">⏪ Começou mês passado (2º mês agora)</option>
+            <option value="-2">⏪ Começou há 2 meses (3º mês agora)</option>
+            <option value="-3">⏪ Começou há 3 meses (4º mês agora)</option>
+            <option value="-4">⏪ Começou há 4 meses (5º mês agora)</option>
+            <option value="-5">⏪ Começou há 5 meses (6º mês agora)</option>
+            <option value="-6">⏪ Começou há 6 meses (7º mês agora)</option>
+          </select>
         </div>
 
         <div class="duration-stepper-row">
@@ -4974,11 +5199,13 @@ function handleCurrencyMask(input) {
   if (!digits) {
     input.value = '0,00';
     document.getElementById('txValue').value = '0.00';
+    if (typeof updateTxInstallmentPreview === 'function') updateTxInstallmentPreview();
     return;
   }
   let valNum = parseInt(digits, 10) / 100;
   input.value = valNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   document.getElementById('txValue').value = valNum.toFixed(2);
+  if (typeof updateTxInstallmentPreview === 'function') updateTxInstallmentPreview();
 }
 
 function setTxAmount(numVal) {
@@ -4988,6 +5215,7 @@ function setTxAmount(numVal) {
   if (dispEl) {
     dispEl.value = val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
+  if (typeof updateTxInstallmentPreview === 'function') updateTxInstallmentPreview();
 }
 
 function setTxType(type) {
@@ -5389,7 +5617,15 @@ const CloudSyncEngine = {
   }
 };
 
-async function persistData() {
+async function syncAllMonthsCardInvoices() {
+  if (!appData || !appData.months) return;
+  // Recalcula todos os 12 meses do ano ativo para manter as faturas de cartão (fixedExpenses) 100% sincronizadas
+  for (let mIdx = 0; mIdx < 12; mIdx++) {
+    getMonthTotals(mIdx);
+  }
+}
+
+function persistData() {
   invalidateTotalsCache();
   if (appData) {
     if (!appData.years || typeof appData.years !== 'object') appData.years = {};
@@ -5400,6 +5636,7 @@ async function persistData() {
     }
     appData.months = appData.years[currentYear].months;
     appData.year = currentYear;
+    syncAllMonthsCardInvoices();
     stampDataRevision(appData);
   }
 
@@ -8444,7 +8681,8 @@ function handleBankChange() {
         'PARCELADO 2X', 'PARCELADO 3X', 'PARCELADO 4X',
         'PARCELADO 5X', 'PARCELADO 6X', 'PARCELADO 7X',
         'PARCELADO 8X', 'PARCELADO 9X', 'PARCELADO 10X',
-        'PARCELADO 11X', 'PARCELADO 12X',
+        'PARCELADO 11X', 'PARCELADO 12X', 'PARCELADO 15X',
+        'PARCELADO 18X', 'PARCELADO 24X',
         'ÚLTIMA PARCELA'
       ];
       creditOptions.forEach(op => {
@@ -8482,6 +8720,9 @@ function handleBankChange() {
 
   if (curInst && Array.from(selInst.options).some(o => o.value === curInst)) {
     selInst.value = curInst;
+  }
+  if (typeof handleInstallmentSelectChange === 'function') {
+    handleInstallmentSelectChange();
   }
 }
 
@@ -8523,6 +8764,295 @@ function closeModal(id) {
   document.getElementById(id).classList.remove('open');
 }
 
+// =========================================================================
+// MOTOR DE ROTEAMENTO CRONOLÓGICO E COMPRAS PARCELADAS RETROATIVAS
+// =========================================================================
+function parseTxDateInfo(dateStr) {
+  let y = currentYear;
+  let m = currentMonthIdx;
+  let d = '01';
+  if (dateStr && typeof dateStr === 'string') {
+    const parts = dateStr.trim().split('-');
+    if (parts.length === 3) {
+      const py = parseInt(parts[0], 10);
+      const pm = parseInt(parts[1], 10) - 1;
+      const pd = parseInt(parts[2], 10);
+      if (!isNaN(py) && py >= 2020 && py <= 2035) y = py;
+      if (!isNaN(pm) && pm >= 0 && pm < 12) m = pm;
+      if (!isNaN(pd) && pd >= 1 && pd <= 31) d = String(pd).padStart(2, '0');
+    }
+  }
+  return { year: y, monthIdx: m, dayStr: d };
+}
+
+function getSelectedInstallmentsCount() {
+  const instVal = document.getElementById('txInstallment')?.value || '';
+  const match = instVal.match(/PARCELADO (\d+)X/);
+  if (match) return parseInt(match[1], 10);
+  return 0;
+}
+
+function setTxInstallmentValueMode(mode) {
+  const resolved = (mode === 'installment') ? 'installment' : 'total';
+  const modeEl = document.getElementById('txInstallmentValueMode');
+  if (modeEl) modeEl.value = resolved;
+
+  document.querySelectorAll('#txInstValModeGroup .inst-mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-valmode') === resolved);
+  });
+
+  const heroLbl = document.querySelector('#modalTransaction .hero-amount-label');
+  if (heroLbl) {
+    const nInst = getSelectedInstallmentsCount();
+    if (nInst > 1) {
+      heroLbl.textContent = resolved === 'installment' ? 'Valor de Cada Parcela (R$)' : 'Valor Total da Compra (R$)';
+    } else {
+      heroLbl.textContent = 'Valor do Lançamento';
+    }
+  }
+
+  updateTxInstallmentPreview();
+}
+
+function setTxDateByMonthOffset(monthOffset) {
+  const offset = parseInt(monthOffset, 10) || 0;
+  const curDateVal = document.getElementById('txDate')?.value || '';
+  const { dayStr } = parseTxDateInfo(curDateVal);
+
+  const baseAbsMonths = currentYear * 12 + currentMonthIdx + offset;
+  const targetY = Math.floor(baseAbsMonths / 12);
+  const targetM = ((baseAbsMonths % 12) + 12) % 12;
+
+  const maxDayInMonth = new Date(targetY, targetM + 1, 0).getDate();
+  const safeDay = String(Math.min(parseInt(dayStr, 10) || 1, maxDayInMonth)).padStart(2, '0');
+  const mNum = String(targetM + 1).padStart(2, '0');
+
+  const dateEl = document.getElementById('txDate');
+  if (dateEl) {
+    dateEl.value = `${targetY}-${mNum}-${safeDay}`;
+  }
+  onTxDateChange();
+}
+
+function populateInstallmentCurrentStepOptions(numInstallments) {
+  const sel = document.getElementById('txInstallmentCurrentStep');
+  if (!sel || numInstallments <= 1) return;
+
+  const curMonthLabel = `${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear}`;
+  const lblWizard = document.getElementById('lblCurrentMonthInWizard');
+  if (lblWizard) lblWizard.textContent = `${MONTH_NAMES[currentMonthIdx]}/${currentYear}`;
+
+  const dateVal = document.getElementById('txDate')?.value || '';
+  const { year: startY, monthIdx: startM } = parseTxDateInfo(dateVal);
+  const diffMonths = (currentYear * 12 + currentMonthIdx) - (startY * 12 + startM);
+  const activeStep = diffMonths + 1; // 1 = começa neste mês, 2 = começou mês passado, etc.
+
+  sel.innerHTML = '';
+  for (let step = 1; step <= numInstallments; step++) {
+    const monthsAgo = step - 1;
+    const startAbs = (currentYear * 12 + currentMonthIdx) - monthsAgo;
+    const sY = Math.floor(startAbs / 12);
+    const sM = ((startAbs % 12) + 12) % 12;
+    const startShort = `${MONTH_NAMES[sM].substring(0, 3)}/${sY}`;
+
+    const opt = document.createElement('option');
+    opt.value = String(step);
+    if (step === 1) {
+      opt.textContent = `1ª de ${numInstallments} em ${curMonthLabel} (Compra feita neste mês — Início: ${startShort})`;
+    } else if (step === numInstallments) {
+      opt.textContent = `${step}ª de ${numInstallments} em ${curMonthLabel} (Última parcela! Compra há ${monthsAgo} ${monthsAgo === 1 ? 'mês' : 'meses'} — 1ª em ${startShort})`;
+    } else {
+      opt.textContent = `${step}ª de ${numInstallments} em ${curMonthLabel} (Compra há ${monthsAgo} ${monthsAgo === 1 ? 'mês' : 'meses'} — 1ª em ${startShort})`;
+    }
+    sel.appendChild(opt);
+  }
+
+  if (activeStep >= 1 && activeStep <= numInstallments) {
+    sel.value = String(activeStep);
+  } else {
+    const customOpt = document.createElement('option');
+    customOpt.value = 'custom';
+    customOpt.textContent = `📅 Data personalizada: 1ª parcela em ${MONTH_NAMES[startM].substring(0, 3)}/${startY}`;
+    sel.insertBefore(customOpt, sel.firstChild);
+    sel.value = 'custom';
+  }
+}
+
+function onInstallmentCurrentStepChange() {
+  const sel = document.getElementById('txInstallmentCurrentStep');
+  if (!sel || sel.value === 'custom') return;
+  const step = parseInt(sel.value, 10) || 1;
+  const monthsAgo = step - 1;
+  setTxDateByMonthOffset(-monthsAgo);
+}
+
+function onTxDateChange() {
+  const dateVal = document.getElementById('txDate')?.value || '';
+  const { year: startY, monthIdx: startM } = parseTxDateInfo(dateVal);
+  const diffFromCurrent = (startY * 12 + startM) - (currentYear * 12 + currentMonthIdx);
+
+  // Atualizar pílulas rápidas de data
+  document.querySelectorAll('#txDateQuickPills .date-pill-btn').forEach(btn => {
+    const btnOffset = parseInt(btn.getAttribute('data-offset'), 10);
+    btn.classList.toggle('active', btnOffset === diffFromCurrent);
+  });
+
+  // Atualizar Badge e Card de Competência
+  const compCard = document.getElementById('txCompetenceCard');
+  const compBadge = document.getElementById('txCompetenceBadge');
+  const targetLabel = `${MONTH_NAMES[startM]}/${startY}`;
+
+  if (compCard && compBadge) {
+    if (diffFromCurrent === 0) {
+      compCard.classList.remove('is-different-month');
+      compBadge.classList.remove('is-retro');
+      compBadge.textContent = `📍 Mês Atual (${MONTH_NAMES[startM].substring(0, 3)}/${startY})`;
+    } else if (diffFromCurrent < 0) {
+      compCard.classList.add('is-different-month');
+      compBadge.classList.add('is-retro');
+      const mAgo = Math.abs(diffFromCurrent);
+      compBadge.textContent = `⏪ Retroativo: ${targetLabel} (${mAgo} ${mAgo === 1 ? 'mês' : 'meses'} atrás)`;
+    } else {
+      compCard.classList.add('is-different-month');
+      compBadge.classList.add('is-retro');
+      compBadge.textContent = `⏩ Agendado: ${targetLabel}`;
+    }
+  }
+
+  const nInst = getSelectedInstallmentsCount();
+  if (nInst > 1) {
+    populateInstallmentCurrentStepOptions(nInst);
+  }
+  updateTxInstallmentPreview();
+}
+
+function handleInstallmentSelectChange() {
+  const type = document.getElementById('txType')?.value || 'SAÍDA';
+  const nInst = (type === 'SAÍDA') ? getSelectedInstallmentsCount() : 0;
+  const panel = document.getElementById('txInstallmentConfigPanel');
+  const lblDate = document.getElementById('lblTxDateField');
+  const heroLbl = document.querySelector('#modalTransaction .hero-amount-label');
+
+  if (panel) {
+    if (nInst > 1) {
+      panel.style.display = 'flex';
+      if (lblDate) lblDate.textContent = `📅 Data da Compra (Mês da 1ª Parcela de ${nInst}x)`;
+      populateInstallmentCurrentStepOptions(nInst);
+      const valMode = document.getElementById('txInstallmentValueMode')?.value || 'total';
+      if (heroLbl) {
+        heroLbl.textContent = valMode === 'installment' ? 'Valor de Cada Parcela (R$)' : 'Valor Total da Compra (R$)';
+      }
+    } else {
+      panel.style.display = 'none';
+      if (lblDate) lblDate.textContent = '📅 Data da Movimentação (Mês de Competência)';
+      if (heroLbl) heroLbl.textContent = 'Valor do Lançamento';
+    }
+  }
+  updateTxInstallmentPreview();
+}
+
+function computeInstallmentBreakdown(rawVal, numInstallments, valMode) {
+  const n = Math.max(1, parseInt(numInstallments, 10) || 1);
+  const v = Math.max(0, parseFloat(rawVal) || 0);
+  if (valMode === 'installment') {
+    const instVal = Math.round(v * 100) / 100;
+    const totalVal = Math.round(instVal * n * 100) / 100;
+    return { totalPurchase: totalVal, baseInstallmentValue: instVal, firstInstallmentValue: instVal };
+  } else {
+    const totalVal = Math.round(v * 100) / 100;
+    const baseInstVal = Math.floor((totalVal / n) * 100) / 100;
+    const firstInstVal = Math.round((totalVal - baseInstVal * (n - 1)) * 100) / 100;
+    return { totalPurchase: totalVal, baseInstallmentValue: baseInstVal, firstInstallmentValue: firstInstVal };
+  }
+}
+
+function updateTxInstallmentPreview() {
+  const type = document.getElementById('txType')?.value || 'SAÍDA';
+  const nInst = (type === 'SAÍDA') ? getSelectedInstallmentsCount() : 0;
+  if (nInst <= 1) return;
+
+  const rawVal = parseFloat(document.getElementById('txValue')?.value) || 0;
+  const valMode = document.getElementById('txInstallmentValueMode')?.value || 'total';
+  const { totalPurchase, baseInstallmentValue, firstInstallmentValue } = computeInstallmentBreakdown(rawVal, nInst, valMode);
+
+  const mathBadge = document.getElementById('txInstallmentMathBadge');
+  if (mathBadge) {
+    mathBadge.textContent = `${nInst}x de ${formatBRL(baseInstallmentValue)} (Total: ${formatBRL(totalPurchase)})`;
+  }
+
+  const dateVal = document.getElementById('txDate')?.value || '';
+  const { year: startY, monthIdx: startM } = parseTxDateInfo(dateVal);
+
+  const endAbs = startY * 12 + startM + nInst - 1;
+  const endY = Math.floor(endAbs / 12);
+  const endM = ((endAbs % 12) + 12) % 12;
+
+  const startLbl = `${MONTH_NAMES[startM].substring(0, 3)}/${startY}`;
+  const endLbl = `${MONTH_NAMES[endM].substring(0, 3)}/${endY}`;
+  const curViewAbs = currentYear * 12 + currentMonthIdx;
+  const curStep = curViewAbs - (startY * 12 + startM) + 1;
+
+  const summaryLine = document.getElementById('txInstallmentSummaryLine');
+  if (summaryLine) {
+    if (curStep >= 1 && curStep <= nInst) {
+      summaryLine.innerHTML = `🗓️ De <strong>${startLbl}</strong> a <strong>${endLbl}</strong> • Em <strong>${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear}</strong> cairá a parcela <strong style="color: var(--primary);">${curStep}/${nInst}</strong>`;
+    } else {
+      summaryLine.innerHTML = `🗓️ Vigência das parcelas: <strong>${startLbl}</strong> até <strong>${endLbl}</strong> (${nInst} meses)`;
+    }
+  }
+
+  const timelineEl = document.getElementById('txInstallmentTimeline');
+  if (timelineEl) {
+    timelineEl.innerHTML = '';
+    const frag = createSafeFragment();
+    for (let i = 0; i < nInst; i++) {
+      const absM = startY * 12 + startM + i;
+      const tY = Math.floor(absM / 12);
+      const tM = ((absM % 12) + 12) % 12;
+      const isCurView = (tY === currentYear && tM === currentMonthIdx);
+      const isPast = absM < curViewAbs;
+      const chipVal = (i === 0) ? firstInstallmentValue : baseInstallmentValue;
+
+      const chip = document.createElement('div');
+      chip.className = `inst-timeline-chip ${isCurView ? 'is-current-view' : (isPast ? 'is-past' : '')}`;
+      chip.innerHTML = `
+        <span>${isCurView ? '👉 ' : ''}${i + 1}/${nInst} • ${MONTH_NAMES[tM].substring(0, 3)}/${String(tY).slice(-2)}</span>
+        <span class="font-mono" style="font-size: 0.65rem;">${formatBRL(chipVal)}</span>
+      `;
+      frag.appendChild(chip);
+    }
+    appendSafeFragment(timelineEl, frag);
+  }
+}
+
+function findTransactionAnywhere(txId) {
+  if (!txId || !appData) return null;
+  // 1. Priorizar o mês e ano ativos
+  if (appData.months && appData.months[currentMonthIdx]) {
+    const tCur = (appData.months[currentMonthIdx].transactions || []).find(x => x.id === txId);
+    if (tCur) return { tx: tCur, year: currentYear, monthIdx: currentMonthIdx, monthsArr: appData.months };
+  }
+  // 2. Demais meses do ano ativo
+  for (let m = 0; m < 12; m++) {
+    const t = (appData.months[m]?.transactions || []).find(x => x.id === txId);
+    if (t) return { tx: t, year: currentYear, monthIdx: m, monthsArr: appData.months };
+  }
+  // 3. Buscar em todos os anos estruturados
+  if (appData.years) {
+    for (const yKey of Object.keys(appData.years)) {
+      const yNum = parseInt(yKey, 10);
+      const yMonths = appData.years[yKey]?.months;
+      if (Array.isArray(yMonths)) {
+        for (let m = 0; m < 12; m++) {
+          const t = (yMonths[m]?.transactions || []).find(x => x.id === txId);
+          if (t) return { tx: t, year: yNum, monthIdx: m, monthsArr: yMonths };
+        }
+      }
+    }
+  }
+  return null;
+}
+
 function openNewTransactionModal() {
   document.getElementById('txId').value = '';
   document.getElementById('formTransaction').reset();
@@ -8534,31 +9064,24 @@ function openNewTransactionModal() {
   const defaultDay = isCurrentMonthAndYear ? String(now.getDate()).padStart(2, '0') : '01';
   const mNum = String(currentMonthIdx + 1).padStart(2, '0');
   document.getElementById('txDate').value = `${currentYear}-${mNum}-${defaultDay}`;
+
+  setTxInstallmentValueMode('total');
   setTxType('SAÍDA');
   setTxAmount(0);
   
   const authorSelect = document.getElementById('txAuthor');
   if (authorSelect) authorSelect.value = 'USUÁRIO';
   
-  toggleTxAdvancedOptions(false); // Mantém opções avançadas colapsadas inicialmente
+  toggleTxAdvancedOptions(false);
   handleTypeChange();
+  onTxDateChange();
   openModal('modalTransaction');
 }
 
 function editTransaction(txId) {
-  let foundTx = null;
-  let foundMonthIdx = -1;
-
-  for (let m = 0; m < 12; m++) {
-    const t = appData.months[m].transactions.find(x => x.id === txId);
-    if (t) {
-      foundTx = t;
-      foundMonthIdx = m;
-      break;
-    }
-  }
-
-  if (!foundTx) return;
+  const found = findTransactionAnywhere(txId);
+  if (!found) return;
+  const { tx: foundTx } = found;
 
   document.getElementById('txId').value = foundTx.id;
   setTxType(foundTx.type);
@@ -8570,7 +9093,10 @@ function editTransaction(txId) {
   if (authorSelect) {
     authorSelect.value = txAuthorVal;
   }
+
+  // Se for uma parcela de compra parcelada, restaura a descrição base ou mantém a descrição limpa
   document.getElementById('txDescription').value = foundTx.description;
+  setTxInstallmentValueMode('total');
   setTxAmount(foundTx.value);
 
   document.getElementById('txCategory').value = foundTx.category;
@@ -8580,7 +9106,6 @@ function editTransaction(txId) {
   const selInst = document.getElementById('txInstallment');
   const instVal = foundTx.installment || 'À VISTA';
   if (selInst) {
-    // Se a transação possui rótulo dinâmico de parcela (ex: 'PARCELADO: RESTAM 5'), preserva a opção no select
     if (!Array.from(selInst.options).some(o => o.value === instVal)) {
       const customOpt = document.createElement('option');
       customOpt.value = instVal;
@@ -8590,7 +9115,9 @@ function editTransaction(txId) {
     selInst.value = instVal;
   }
 
-  // Se for de Terceiros, expande as opções avançadas para visibilidade imediata
+  handleInstallmentSelectChange();
+  onTxDateChange();
+
   if (txAuthorVal === 'TERCEIROS') {
     toggleTxAdvancedOptions(true);
   } else {
@@ -8603,151 +9130,281 @@ function editTransaction(txId) {
   openModal('modalTransaction');
 }
 
+function ensureTargetYearExists(targetY) {
+  if (!appData.years) appData.years = {};
+  if (!appData.years[targetY] || !Array.isArray(appData.years[targetY].months) || appData.years[targetY].months.length !== 12) {
+    appData.years[targetY] = { months: createDefaultYearMonths(targetY) };
+  }
+  if (!SUPPORTED_YEARS.includes(targetY) && targetY >= 2024 && targetY <= 2035) {
+    SUPPORTED_YEARS.push(targetY);
+    SUPPORTED_YEARS.sort((a, b) => a - b);
+  }
+  return appData.years[targetY].months;
+}
+
 function saveTransaction(e) {
-  e.preventDefault();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
   ensureMultiYearStructure();
 
   const editId = document.getElementById('txId').value;
   const date = document.getElementById('txDate').value;
   const type = document.getElementById('txType').value;
-  const description = document.getElementById('txDescription').value.trim();
+  const rawDescription = document.getElementById('txDescription').value.trim();
   const value = parseFloat(document.getElementById('txValue').value) || 0;
-  if (value <= 0) { alert('Informe um valor maior que zero para a movimentação.'); return; }
+  if (value <= 0) {
+    showToast('⚠️ Informe um valor maior que R$ 0,00.', 2600);
+    return;
+  }
   const category = document.getElementById('txCategory').value;
   const bank = document.getElementById('txBank').value;
   const installment = document.getElementById('txInstallment').value || 'À VISTA';
   const author = (document.getElementById('txAuthor')?.value || 'USUÁRIO').toUpperCase();
+  const valMode = document.getElementById('txInstallmentValueMode')?.value || 'total';
 
-  let monthTarget = currentMonthIdx;
-  let yearTarget = currentYear;
-  let dayStr = '01';
-  if (date) {
-    const parts = date.split('-');
-    if (parts.length === 3) {
-      const parsedYear = parseInt(parts[0], 10);
-      const parsedMonth = parseInt(parts[1], 10) - 1;
-      dayStr = parts[2] || '01';
-      if (parsedMonth >= 0 && parsedMonth < 12) {
-        monthTarget = parsedMonth;
-      }
-      if (SUPPORTED_YEARS.includes(parsedYear)) {
-        yearTarget = parsedYear;
-      }
-    }
-  }
+  const { year: yearTarget, monthIdx: monthTarget, dayStr } = parseTxDateInfo(date);
 
+  // =========================================================================
+  // 1. MODO EDIÇÃO DE MOVIMENTAÇÃO EXISTENTE (COM REAGENDAMENTO RETROATIVO DE PARCELAS)
+  // =========================================================================
   if (editId) {
-    let originalTx = null;
-    let origMonth = currentMonthIdx;
-    for (let m = 0; m < 12; m++) {
-      const idx = appData.months[m].transactions.findIndex(x => x.id === editId);
-      if (idx !== -1) {
-        originalTx = appData.months[m].transactions[idx];
-        origMonth = m;
-        appData.months[m].transactions.splice(idx, 1);
-        break;
-      }
+    const found = findTransactionAnywhere(editId);
+    const originalTx = found ? found.tx : null;
+    const origYear = found ? found.year : currentYear;
+    const origMonth = found ? found.monthIdx : currentMonthIdx;
+
+    if (found && found.monthsArr && found.monthsArr[origMonth]) {
+      const idx = found.monthsArr[origMonth].transactions.findIndex(x => x.id === editId);
+      if (idx !== -1) found.monthsArr[origMonth].transactions.splice(idx, 1);
     }
 
-    // Se a data não foi explicitamente mudada para outro mês quando era uma entrada recorrente, mantém no mês editado
-    const targetMonthsArr = (appData.years && appData.years[yearTarget]) ? appData.years[yearTarget].months : appData.months;
-    const updatedTx = {
-      ...(originalTx || {}),
-      id: editId,
-      date,
-      type,
-      description,
-      value,
-      category,
-      bank,
-      installment,
-      author
-    };
-
-    // Se a transação pertencia a um grupo de parcelamento e o usuário alterou Autor, Banco ou Categoria, sincroniza no grupo
-    if (originalTx && originalTx.purchaseGroupId) {
+    // Caso 1A: Usuário editou uma transação comum e mudou para 'PARCELADO NX'
+    const newParceladoMatch = (type === 'SAÍDA') ? installment.match(/^PARCELADO (\d+)X$/) : null;
+    if (newParceladoMatch && (!originalTx || !originalTx.purchaseGroupId)) {
+      // Remove a antiga (já removida acima) e cai no fluxo de geração de N parcelas abaixo!
+    } else if (originalTx && originalTx.purchaseGroupId) {
+      // Caso 1B: Edição de uma compra que já faz parte de um grupo parcelado (purchaseGroupId)
       const grpId = originalTx.purchaseGroupId;
-      SUPPORTED_YEARS.forEach(y => {
-        const yMonths = appData.years?.[y]?.months;
-        if (Array.isArray(yMonths)) {
-          yMonths.forEach(mObj => {
-            (mObj.transactions || []).forEach(t => {
-              if (t.purchaseGroupId === grpId && t.id !== editId) {
-                t.author = author;
-                t.bank = bank;
-                t.category = category;
+      const origInstIdx = (parseInt(originalTx.installmentIndex, 10) || 1) - 1;
+      const totalCount = newParceladoMatch ? parseInt(newParceladoMatch[1], 10) : (parseInt(originalTx.installmentCount, 10) || 1);
+      const cleanBaseDesc = rawDescription.replace(/\s*\(\d+\/\d+\)\s*$/, '').trim() || originalTx.baseDescription || rawDescription;
+
+      // Verificar se o usuário deslocou o mês/ano desta parcela (ex: moveu para meses atrás)
+      const deltaMonths = (yearTarget * 12 + monthTarget) - (origYear * 12 + origMonth);
+
+      if (deltaMonths !== 0 || newParceladoMatch) {
+        // Se houve mudança de mês/ano ou mudança no número de parcelas (PARCELADO NX),
+        // coletamos as parcelas existentes do grupo (para preservar IDs quando possível) e reagendamos todas cronologicamente!
+        const existingGroupTxs = [];
+        Object.keys(appData.years).forEach(yKey => {
+          const yMonths = appData.years[yKey]?.months;
+          if (!Array.isArray(yMonths)) return;
+          for (let m = 0; m < 12; m++) {
+            const arr = yMonths[m].transactions || [];
+            for (let k = arr.length - 1; k >= 0; k--) {
+              if (arr[k].purchaseGroupId === grpId) {
+                existingGroupTxs.push(arr[k]);
+                arr.splice(k, 1);
               }
-            });
-          });
-        }
-      });
-    }
-
-    targetMonthsArr[monthTarget].transactions.push(updatedTx);
-
-    closeModal('modalTransaction');
-    persistData();
-    showToast("✅ Movimentação atualizada com sucesso!", 2500);
-    return;
-  }
-
-  if (installment.startsWith('PARCELADO ') && type === 'SAÍDA') {
-    const match = installment.match(/PARCELADO (\d+)X/);
-    if (match) {
-      const numInstallments = parseInt(match[1], 10);
-      const totalPurchase = value;
-      const installmentValue = parseFloat((totalPurchase / numInstallments).toFixed(2));
-      const purchaseGroupId = 'grp_' + Date.now();
-
-      for (let i = 0; i < numInstallments; i++) {
-        const totalMonthIndex = monthTarget + i;
-        const targetYearOffset = Math.floor(totalMonthIndex / 12);
-        const targetM = totalMonthIndex % 12;
-        const targetY = yearTarget + targetYearOffset;
-
-        if (targetY <= SUPPORTED_YEARS[SUPPORTED_YEARS.length - 1]) {
-          if (!appData.years[targetY]) {
-            appData.years[targetY] = { months: createDefaultYearMonths(targetY) };
+            }
           }
+        });
+        if (originalTx) existingGroupTxs.push(originalTx);
 
-          const remainingInstallmentsAfter = numInstallments - (i + 1);
-          const remainingDebtAfter = parseFloat((remainingInstallmentsAfter * installmentValue).toFixed(2));
-          const currentLabel = (i === numInstallments - 1) ? 'ÚLTIMA PARCELA' : `PARCELADO: RESTAM ${remainingInstallmentsAfter}`;
-          
-          const mStr = String(targetM + 1).padStart(2, '0');
-          const installmentDate = `${targetY}-${mStr}-${dayStr}`;
+        // O mês de início da 1ª parcela (índice 0):
+        // Se o usuário escolheu 'PARCELADO NX' explicitamente, a data escolhida (#txDate) já é o início da 1ª parcela;
+        // Se manteve 'PARCELADO: RESTAM X' e apenas mudou a data daquela parcela (origInstIdx), recuamos origInstIdx meses.
+        const groupStartAbs = newParceladoMatch
+          ? (yearTarget * 12 + monthTarget)
+          : ((yearTarget * 12 + monthTarget) - origInstIdx);
 
-          appData.years[targetY].months[targetM].transactions.push({
-            id: 'tx_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 4),
-            date: installmentDate,
-            type: type,
-            description: `${description} (${i + 1}/${numInstallments})`,
-            baseDescription: description,
-            value: installmentValue,
-            category: category,
-            bank: bank,
-            installment: currentLabel,
+        const perInstVal = newParceladoMatch
+          ? computeInstallmentBreakdown(value, totalCount, valMode).baseInstallmentValue
+          : value;
+        const firstInstVal = newParceladoMatch
+          ? computeInstallmentBreakdown(value, totalCount, valMode).firstInstallmentValue
+          : value;
+        const totalPurchaseVal = Math.round(((firstInstVal + perInstVal * (totalCount - 1))) * 100) / 100;
+
+        for (let i = 0; i < totalCount; i++) {
+          const targetAbs = groupStartAbs + i;
+          const tY = Math.floor(targetAbs / 12);
+          const tM = ((targetAbs % 12) + 12) % 12;
+          const targetMonths = ensureTargetYearExists(tY);
+          const maxD = new Date(tY, tM + 1, 0).getDate();
+          const safeD = String(Math.min(parseInt(dayStr, 10) || 1, maxD)).padStart(2, '0');
+          const mStr = String(tM + 1).padStart(2, '0');
+
+          const remAfter = totalCount - (i + 1);
+          const curInstVal = (i === 0) ? firstInstVal : perInstVal;
+          const remDebt = parseFloat((remAfter * perInstVal).toFixed(2));
+          const curLabel = (i === totalCount - 1) ? 'ÚLTIMA PARCELA' : `PARCELADO: RESTAM ${remAfter}`;
+          const prevMatch = existingGroupTxs.find(x => x.installmentIndex === (i + 1));
+
+          targetMonths[tM].transactions.push({
+            id: (i === origInstIdx) ? editId : (prevMatch ? prevMatch.id : `tx_${Date.now()}_${i}_${Math.random().toString(36).substr(2, 4)}`),
+            date: `${tY}-${mStr}-${safeD}`,
+            type: 'SAÍDA',
+            description: `${cleanBaseDesc} (${i + 1}/${totalCount})`,
+            baseDescription: cleanBaseDesc,
+            value: curInstVal,
+            category,
+            bank,
+            installment: curLabel,
             isInstallment: true,
-            purchaseTotal: totalPurchase,
+            purchaseTotal: totalPurchaseVal,
             installmentIndex: i + 1,
-            installmentCount: numInstallments,
-            remainingDebtAfter: remainingDebtAfter,
-            purchaseGroupId: purchaseGroupId,
-            author: author
+            installmentCount: totalCount,
+            remainingDebtAfter: remDebt,
+            purchaseGroupId: grpId,
+            author
           });
         }
-      }
 
-      // Garante que appData.months aponte para a referência atualizada
+        appData.months = appData.years[currentYear].months;
+        closeModal('modalTransaction');
+        persistData();
+        showToast(`✅ Parcelas reagendadas com sucesso para os meses correspondentes!`, 3000);
+        return;
+      } else {
+        // Mesma data/mês: atualiza a parcela editada e sincroniza Autor, Banco, Categoria e Valor nas demais parcelas do grupo
+        const updatedTx = {
+          ...originalTx,
+          id: editId,
+          date,
+          type,
+          description: rawDescription,
+          value,
+          category,
+          bank,
+          installment,
+          author
+        };
+
+        Object.keys(appData.years).forEach(yKey => {
+          const yMonths = appData.years[yKey]?.months;
+          if (Array.isArray(yMonths)) {
+            yMonths.forEach(mObj => {
+              (mObj.transactions || []).forEach(t => {
+                if (t.purchaseGroupId === grpId && t.id !== editId) {
+                  t.author = author;
+                  t.bank = bank;
+                  t.category = category;
+                }
+              });
+            });
+          }
+        });
+
+        const targetMonthsArr = ensureTargetYearExists(yearTarget);
+        targetMonthsArr[monthTarget].transactions.push(updatedTx);
+        appData.months = appData.years[currentYear].months;
+        closeModal('modalTransaction');
+        persistData();
+        showToast("✅ Movimentação parcelada atualizada com sucesso!", 2500);
+        return;
+      }
+    } else {
+      // Caso 1C: Transação avulsa editada (pode ter mudado de mês/ano para um mês passado!)
+      const targetMonthsArr = ensureTargetYearExists(yearTarget);
+      const updatedTx = {
+        ...(originalTx || {}),
+        id: editId,
+        date,
+        type,
+        description: rawDescription,
+        value,
+        category,
+        bank,
+        installment,
+        author
+      };
+      targetMonthsArr[monthTarget].transactions.push(updatedTx);
       appData.months = appData.years[currentYear].months;
       closeModal('modalTransaction');
       persistData();
-      showToast(`✅ Compra parcelada em ${numInstallments}x registrada com sucesso!`, 2800);
+      showToast(`✅ Movimentação atualizada em ${MONTH_NAMES[monthTarget]}/${yearTarget}!`, 2600);
       return;
     }
   }
 
-  const targetYearMonths = (appData.years && appData.years[yearTarget]) ? appData.years[yearTarget].months : appData.months;
+  // =========================================================================
+  // 2. CRIAÇÃO DE NOVA COMPRA PARCELADA (INCLUINDO RETROATIVA DE MESES/ANOS ATRÁS)
+  // =========================================================================
+  if (installment.startsWith('PARCELADO ') && type === 'SAÍDA') {
+    const match = installment.match(/PARCELADO (\d+)X/);
+    if (match) {
+      const numInstallments = parseInt(match[1], 10);
+      const cleanBaseDesc = rawDescription.replace(/\s*\(\d+\/\d+\)\s*$/, '').trim() || rawDescription;
+      const { totalPurchase, baseInstallmentValue, firstInstallmentValue } = computeInstallmentBreakdown(value, numInstallments, valMode);
+      const purchaseGroupId = 'grp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+
+      const startAbsMonth = yearTarget * 12 + monthTarget;
+      let landedInCurrentViewStep = null;
+
+      for (let i = 0; i < numInstallments; i++) {
+        const targetAbsMonth = startAbsMonth + i;
+        const targetY = Math.floor(targetAbsMonth / 12);
+        const targetM = ((targetAbsMonth % 12) + 12) % 12;
+
+        const targetYearMonths = ensureTargetYearExists(targetY);
+        const maxDay = new Date(targetY, targetM + 1, 0).getDate();
+        const safeDayStr = String(Math.min(parseInt(dayStr, 10) || 1, maxDay)).padStart(2, '0');
+        const mStr = String(targetM + 1).padStart(2, '0');
+        const installmentDate = `${targetY}-${mStr}-${safeDayStr}`;
+
+        const curInstValue = (i === 0) ? firstInstallmentValue : baseInstallmentValue;
+        const remainingInstallmentsAfter = numInstallments - (i + 1);
+        const remainingDebtAfter = parseFloat((remainingInstallmentsAfter * baseInstallmentValue).toFixed(2));
+        const currentLabel = (i === numInstallments - 1) ? 'ÚLTIMA PARCELA' : `PARCELADO: RESTAM ${remainingInstallmentsAfter}`;
+
+        if (targetY === currentYear && targetM === currentMonthIdx) {
+          landedInCurrentViewStep = i + 1;
+        }
+
+        targetYearMonths[targetM].transactions.push({
+          id: 'tx_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substr(2, 4),
+          date: installmentDate,
+          type: type,
+          description: `${cleanBaseDesc} (${i + 1}/${numInstallments})`,
+          baseDescription: cleanBaseDesc,
+          value: curInstValue,
+          category: category,
+          bank: bank,
+          installment: currentLabel,
+          isInstallment: true,
+          purchaseTotal: totalPurchase,
+          installmentIndex: i + 1,
+          installmentCount: numInstallments,
+          remainingDebtAfter: remainingDebtAfter,
+          purchaseGroupId: purchaseGroupId,
+          author: author
+        });
+      }
+
+      appData.months = appData.years[currentYear].months;
+      closeModal('modalTransaction');
+      persistData();
+
+      const startLabel = `${MONTH_NAMES[monthTarget].substring(0, 3)}/${yearTarget}`;
+      const endAbs = startAbsMonth + numInstallments - 1;
+      const endLabel = `${MONTH_NAMES[((endAbs % 12) + 12) % 12].substring(0, 3)}/${Math.floor(endAbs / 12)}`;
+
+      if (yearTarget !== currentYear || monthTarget !== currentMonthIdx) {
+        const curStepInfo = landedInCurrentViewStep
+          ? ` (Parcela ${landedInCurrentViewStep}/${numInstallments} já disponível em ${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear})`
+          : '';
+        showToast(`✅ Compra em ${numInstallments}x lançada de ${startLabel} a ${endLabel}${curStepInfo}!`, 3800);
+      } else {
+        showToast(`✅ Compra parcelada em ${numInstallments}x (${startLabel} a ${endLabel}) registrada com sucesso!`, 3000);
+      }
+      return;
+    }
+  }
+
+  // =========================================================================
+  // 3. MOVIMENTAÇÃO AVULSA OU ENTRADA RECORRENTE (COM ROTEAMENTO EXATO DE MÊS/ANO)
+  // =========================================================================
+  const targetYearMonths = ensureTargetYearExists(yearTarget);
 
   if (type === 'ENTRADA') {
     const scopeEl = document.getElementById('txIncomeScope');
@@ -8760,7 +9417,7 @@ function saveTransaction(e) {
           id: 'tx_' + Date.now() + '_' + m + '_' + Math.random().toString(36).substr(2, 4),
           date: `${yearTarget}-${mStr}-${dayStr}`,
           type,
-          description,
+          description: rawDescription,
           value,
           category,
           bank,
@@ -8768,9 +9425,10 @@ function saveTransaction(e) {
           author
         });
       }
+      appData.months = appData.years[currentYear].months;
       closeModal('modalTransaction');
       persistData();
-      showToast("✅ Entrada recorrente registrada até Dezembro!", 2500);
+      showToast(`✅ Entrada recorrente registrada de ${MONTH_NAMES[monthTarget]} até Dezembro/${yearTarget}!`, 2800);
       return;
     } else if (incomeScope === 'all') {
       for (let m = 0; m < 12; m++) {
@@ -8779,7 +9437,7 @@ function saveTransaction(e) {
           id: 'tx_' + Date.now() + '_' + m + '_' + Math.random().toString(36).substr(2, 4),
           date: `${yearTarget}-${mStr}-${dayStr}`,
           type,
-          description,
+          description: rawDescription,
           value,
           category,
           bank,
@@ -8787,9 +9445,10 @@ function saveTransaction(e) {
           author
         });
       }
+      appData.months = appData.years[currentYear].months;
       closeModal('modalTransaction');
       persistData();
-      showToast("✅ Entrada registrada em todos os 12 meses!", 2500);
+      showToast(`✅ Entrada registrada em todos os 12 meses de ${yearTarget}!`, 2800);
       return;
     }
   }
@@ -8798,7 +9457,7 @@ function saveTransaction(e) {
     id: 'tx_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
     date,
     type,
-    description,
+    description: rawDescription,
     value,
     category,
     bank,
@@ -8806,9 +9465,15 @@ function saveTransaction(e) {
     author
   });
 
+  appData.months = appData.years[currentYear].months;
   closeModal('modalTransaction');
   persistData();
-  showToast("✅ Movimentação salva com sucesso!", 2500);
+
+  if (yearTarget !== currentYear || monthTarget !== currentMonthIdx) {
+    showToast(`✅ Movimentação gravada diretamente em ${MONTH_NAMES[monthTarget]}/${yearTarget}!`, 3200);
+  } else {
+    showToast("✅ Movimentação salva com sucesso!", 2500);
+  }
 }
 
 let pendingDeleteTx = null;
@@ -9515,9 +10180,21 @@ function updateFixedExpensePreview() {
 
   if (mode === 'temporary') {
     box.classList.add('is-temp');
-    const { label: endLabel } = computeEndMonthYear(currentYear, currentMonthIdx, duration);
+    const startOffset = parseInt(document.getElementById('fixedStartOffsetSelect')?.value || '0', 10) || 0;
+    const startAbs = currentYear * 12 + currentMonthIdx + startOffset;
+    const effStartY = Math.floor(startAbs / 12);
+    const effStartM = ((startAbs % 12) + 12) % 12;
+    const effStartLabel = `${MONTH_NAMES[effStartM].substring(0, 3)}/${effStartY}`;
+    const startLblEl = document.getElementById('fixedStartMonthLabel');
+    if (startLblEl) startLblEl.textContent = effStartLabel;
+
+    const { label: endLabel } = computeEndMonthYear(effStartY, effStartM, duration);
     const totalCommitment = val * duration;
-    line1.innerHTML = `⏳ Vigência Temporária: <strong>${startLabel} até ${endLabel}</strong> (${duration} ${duration === 1 ? 'mês' : 'meses'})`;
+    const curStepInView = Math.abs(startOffset) + 1;
+    const retroNote = (startOffset < 0 && curStepInView <= duration)
+      ? ` • Em ${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear}: <strong>${curStepInView}/${duration}</strong>`
+      : '';
+    line1.innerHTML = `⏳ Vigência Temporária: <strong>${effStartLabel} até ${endLabel}</strong> (${duration} ${duration === 1 ? 'mês' : 'meses'})${retroNote}`;
     line2.innerHTML = `Comprometimento acumulado no período: <strong>${formatBRL(totalCommitment)}</strong> (${duration}x de ${formatBRL(val)})`;
     if (btnSave) btnSave.textContent = editId ? `Salvar Alterações (${duration}m)` : `Agendar por ${duration} ${duration === 1 ? 'Mês' : 'Meses'}`;
   } else if (mode === 'annual') {
@@ -9556,6 +10233,8 @@ function openAddFixedModal(defaultMode) {
     ? defaultMode
     : 'annual';
 
+  const offsetSel = document.getElementById('fixedStartOffsetSelect');
+  if (offsetSel) offsetSel.value = '0';
   setFixedDurationMonths(6);
   setFixedExpenseMode(initialMode);
   openModal('modalFixedExpense');
@@ -9690,21 +10369,19 @@ function saveNewFixedExpense(e) {
   const groupId = 'fgrp_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
 
   if (mode === 'temporary') {
-    const { label: endLabel } = computeEndMonthYear(currentYear, currentMonthIdx, durationMonths);
+    const startOffset = parseInt(document.getElementById('fixedStartOffsetSelect')?.value || '0', 10) || 0;
+    const startAbs = currentYear * 12 + currentMonthIdx + startOffset;
+    const effStartY = Math.floor(startAbs / 12);
+    const effStartM = ((startAbs % 12) + 12) % 12;
+    const effStartLabel = `${MONTH_NAMES[effStartM].substring(0, 3)}/${effStartY}`;
+    const { label: endLabel } = computeEndMonthYear(effStartY, effStartM, durationMonths);
     let createdCount = 0;
 
     for (let i = 0; i < durationMonths; i++) {
-      const totalMonthOffset = currentMonthIdx + i;
-      const yearOffset = Math.floor(totalMonthOffset / 12);
-      const targetMonthIdx = totalMonthOffset % 12;
-      const targetYear = currentYear + yearOffset;
-
-      let targetMonthsArray = null;
-      if (targetYear === currentYear) {
-        targetMonthsArray = appData.months;
-      } else if (appData.years && appData.years[targetYear] && appData.years[targetYear].months) {
-        targetMonthsArray = appData.years[targetYear].months;
-      }
+      const targetAbs = startAbs + i;
+      const targetYear = Math.floor(targetAbs / 12);
+      const targetMonthIdx = ((targetAbs % 12) + 12) % 12;
+      const targetMonthsArray = ensureTargetYearExists(targetYear);
 
       if (targetMonthsArray && targetMonthsArray[targetMonthIdx]) {
         targetMonthsArray[targetMonthIdx].fixedExpenses.push({
@@ -9718,7 +10395,7 @@ function saveNewFixedExpense(e) {
           tempMonthIndex: i + 1,
           tempMonthCount: durationMonths,
           tempRemainingMonths: durationMonths - (i + 1),
-          tempStartLabel: `${MONTH_NAMES[currentMonthIdx].substring(0, 3)}/${currentYear}`,
+          tempStartLabel: effStartLabel,
           tempEndLabel: endLabel
         });
         createdCount++;
