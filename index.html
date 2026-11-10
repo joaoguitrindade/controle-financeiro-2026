@@ -2305,8 +2305,12 @@
       <!-- SEÇÃO: CADASTROS & ORGANIZAÇÃO -->
     <div>
       <div class="sidebar-section-title">
-        <span>🏦</span> Cadastros & Organização
+        <span>🏦</span> Cadastros & Configuração do Mês
       </div>
+      <button class="sidebar-item-btn" onclick="closeSidebarMenu(); openMonthConfigModal();">
+        <span>⚙️ Configurar Mês (Reserva / Gasto Diário)</span>
+        <span style="font-size: 0.78rem; color: var(--primary); font-weight: 700;">Abrir</span>
+      </button>
       <button class="sidebar-item-btn" onclick="closeSidebarMenu(); openBanksManagerModal();">
         <span>🏦 Gerenciar Bancos, Cartões & Cores</span>
         <span style="font-size: 0.8rem; color: var(--text-muted);">Editar</span>
@@ -2498,7 +2502,7 @@
     </div>
 
     <!-- KPIS DO MÊS SELECIONADO (5 CARDS MINIMALISTAS E SEM SOBREPOSIÇÃO) -->
-    <div class="grid grid-5 kpi-grid-centered">
+    <div class="grid grid-5 kpi-grid-centered" id="monthlyKpiGrid">
       <!-- 1. ENTRADAS -->
       <div class="card card-kpi-centered">
         <div class="card-header">
@@ -2541,17 +2545,17 @@
         </div>
       </div>
 
-      <!-- 5. RESERVA & META -->
-      <div class="card card-kpi-centered">
+      <!-- 5. RESERVA & META OU GASTO DIÁRIO (OPCIONAL / CONFIGURÁVEL NO MENU CONFIGURAR MÊS) -->
+      <div class="card card-kpi-centered" id="cardFifthKpi">
         <div class="card-header">
-          <span class="card-title">🎯 Reserva</span>
-          <span class="badge badge-warning" id="monthGoalBadge">Meta</span>
+          <span class="card-title" id="monthFifthCardTitle">🎯 Reserva</span>
+          <span class="badge badge-warning" id="monthGoalBadge" style="cursor: pointer;" onclick="openMonthConfigModal()" title="Clique para configurar (Reserva ou Gasto Diário)">Meta</span>
         </div>
         <div class="kpi-value" id="monthSavedTotal" style="color: var(--warning);">R$ 0,00</div>
-        <div class="progress-track">
+        <div class="progress-track" id="monthGoalProgressTrack">
           <div class="progress-fill" id="monthGoalProgress" style="width: 0%;"></div>
         </div>
-        <div class="kpi-sub">Meta: <strong id="monthGoalTargetText">R$ 800,00</strong> <span id="monthInAccount" style="display:none;">R$ 0,00</span></div>
+        <div class="kpi-sub" id="monthFifthCardSub">Meta: <strong id="monthGoalTargetText">R$ 800,00</strong> <span id="monthInAccount" style="display:none;">R$ 0,00</span></div>
       </div>
     </div>
 
@@ -3508,30 +3512,69 @@
   </div>
 </div>
 
-<!-- ==================== MODAL: CONFIGURAÇÃO DO MÊS ==================== -->
-<div class="modal-overlay" id="modalMonthConfig">
-  <div class="modal">
+<!-- ==================== MODAL: CONFIGURAÇÃO DO MÊS (RESERVA OPCIONAL / GASTO DIÁRIO) ==================== -->
+<div class="modal-overlay" id="modalMonthConfig" onclick="if (event.target === this) closeModal('modalMonthConfig')">
+  <div class="modal modal-bottom-sheet">
     <div class="modal-handle-bar"></div>
     <div class="modal-header">
-      <h3 class="modal-title" id="modalConfigMonthTitle">Configurar Metas de Janeiro 2026</h3>
+      <h3 class="modal-title" id="modalConfigMonthTitle">Configurar Mês</h3>
       <button class="modal-close" onclick="closeModal('modalMonthConfig')">&times;</button>
     </div>
 
     <form onsubmit="saveMonthConfig(event)">
+      <input type="hidden" id="cfgFifthCardMode" value="reserve">
+
+      <!-- 1. SELETOR DE MODO DA 5ª CAIXA DO PAINEL -->
       <div class="form-group">
-        <label>Meta de Reserva / Caixinha para o Mês (R$)</label>
-        <input type="number" step="0.01" id="cfgGoal" class="form-control" value="800.00" required inputmode="decimal">
+        <label>Exibir no 5º Card do Painel Mensal:</label>
+        <div class="segmented-control" id="cfgFifthModeSegmented" style="margin-bottom: 4px;">
+          <button type="button" class="segmented-btn active" data-kmode="reserve" onclick="setCfgFifthCardMode('reserve')">🎯 Reserva</button>
+          <button type="button" class="segmented-btn" data-kmode="daily" onclick="setCfgFifthCardMode('daily')">📅 Gasto Diário</button>
+          <button type="button" class="segmented-btn" data-kmode="hidden" onclick="setCfgFifthCardMode('hidden')">🙈 Ocultar</button>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Saldo Inicial Na Conta (R$)</label>
-        <input type="number" step="0.01" id="cfgInAccount" class="form-control" value="0.00" inputmode="decimal">
+      <!-- 2A. CONFIGURAÇÃO QUANDO MODO = RESERVA -->
+      <div id="cfgSectionReserve" class="form-group">
+        <label for="cfgGoal">Meta de Reserva / Caixinha para o Mês (R$)</label>
+        <input type="number" step="0.01" id="cfgGoal" class="form-control font-mono" value="800.00" inputmode="decimal">
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
-        <button type="button" class="btn btn-outline" onclick="applyConfigToAllMonths()">Replicar Meta p/ Todos os Meses</button>
-        <div style="display: flex; gap: 8px;">
-          <button type="button" class="btn btn-outline" onclick="closeModal('modalMonthConfig')">Fechar</button>
+      <!-- 2B. CONFIGURAÇÃO QUANDO MODO = GASTO DIÁRIO -->
+      <div id="cfgSectionDaily" class="duration-selector-card" style="display: none; border-color: rgba(14, 165, 233, 0.3); background: rgba(14, 165, 233, 0.05);">
+        <div class="form-group" style="margin-bottom: 8px;">
+          <label for="cfgDailyCalcMode" style="color: var(--info);">Cálculo do Gasto Diário (Restante do Salário ÷ Dias):</label>
+          <select id="cfgDailyCalcMode" class="form-control" onchange="updateCfgDailyPreview()">
+            <option value="remaining">Pelos dias restantes até o último dia do mês (Dinâmico)</option>
+            <option value="total_month">Pelo total de dias do mês (28 a 31 dias fixos)</option>
+          </select>
+        </div>
+        <div id="cfgDailyPreviewBox" style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; padding: 6px 8px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-subtle);">
+          <!-- Preenchido em tempo real -->
+        </div>
+      </div>
+
+      <!-- 2C. AVISO QUANDO MODO = OCULTAR -->
+      <div id="cfgSectionHidden" class="fixed-preview-banner" style="display: none;">
+        <span>🙈 A 5ª caixa ficará oculta e o painel exibirá apenas os 4 indicadores principais (Entradas, Fixas, Salário Livre e Nos Bancos).</span>
+      </div>
+
+      <!-- 3. SALDO INICIAL NA CONTA -->
+      <div class="form-group">
+        <label for="cfgInAccount">Saldo Inicial na Conta / Bancos neste Mês (R$)</label>
+        <input type="number" step="0.01" id="cfgInAccount" class="form-control font-mono" value="0.00" inputmode="decimal">
+      </div>
+
+      <!-- 4. CHECKBOX PARA APLICAR A TODOS OS MESES -->
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--text-main); cursor: pointer; margin: 10px 0 14px;">
+        <input type="checkbox" id="chkApplyConfigAllMonths" style="width: 16px; height: 16px; min-height: 16px; accent-color: var(--primary);">
+        <span>Aplicar esta configuração para todos os 12 meses de <strong id="lblCfgYear">2026</strong></span>
+      </label>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+        <button type="button" class="btn btn-outline" style="font-size: 0.76rem; padding: 8px 10px;" onclick="applyConfigToAllMonths()">Replicar p/ Ano Todo</button>
+        <div style="display: flex; gap: 8px; flex: 1; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalMonthConfig')">Cancelar</button>
           <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
       </div>
@@ -6029,10 +6072,12 @@ function reconcileMonthArrays(monthsA, monthsB) {
       mA.incomes = Array.from(incMap.values());
     }
 
-    // 4. Preservar saldos configurados
+    // 4. Preservar saldos e modo da 5ª caixa configurados
     if (!mA.inAccount && mB.inAccount) mA.inAccount = mB.inAccount;
     if (!mA.totalSaved && mB.totalSaved) mA.totalSaved = mB.totalSaved;
     if ((mA.goal === undefined || mA.goal === 800) && mB.goal && mB.goal !== 800) mA.goal = mB.goal;
+    if (!mA.fifthCardMode && mB.fifthCardMode) mA.fifthCardMode = mB.fifthCardMode;
+    if (!mA.dailyCalcMode && mB.dailyCalcMode) mA.dailyCalcMode = mB.dailyCalcMode;
   }
   return monthsA;
 }
@@ -6380,11 +6425,8 @@ function renderMonthlyView() {
     bankSubEl.textContent = parts.join(' • ');
   }
 
-  document.getElementById('monthSavedTotal').textContent = formatBRL(t.totalSaved);
-  document.getElementById('monthGoalBadge').textContent = t.remainingForGoal > 0 ? `Resta ${formatBRL(t.remainingForGoal)}` : `Meta Atingida! 🎉`;
-  document.getElementById('monthGoalProgress').style.width = t.goalProgressPct + '%';
-  document.getElementById('monthGoalTargetText').textContent = formatBRL(m.goal);
-  document.getElementById('monthInAccount').textContent = formatBRL(m.inAccount);
+  // 5º Card Dinâmico: Reserva vs Gasto Diário vs Oculto
+  renderFifthKpiCard(m, t);
 
   // Renderizar Faturas Dinâmicas de Cartão de Crédito (Design Proporcional e Harmônico)
   const cardsContainer = document.getElementById('dynamicCardsContainer');
@@ -8638,34 +8680,216 @@ function deleteBank(idx) {
   }
 }
 
-// CONFIGURAÇÃO DO MÊS
+// =========================================================================
+// CONFIGURAÇÃO DO MÊS: RESERVA OPCIONAL vs GASTO DIÁRIO (RESTANTE ÷ DIAS)
+// =========================================================================
+function computeDailyAllowanceInfo(year, monthIdx, salaryRemaining, calcMode) {
+  const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
+  const now = new Date();
+  const isCurrentRealMonth = (year === now.getFullYear() && monthIdx === now.getMonth());
+  const todayDay = isCurrentRealMonth ? now.getDate() : 1;
+  // Quantidade de dias de hoje até o último dia do mês (inclusive hoje)
+  const remainingDaysUntilEnd = isCurrentRealMonth ? Math.max(1, daysInMonth - todayDay + 1) : daysInMonth;
+
+  const mode = (calcMode === 'total_month') ? 'total_month' : 'remaining';
+  const divisorDays = (mode === 'remaining' && isCurrentRealMonth) ? remainingDaysUntilEnd : daysInMonth;
+
+  const safeRemaining = parseFloat(salaryRemaining) || 0;
+  const dailyValue = safeRemaining / Math.max(1, divisorDays);
+  const fullMonthDailyValue = safeRemaining / Math.max(1, daysInMonth);
+  const lastDayFormatted = `${String(daysInMonth).padStart(2, '0')}/${String(monthIdx + 1).padStart(2, '0')}`;
+
+  return {
+    daysInMonth,
+    isCurrentRealMonth,
+    todayDay,
+    remainingDaysUntilEnd,
+    divisorDays,
+    dailyValue,
+    fullMonthDailyValue,
+    lastDayFormatted,
+    mode
+  };
+}
+
+function renderFifthKpiCard(m, t) {
+  const cardEl = document.getElementById('cardFifthKpi');
+  const gridEl = document.getElementById('monthlyKpiGrid');
+  const titleEl = document.getElementById('monthFifthCardTitle');
+  const badgeEl = document.getElementById('monthGoalBadge');
+  const valEl = document.getElementById('monthSavedTotal');
+  const trackEl = document.getElementById('monthGoalProgressTrack');
+  const fillEl = document.getElementById('monthGoalProgress');
+  const subEl = document.getElementById('monthFifthCardSub');
+
+  const fifthMode = m.fifthCardMode || appData.fifthCardMode || 'reserve';
+
+  if (fifthMode === 'hidden') {
+    if (cardEl) cardEl.style.display = 'none';
+    if (gridEl) {
+      gridEl.classList.remove('grid-5');
+      gridEl.classList.add('grid-4');
+    }
+    return;
+  }
+
+  if (cardEl) cardEl.style.display = 'flex';
+  if (gridEl) {
+    gridEl.classList.remove('grid-4');
+    gridEl.classList.add('grid-5');
+  }
+
+  if (fifthMode === 'daily') {
+    const calcMode = m.dailyCalcMode || appData.dailyCalcMode || 'remaining';
+    const info = computeDailyAllowanceInfo(currentYear, currentMonthIdx, t.salaryRemaining, calcMode);
+
+    if (titleEl) titleEl.textContent = '📅 Gasto Diário';
+    if (badgeEl) {
+      badgeEl.className = 'badge badge-info';
+      badgeEl.textContent = `Até ${info.lastDayFormatted} (${info.divisorDays}d)`;
+    }
+    if (valEl) {
+      valEl.style.color = info.dailyValue >= 0 ? 'var(--primary)' : 'var(--danger)';
+      valEl.innerHTML = `${formatBRL(info.dailyValue)}<small style="font-size: 0.58em; font-weight: 600; opacity: 0.8;">/dia</small>`;
+    }
+    if (trackEl && fillEl) {
+      trackEl.style.display = 'block';
+      const pctAvailableDays = Math.min(100, Math.max(0, Math.round((info.divisorDays / info.daysInMonth) * 100)));
+      fillEl.style.width = `${pctAvailableDays}%`;
+    }
+    if (subEl) {
+      if (info.isCurrentRealMonth && info.mode === 'remaining' && info.remainingDaysUntilEnd < info.daysInMonth) {
+        subEl.innerHTML = `Restam <strong>${info.remainingDaysUntilEnd}d</strong> até ${info.lastDayFormatted} • Mês (${info.daysInMonth}d): ${formatBRL(info.fullMonthDailyValue)}/d <span id="monthGoalTargetText" style="display:none;">${formatBRL(m.goal)}</span><span id="monthInAccount" style="display:none;">${formatBRL(m.inAccount)}</span>`;
+      } else {
+        subEl.innerHTML = `Salário Livre ÷ <strong>${info.divisorDays} dias</strong> (até ${info.lastDayFormatted}) <span id="monthGoalTargetText" style="display:none;">${formatBRL(m.goal)}</span><span id="monthInAccount" style="display:none;">${formatBRL(m.inAccount)}</span>`;
+      }
+    }
+    return;
+  }
+
+  // Modo padrão: 'reserve' (Reserva & Meta)
+  if (titleEl) titleEl.textContent = '🎯 Reserva';
+  if (badgeEl) {
+    badgeEl.className = 'badge badge-warning';
+    badgeEl.textContent = t.remainingForGoal > 0 ? `Resta ${formatBRL(t.remainingForGoal)}` : `Meta Atingida! 🎉`;
+  }
+  if (valEl) {
+    valEl.style.color = 'var(--warning)';
+    valEl.textContent = formatBRL(t.totalSaved);
+  }
+  if (trackEl && fillEl) {
+    trackEl.style.display = 'block';
+    fillEl.style.width = t.goalProgressPct + '%';
+  }
+  if (subEl) {
+    subEl.innerHTML = `Meta: <strong id="monthGoalTargetText">${formatBRL(m.goal)}</strong> <span id="monthInAccount" style="display:none;">${formatBRL(m.inAccount)}</span>`;
+  }
+}
+
+function setCfgFifthCardMode(mode) {
+  const resolved = ['reserve', 'daily', 'hidden'].includes(mode) ? mode : 'reserve';
+  const inputEl = document.getElementById('cfgFifthCardMode');
+  if (inputEl) inputEl.value = resolved;
+
+  document.querySelectorAll('#cfgFifthModeSegmented .segmented-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-kmode') === resolved);
+  });
+
+  const secRes = document.getElementById('cfgSectionReserve');
+  const secDaily = document.getElementById('cfgSectionDaily');
+  const secHid = document.getElementById('cfgSectionHidden');
+
+  if (secRes) secRes.style.display = (resolved === 'reserve') ? 'flex' : 'none';
+  if (secDaily) secDaily.style.display = (resolved === 'daily') ? 'block' : 'none';
+  if (secHid) secHid.style.display = (resolved === 'hidden') ? 'block' : 'none';
+
+  if (resolved === 'daily') {
+    updateCfgDailyPreview();
+  }
+}
+
+function updateCfgDailyPreview() {
+  const box = document.getElementById('cfgDailyPreviewBox');
+  if (!box) return;
+  const calcMode = document.getElementById('cfgDailyCalcMode')?.value || 'remaining';
+  const t = getMonthTotals(currentMonthIdx);
+  const info = computeDailyAllowanceInfo(currentYear, currentMonthIdx, t.salaryRemaining, calcMode);
+
+  box.innerHTML = `
+    <div>💼 Restante do Salário em ${MONTH_NAMES[currentMonthIdx]}: <strong class="font-mono">${formatBRL(t.salaryRemaining)}</strong></div>
+    <div style="margin-top: 2px;">📅 Divisão por <strong>${info.divisorDays} dias</strong> (até ${info.lastDayFormatted}): <strong class="val-pos font-mono" style="font-size: 0.88rem;">${formatBRL(info.dailyValue)} / dia</strong></div>
+  `;
+}
+
 function openMonthConfigModal() {
   const m = appData.months[currentMonthIdx];
-  document.getElementById('modalConfigMonthTitle').textContent = `Configurar Metas de ${m.name} ${currentYear}`;
-  document.getElementById('cfgGoal').value = m.goal || 800;
+  document.getElementById('modalConfigMonthTitle').textContent = `Configurar ${m.name} ${currentYear}`;
+  document.getElementById('cfgGoal').value = (m.goal !== undefined ? m.goal : 800);
   document.getElementById('cfgInAccount').value = m.inAccount || 0;
+
+  const lblYear = document.getElementById('lblCfgYear');
+  if (lblYear) lblYear.textContent = currentYear;
+
+  const chkAll = document.getElementById('chkApplyConfigAllMonths');
+  if (chkAll) chkAll.checked = false;
+
+  const curMode = m.fifthCardMode || appData.fifthCardMode || 'reserve';
+  const curDailyCalc = m.dailyCalcMode || appData.dailyCalcMode || 'remaining';
+  const selDaily = document.getElementById('cfgDailyCalcMode');
+  if (selDaily) selDaily.value = curDailyCalc;
+
+  setCfgFifthCardMode(curMode);
   openModal('modalMonthConfig');
 }
 
 function saveMonthConfig(e) {
-  e.preventDefault();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
   const m = appData.months[currentMonthIdx];
-  m.goal = parseFloat(document.getElementById('cfgGoal').value) || 0;
-  m.inAccount = parseFloat(document.getElementById('cfgInAccount').value) || 0;
+  const goalVal = parseFloat(document.getElementById('cfgGoal')?.value) || 0;
+  const inAccVal = parseFloat(document.getElementById('cfgInAccount')?.value) || 0;
+  const fifthMode = document.getElementById('cfgFifthCardMode')?.value || 'reserve';
+  const dailyCalcMode = document.getElementById('cfgDailyCalcMode')?.value || 'remaining';
+  const applyAll = document.getElementById('chkApplyConfigAllMonths')?.checked || false;
+
+  if (applyAll) {
+    appData.fifthCardMode = fifthMode;
+    appData.dailyCalcMode = dailyCalcMode;
+    appData.months.forEach(monthObj => {
+      monthObj.goal = goalVal;
+      monthObj.fifthCardMode = fifthMode;
+      monthObj.dailyCalcMode = dailyCalcMode;
+    });
+    m.inAccount = inAccVal;
+  } else {
+    m.goal = goalVal;
+    m.inAccount = inAccVal;
+    m.fifthCardMode = fifthMode;
+    m.dailyCalcMode = dailyCalcMode;
+  }
 
   closeModal('modalMonthConfig');
   persistData();
+  const modeLabel = fifthMode === 'daily' ? '📅 Gasto Diário' : (fifthMode === 'hidden' ? '🙈 Caixa Oculta' : '🎯 Reserva');
+  showToast(`✅ Configuração salva (${modeLabel})!`, 2400);
 }
 
 function applyConfigToAllMonths() {
-  if (confirm(`Deseja aplicar esta Meta para TODOS os 12 meses de ${currentYear}?`)) {
-    const goal = parseFloat(document.getElementById('cfgGoal').value) || 0;
-    appData.months.forEach(m => {
-      m.goal = goal;
-    });
-    closeModal('modalMonthConfig');
-    persistData();
-  }
+  const goalVal = parseFloat(document.getElementById('cfgGoal')?.value) || 0;
+  const fifthMode = document.getElementById('cfgFifthCardMode')?.value || 'reserve';
+  const dailyCalcMode = document.getElementById('cfgDailyCalcMode')?.value || 'remaining';
+
+  appData.fifthCardMode = fifthMode;
+  appData.dailyCalcMode = dailyCalcMode;
+  appData.months.forEach(m => {
+    m.goal = goalVal;
+    m.fifthCardMode = fifthMode;
+    m.dailyCalcMode = dailyCalcMode;
+  });
+
+  closeModal('modalMonthConfig');
+  persistData();
+  const modeLabel = fifthMode === 'daily' ? '📅 Gasto Diário' : (fifthMode === 'hidden' ? '🙈 Caixa Oculta' : '🎯 Reserva');
+  showToast(`✅ ${modeLabel} aplicado aos 12 meses de ${currentYear}!`, 2600);
 }
 
 // =========================================================================

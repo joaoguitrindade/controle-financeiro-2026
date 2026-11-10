@@ -2,7 +2,7 @@
 // CONTROLE FINANCEIRO - SERVICE WORKER (PWA & NETWORK-FIRST RESILIENCE)
 // ============================================================
 
-const CACHE_NAME = 'controle-financeiro-v2026-v7';
+const CACHE_NAME = 'controle-financeiro-v2026-v8';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
