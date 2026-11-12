@@ -3003,7 +3003,7 @@
         </div>
         <div class="form-group" style="margin-bottom: 8px;">
           <label>Valor Mensal (R$)</label>
-          <input type="number" step="0.01" min="0.01" id="newIncVal" class="form-control" placeholder="0,00" required inputmode="decimal">
+          <input type="text" id="newIncVal" class="form-control font-mono" placeholder="Ex: 1.500,00 ou 1000 + 250,50" required autocomplete="off">
         </div>
       </div>
 
@@ -3113,8 +3113,14 @@
       </div>
 
       <div class="form-group" style="margin-bottom: 12px;">
-        <label>Valor Mensal (R$)</label>
-        <input type="number" step="0.01" min="0.01" id="editIncVal" class="form-control" required inputmode="decimal">
+        <label for="editIncVal" style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Valor Mensal (R$)</span>
+          <button type="button" class="chip-btn" style="padding: 2px 8px; font-size: 0.7rem; color: var(--primary); border-color: var(--primary);" onclick="appendPlusToEditIncVal()" title="Inserir sinal de + para somar um valor ao atual">➕ Somar valor</button>
+        </label>
+        <input type="text" id="editIncVal" class="form-control font-mono" placeholder="Ex: 28,53 + 15,00 ou + 15,00" required autocomplete="off" oninput="onEditIncValInput()">
+        <div id="editIncCalcPreview" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; display: flex; align-items: center; justify-content: space-between; background: var(--bg-card-subtle); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+          <span>💡 Dica: digite <strong>+ valor</strong> (ex: <code>+ 12,50</code>) para somar ao atual</span>
+        </div>
       </div>
 
       <div class="form-group" style="margin-bottom: 16px;">
@@ -6979,14 +6985,120 @@ function renderIncomesManagerList() {
   });
 }
 
+// =========================================================================
+// AVALIADOR DE EXPRESSÕES DE SOMA (+ X VALOR) E NÚMEROS COM VÍRGULA (PT-BR)
+// =========================================================================
+function parseBrazilianNumberToken(tokenStr) {
+  if (typeof tokenStr !== 'string') return parseFloat(tokenStr) || 0;
+  let s = tokenStr.replace(/[R$\s]/g, '').trim();
+  if (!s) return 0;
+
+  if (s.includes(',') && s.includes('.')) {
+    // Se a vírgula vier depois do último ponto (ex: 1.250,50), ponto é milhar e vírgula é decimal
+    if (s.lastIndexOf(',') > s.lastIndexOf('.')) {
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else {
+      // Ex: 1,250.50
+      s = s.replace(/,/g, '');
+    }
+  } else if (s.includes(',')) {
+    // Ex: 28,53 -> 28.53
+    s = s.replace(',', '.');
+  }
+  const num = parseFloat(s);
+  return isNaN(num) ? 0 : num;
+}
+
+function evaluateCurrencyMathExpression(rawInput, baseValue = 0) {
+  if (typeof rawInput === 'number') return Math.round(rawInput * 100) / 100;
+  const str = String(rawInput || '').trim();
+  if (!str) return 0;
+
+  const base = parseFloat(baseValue) || 0;
+  const startsWithOperator = /^[+\-]/.test(str);
+
+  // Normaliza sinais consecutivos e separa todos os termos com seus operadores (+ ou -)
+  const normalized = str.replace(/\s+/g, '');
+  const tokens = normalized.match(/[+\-]?[^+\-]+/g);
+  if (!tokens || tokens.length === 0) return 0;
+
+  let total = startsWithOperator ? base : 0;
+  let termsCount = startsWithOperator ? 1 : 0;
+
+  tokens.forEach((tok, idx) => {
+    let sign = 1;
+    let cleanTok = tok;
+    if (tok.startsWith('+')) {
+      sign = 1;
+      cleanTok = tok.slice(1);
+    } else if (tok.startsWith('-')) {
+      sign = -1;
+      cleanTok = tok.slice(1);
+    }
+    const val = parseBrazilianNumberToken(cleanTok);
+    if (cleanTok.trim() !== '') {
+      total += sign * val;
+      termsCount++;
+    }
+  });
+
+  return Math.round(total * 100) / 100;
+}
+
+function formatNumberPtBrPlain(numVal) {
+  const n = parseFloat(numVal) || 0;
+  return n.toFixed(2).replace('.', ',');
+}
+
+function appendPlusToEditIncVal() {
+  const input = document.getElementById('editIncVal');
+  if (!input) return;
+  const cur = input.value.trim();
+  if (!cur) {
+    const base = pendingEditIncome ? (parseFloat(pendingEditIncome.originalValue) || 0) : 0;
+    input.value = formatNumberPtBrPlain(base) + ' + ';
+  } else if (!cur.endsWith('+')) {
+    input.value = cur + ' + ';
+  }
+  input.focus();
+  onEditIncValInput();
+}
+
+function onEditIncValInput() {
+  const input = document.getElementById('editIncVal');
+  const preview = document.getElementById('editIncCalcPreview');
+  if (!input || !preview) return;
+
+  const raw = input.value.trim();
+  const baseVal = pendingEditIncome ? (parseFloat(pendingEditIncome.originalValue) || 0) : 0;
+  const resultVal = evaluateCurrencyMathExpression(raw, baseVal);
+  const hasMath = raw.includes('+') || (raw.indexOf('-', 1) !== -1) || raw.startsWith('+');
+
+  if (hasMath) {
+    preview.innerHTML = `
+      <span>🧮 Soma em tempo real:</span>
+      <strong class="val-pos font-mono" style="font-size: 0.86rem;">= ${formatBRL(resultVal)}</strong>
+    `;
+  } else {
+    preview.innerHTML = `
+      <span>💡 Digite <strong>+ valor</strong> (ex: <code>+ 15,50</code>) para somar a ${formatBRL(baseVal)}</span>
+      <strong class="font-mono" style="color: var(--text-main);">${formatBRL(resultVal)}</strong>
+    `;
+  }
+}
+
 function saveNewIncomeItem(e) {
-  e.preventDefault();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
   const desc = document.getElementById('newIncDesc').value.trim();
-  const val = parseFloat(document.getElementById('newIncVal').value) || 0;
+  const rawVal = document.getElementById('newIncVal').value;
+  const val = evaluateCurrencyMathExpression(rawVal, 0);
   const scope = document.getElementById('newIncScope').value;
   const specificStart = parseInt(document.getElementById('newIncStartMonth').value, 10);
 
-  if (!desc || val <= 0) return;
+  if (!desc || val <= 0) {
+    showToast('⚠️ Informe uma descrição e um valor válido maior que R$ 0,00.', 2500);
+    return;
+  }
 
   let startMonth = currentMonthIdx;
   let endMonth = 11;
@@ -7019,6 +7131,7 @@ function saveNewIncomeItem(e) {
 
   renderIncomesManagerList();
   persistData();
+  showToast(`✅ Entrada de ${formatBRL(val)} adicionada!`, 2400);
 }
 
 function openEditIncomeModal(idx) {
@@ -7026,31 +7139,39 @@ function openEditIncomeModal(idx) {
   const item = m.incomes[idx];
   if (!item) return;
 
+  const origVal = parseFloat(item.value) || 0;
   pendingEditIncome = {
     index: idx,
     monthIdx: currentMonthIdx,
     item: item,
-    originalDesc: item.description
+    originalDesc: item.description,
+    originalValue: origVal
   };
 
   document.getElementById('editIncDesc').value = item.description;
-  document.getElementById('editIncVal').value = item.value;
+  document.getElementById('editIncVal').value = formatNumberPtBrPlain(origVal);
   document.getElementById('optEditIncFromNowOn').textContent = `Deste mês (${m.name}) em diante (até Dezembro)`;
   document.getElementById('optEditIncCurrentOnly').textContent = `Apenas em ${m.name}`;
   document.getElementById('editIncScope').value = 'all';
 
+  onEditIncValInput();
   openModal('modalEditIncome');
 }
 
 function saveEditedIncomeItem(e) {
-  e.preventDefault();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
   if (!pendingEditIncome) return;
 
   const newDesc = document.getElementById('editIncDesc').value.trim();
-  const newVal = parseFloat(document.getElementById('editIncVal').value) || 0;
+  const rawValStr = document.getElementById('editIncVal').value;
+  const origVal = parseFloat(pendingEditIncome.originalValue) || 0;
+  const newVal = evaluateCurrencyMathExpression(rawValStr, origVal);
   const scope = document.getElementById('editIncScope').value;
 
-  if (!newDesc || newVal <= 0) return;
+  if (!newDesc || newVal <= 0) {
+    showToast('⚠️ Informe uma descrição e um valor final maior que R$ 0,00.', 2500);
+    return;
+  }
 
   const origDesc = pendingEditIncome.originalDesc.trim().toLowerCase();
   const startM = pendingEditIncome.monthIdx;
@@ -8683,29 +8804,89 @@ function deleteBank(idx) {
 // =========================================================================
 // CONFIGURAÇÃO DO MÊS: RESERVA OPCIONAL vs GASTO DIÁRIO (RESTANTE ÷ DIAS)
 // =========================================================================
-function computeDailyAllowanceInfo(year, monthIdx, salaryRemaining, calcMode) {
+function computeDailyAllowanceInfo(year, monthIdx, salaryRemaining, calcMode, monthObjOverride, refDateOverride) {
   const daysInMonth = new Date(year, monthIdx + 1, 0).getDate();
-  const now = new Date();
+  const now = refDateOverride ? new Date(refDateOverride + 'T12:00:00') : (window.__simulatedNowDate ? new Date(window.__simulatedNowDate + 'T12:00:00') : new Date());
   const isCurrentRealMonth = (year === now.getFullYear() && monthIdx === now.getMonth());
   const todayDay = isCurrentRealMonth ? now.getDate() : 1;
+
   // Quantidade de dias de hoje até o último dia do mês (inclusive hoje)
   const remainingDaysUntilEnd = isCurrentRealMonth ? Math.max(1, daysInMonth - todayDay + 1) : daysInMonth;
 
   const mode = (calcMode === 'total_month') ? 'total_month' : 'remaining';
   const divisorDays = (mode === 'remaining' && isCurrentRealMonth) ? remainingDaysUntilEnd : daysInMonth;
 
+  const mObj = monthObjOverride || (appData && appData.months ? appData.months[monthIdx] : null);
+  const cardBanks = (appData && Array.isArray(appData.banks)) ? appData.banks.filter(b => b.isCreditCard) : [];
+
+  const mStr = String(monthIdx + 1).padStart(2, '0');
+  const dStr = String(todayDay).padStart(2, '0');
+  const todayStr = `${year}-${mStr}-${dStr}`;
+
+  let todayCardUserSpent = 0;
+  let todayDebitPixUserSpent = 0;
+  let pastDebitPixUserSpent = 0;
+
+  if (mObj && Array.isArray(mObj.transactions)) {
+    mObj.transactions.forEach(tx => {
+      if (!tx || tx.type !== 'SAÍDA') return;
+      const author = (tx.author || 'USUÁRIO').toUpperCase();
+      if (author !== 'USUÁRIO') return;
+
+      // Ignorar parcelas automáticas herdadas de compras feitas em meses passados (installmentIndex > 1)
+      // pois já compõem o custo fixo da fatura mensal, não sendo um gasto avulso feito no dia de hoje
+      if (tx.isInstallment && parseInt(tx.installmentIndex, 10) > 1) return;
+
+      const val = parseFloat(tx.value) || 0;
+      if (val <= 0) return;
+
+      const isCard = cardBanks.some(b => b.name === tx.bank);
+      const isDebitPix = !isCard || tx.installment === 'PIX' || tx.installment === 'DÉBITO' || tx.installment === 'DINHEIRO';
+
+      if (isCurrentRealMonth && tx.date === todayStr) {
+        if (isCard && !isDebitPix) {
+          todayCardUserSpent += val;
+        } else {
+          todayDebitPixUserSpent += val;
+        }
+      } else if (isCurrentRealMonth && tx.date && tx.date < todayStr) {
+        if (isDebitPix) {
+          pastDebitPixUserSpent += val;
+        }
+      }
+    });
+  }
+
+  const todayTotalSpent = Math.round((todayCardUserSpent + todayDebitPixUserSpent) * 100) / 100;
+
+  // O Restante do Salário (salaryRemaining) já teve 'todayCardUserSpent' descontado na fatura.
+  // Recompondo 'todayCardUserSpent' e descontando 'pastDebitPixUserSpent', obtemos o Saldo Disponível exato na abertura do dia de hoje!
   const safeRemaining = parseFloat(salaryRemaining) || 0;
-  const dailyValue = safeRemaining / Math.max(1, divisorDays);
-  const fullMonthDailyValue = safeRemaining / Math.max(1, daysInMonth);
-  const lastDayFormatted = `${String(daysInMonth).padStart(2, '0')}/${String(monthIdx + 1).padStart(2, '0')}`;
+  const startOfDayPool = safeRemaining + todayCardUserSpent - pastDebitPixUserSpent;
+
+  // Cota Base do Dia (quanto podia gastar hoje antes dos gastos de hoje)
+  const dailyQuotaToday = Math.round((startOfDayPool / Math.max(1, divisorDays)) * 100) / 100;
+
+  // Quanto AINDA pode gastar hoje (Cota de Hoje - Gasto de Hoje)
+  const availableToday = Math.round((dailyQuotaToday - todayTotalSpent) * 100) / 100;
+
+  const fullMonthDailyValue = Math.round((startOfDayPool / Math.max(1, daysInMonth)) * 100) / 100;
+  const lastDayFormatted = `${String(daysInMonth).padStart(2, '0')}/${mStr}`;
+  const todayFormatted = `${dStr}/${mStr}`;
 
   return {
     daysInMonth,
     isCurrentRealMonth,
     todayDay,
+    todayStr,
+    todayFormatted,
     remainingDaysUntilEnd,
     divisorDays,
-    dailyValue,
+    startOfDayPool,
+    dailyQuotaToday,
+    todayTotalSpent,
+    availableToday,
+    dailyValue: availableToday,
     fullMonthDailyValue,
     lastDayFormatted,
     mode
@@ -8741,25 +8922,32 @@ function renderFifthKpiCard(m, t) {
 
   if (fifthMode === 'daily') {
     const calcMode = m.dailyCalcMode || appData.dailyCalcMode || 'remaining';
-    const info = computeDailyAllowanceInfo(currentYear, currentMonthIdx, t.salaryRemaining, calcMode);
+    const info = computeDailyAllowanceInfo(currentYear, currentMonthIdx, t.salaryRemaining, calcMode, m);
 
     if (titleEl) titleEl.textContent = '📅 Gasto Diário';
     if (badgeEl) {
-      badgeEl.className = 'badge badge-info';
-      badgeEl.textContent = `Até ${info.lastDayFormatted} (${info.divisorDays}d)`;
+      badgeEl.className = info.availableToday < 0 ? 'badge badge-danger' : 'badge badge-info';
+      badgeEl.textContent = info.isCurrentRealMonth
+        ? `Hoje (${info.todayFormatted}) • ${info.divisorDays}d`
+        : `Até ${info.lastDayFormatted} (${info.divisorDays}d)`;
     }
     if (valEl) {
-      valEl.style.color = info.dailyValue >= 0 ? 'var(--primary)' : 'var(--danger)';
-      valEl.innerHTML = `${formatBRL(info.dailyValue)}<small style="font-size: 0.58em; font-weight: 600; opacity: 0.8;">/dia</small>`;
+      valEl.style.color = info.availableToday > 0 ? 'var(--primary)' : (info.availableToday < 0 ? 'var(--danger)' : 'var(--warning)');
+      const unitLabel = info.isCurrentRealMonth ? '/hoje' : '/dia';
+      valEl.innerHTML = `${formatBRL(info.availableToday)}<small style="font-size: 0.56em; font-weight: 600; opacity: 0.82;">${unitLabel}</small>`;
     }
     if (trackEl && fillEl) {
       trackEl.style.display = 'block';
-      const pctAvailableDays = Math.min(100, Math.max(0, Math.round((info.divisorDays / info.daysInMonth) * 100)));
-      fillEl.style.width = `${pctAvailableDays}%`;
+      const pctRemainingToday = info.dailyQuotaToday > 0
+        ? Math.min(100, Math.max(0, Math.round((info.availableToday / info.dailyQuotaToday) * 100)))
+        : 0;
+      fillEl.style.width = `${pctRemainingToday}%`;
     }
     if (subEl) {
-      if (info.isCurrentRealMonth && info.mode === 'remaining' && info.remainingDaysUntilEnd < info.daysInMonth) {
-        subEl.innerHTML = `Restam <strong>${info.remainingDaysUntilEnd}d</strong> até ${info.lastDayFormatted} • Mês (${info.daysInMonth}d): ${formatBRL(info.fullMonthDailyValue)}/d <span id="monthGoalTargetText" style="display:none;">${formatBRL(m.goal)}</span><span id="monthInAccount" style="display:none;">${formatBRL(m.inAccount)}</span>`;
+      if (info.todayTotalSpent > 0) {
+        subEl.innerHTML = `Cota hoje: <strong>${formatBRL(info.dailyQuotaToday)}</strong> − Gasto: <strong class="val-neg">${formatBRL(info.todayTotalSpent)}</strong> <span id="monthGoalTargetText" style="display:none;">${formatBRL(m.goal)}</span><span id="monthInAccount" style="display:none;">${formatBRL(m.inAccount)}</span>`;
+      } else if (info.isCurrentRealMonth) {
+        subEl.innerHTML = `Cota hoje: <strong>${formatBRL(info.dailyQuotaToday)}</strong> • Gasto hoje: <strong>R$ 0,00</strong> <span id="monthGoalTargetText" style="display:none;">${formatBRL(m.goal)}</span><span id="monthInAccount" style="display:none;">${formatBRL(m.inAccount)}</span>`;
       } else {
         subEl.innerHTML = `Salário Livre ÷ <strong>${info.divisorDays} dias</strong> (até ${info.lastDayFormatted}) <span id="monthGoalTargetText" style="display:none;">${formatBRL(m.goal)}</span><span id="monthInAccount" style="display:none;">${formatBRL(m.inAccount)}</span>`;
       }
@@ -8812,12 +9000,13 @@ function updateCfgDailyPreview() {
   const box = document.getElementById('cfgDailyPreviewBox');
   if (!box) return;
   const calcMode = document.getElementById('cfgDailyCalcMode')?.value || 'remaining';
+  const m = appData.months[currentMonthIdx];
   const t = getMonthTotals(currentMonthIdx);
-  const info = computeDailyAllowanceInfo(currentYear, currentMonthIdx, t.salaryRemaining, calcMode);
+  const info = computeDailyAllowanceInfo(currentYear, currentMonthIdx, t.salaryRemaining, calcMode, m);
 
   box.innerHTML = `
-    <div>💼 Restante do Salário em ${MONTH_NAMES[currentMonthIdx]}: <strong class="font-mono">${formatBRL(t.salaryRemaining)}</strong></div>
-    <div style="margin-top: 2px;">📅 Divisão por <strong>${info.divisorDays} dias</strong> (até ${info.lastDayFormatted}): <strong class="val-pos font-mono" style="font-size: 0.88rem;">${formatBRL(info.dailyValue)} / dia</strong></div>
+    <div>📅 Cota Base de Hoje (${info.divisorDays}d até ${info.lastDayFormatted}): <strong class="font-mono">${formatBRL(info.dailyQuotaToday)}</strong></div>
+    <div style="margin-top: 2px;">💸 Gasto Hoje: <strong class="val-neg font-mono">-${formatBRL(info.todayTotalSpent)}</strong> ➔ Disponível Hoje: <strong class="val-pos font-mono" style="font-size: 0.88rem;">${formatBRL(info.availableToday)}</strong></div>
   `;
 }
 
