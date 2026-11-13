@@ -132,9 +132,9 @@
     }
 
     .val-pos { color: var(--success) !important; }
-    body.dark-theme .val-pos { color: #34d399 !important; }
+    body.dark-theme .val-pos { color: var(--success) !important; }
     .val-neg { color: var(--danger) !important; }
-    body.dark-theme .val-neg { color: #fb7185 !important; }
+    body.dark-theme .val-neg { color: var(--danger) !important; }
     .val-neutral { color: var(--text-muted) !important; }
     .val-warning { color: var(--warning) !important; }
 
@@ -2164,6 +2164,160 @@
       }
     }
 
+    /* ESTILOS DO MENU MINHA CONTA & ESTÚDIO DE CORES */
+    .account-hero-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .account-avatar-wrapper {
+      position: relative;
+      width: 68px;
+      height: 68px;
+      min-width: 68px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .account-avatar-large {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.45rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 2px solid var(--bg-card);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .account-avatar-large img,
+    .user-avatar-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .account-camera-badge {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: 2px solid var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .theme-presets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .theme-preset-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 11px;
+      border-radius: 12px;
+      background: var(--bg-card-subtle);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+
+    .theme-preset-card:hover {
+      border-color: var(--primary);
+      background: var(--bg-card-hover);
+    }
+
+    .theme-preset-card.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+
+    .theme-preset-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .theme-swatch-dots {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+
+    .theme-swatch-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+
+    .color-control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+    }
+
+    .color-control-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-main);
+      min-width: 0;
+    }
+
+    .color-control-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .color-hex-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--bg-card-subtle);
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
     /* Telas muito estreitas (<= 360px) */
     @media (max-width: 360px) {
       .grid-5 {
@@ -2171,6 +2325,9 @@
       }
       .grid-5 > .card:last-child {
         grid-column: span 1;
+      }
+      .theme-presets-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -2267,7 +2424,7 @@
 
 <aside class="sidebar-drawer" id="sidebarDrawer">
   <div class="sidebar-header">
-    <div class="sidebar-user-block">
+    <div class="sidebar-user-block" style="cursor: pointer;" onclick="closeSidebarMenu(); openMyAccountModal();" title="Abrir Minha Conta, Foto de Perfil e Segurança">
       <div class="user-avatar-circle" id="sidebarUserAvatar" style="width: 44px; height: 44px; font-size: 1.1rem; background: var(--primary);">
         JG
       </div>
@@ -2276,7 +2433,7 @@
           João Guilherme
         </h4>
         <span style="font-size: 0.75rem; color: #34d399; display: flex; align-items: center; gap: 4px;">
-          ☁️ Conectado
+          ☁️ Conectado • 👤 Minha Conta ➔
         </span>
       </div>
     </div>
@@ -2318,25 +2475,6 @@
       <button class="sidebar-item-btn" onclick="closeSidebarMenu(); openManageEntitiesModal();">
         <span>🏷️ Gerenciar Categorias & Cores</span>
         <span style="font-size: 0.8rem; color: var(--text-muted);">Editar</span>
-      </button>
-    </div>
-
-    <!-- SEÇÃO 1: SEGURANÇA E PRIVACIDADE -->
-    <div>
-      <div class="sidebar-section-title">
-        <span>🛡️</span> Segurança & Privacidade
-      </div>
-      <button class="sidebar-item-btn" id="btnSidebarPrivacy" onclick="togglePrivacyMode()">
-        <span>👁️ Modo Sigilo</span>
-        <span id="lblSidebarPrivacyStatus" style="font-size: 0.75rem; color: var(--text-muted);">Desativado</span>
-      </button>
-      <button class="sidebar-item-btn" onclick="closeSidebarMenu(); openAutoLockModal();">
-        <span>⏱️ Bloqueio por Inatividade</span>
-        <span id="lblAutoLockTime" style="font-size: 0.75rem; color: var(--accent-sky);">5m</span>
-      </button>
-      <button class="sidebar-item-btn" onclick="closeSidebarMenu(); changeMyPassword();">
-        <span>🔑 Alterar Minha Senha</span>
-        <span style="font-size: 0.8rem; color: var(--text-muted);">➔</span>
       </button>
     </div>
 
@@ -2435,7 +2573,7 @@
         Nuvem Conectada
       </div>
 
-      <div class="user-profile-badge" onclick="openSidebarMenu()" title="Abrir Menu do Usuário">
+      <div class="user-profile-badge" onclick="openMyAccountModal()" title="Abrir Minha Conta, Foto de Perfil e Segurança">
         <div class="user-avatar-circle" id="headerUserAvatar">JG</div>
         <div class="user-badge-details">
           <span class="user-badge-name" id="headerUserName">João Guilherme</span>
@@ -3438,82 +3576,249 @@
   </div>
 </div>
 
-<!-- ==================== MODAL: PERSONALIZAR CORES DO TEMA DO DASHBOARD ==================== -->
-<div class="modal-overlay" id="modalThemeColors">
-  <div class="modal" style="max-width: 580px;">
+<!-- ==================== NOVO MENU: MINHA CONTA, FOTO DE PERFIL & SEGURANÇA ==================== -->
+<div class="modal-overlay" id="modalMyAccount" onclick="if (event.target === this) closeModal('modalMyAccount')">
+  <div class="modal modal-bottom-sheet" style="max-width: 480px;">
     <div class="modal-handle-bar"></div>
     <div class="modal-header">
-      <h3 class="modal-title">🎨 Personalizar Cores do Tema</h3>
+      <h3 class="modal-title">👤 Minha Conta & Segurança</h3>
+      <button class="modal-close" onclick="closeModal('modalMyAccount')">&times;</button>
+    </div>
+
+    <!-- 1. BLOCO DE IDENTIDADE VISUAL & FOTO DE PERFIL -->
+    <div class="account-hero-card">
+      <div class="account-avatar-wrapper" onclick="document.getElementById('profilePhotoInput').click()" title="Clique para enviar uma foto de perfil">
+        <div class="account-avatar-large" id="myAccountAvatarPreview">JG</div>
+        <div class="account-camera-badge">📷</div>
+      </div>
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 0.98rem; font-weight: 800; color: var(--text-main);" id="myAccountHeaderName">João Guilherme</div>
+        <div style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 8px;">Foto sincronizada com criptografia AES-256</div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.74rem; min-height: 30px;" onclick="document.getElementById('profilePhotoInput').click()">
+            📷 Trocar Foto
+          </button>
+          <button type="button" class="btn btn-outline" id="btnRemoveProfilePhoto" style="padding: 4px 10px; font-size: 0.74rem; min-height: 30px; color: var(--danger); display: none;" onclick="removeProfilePhoto()">
+            🗑️ Remover Foto
+          </button>
+        </div>
+        <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;" onchange="handleProfilePhotoUpload(event)">
+      </div>
+    </div>
+
+    <!-- NOME DE EXIBIÇÃO E COR DO AVATAR -->
+    <div class="form-row" style="margin-bottom: 12px;">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="myAccountDisplayName">Nome de Exibição</label>
+        <input type="text" id="myAccountDisplayName" class="form-control" placeholder="Seu nome" onchange="saveMyAccountProfileChanges()">
+      </div>
+      <div class="form-group" style="margin-bottom: 0;">
+        <label for="myAccountAvatarColor">Cor do Perfil / Iniciais</label>
+        <div style="display: flex; align-items: center; gap: 8px; height: 40px; background: var(--bg-card-subtle); border: 1px solid var(--border); border-radius: 10px; padding: 0 10px;">
+          <input type="color" id="myAccountAvatarColor" class="color-picker-input" value="#00A868" onchange="saveMyAccountProfileChanges()">
+          <span id="myAccountAvatarColorHex" class="font-mono" style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">#00A868</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. CONFIGURAÇÕES DE SEGURANÇA E PRIVACIDADE (EXCLUSIVAS DESTE MENU) -->
+    <div style="margin-bottom: 12px;">
+      <div class="sidebar-section-title" style="margin-bottom: 8px;">
+        <span>🛡️</span> Segurança & Privacidade
+      </div>
+
+      <button type="button" class="sidebar-item-btn" id="btnSidebarPrivacy" onclick="togglePrivacyMode()">
+        <span>👁️ Modo Sigilo (Ocultar Valores na Tela)</span>
+        <span id="lblSidebarPrivacyStatus" class="badge badge-fixed-regular">Desativado</span>
+      </button>
+
+      <button type="button" class="sidebar-item-btn" onclick="closeModal('modalMyAccount'); openAutoLockModal();">
+        <span>⏱️ Bloqueio Automático por Inatividade</span>
+        <span id="lblAutoLockTime" class="badge badge-info">5m</span>
+      </button>
+
+      <button type="button" class="sidebar-item-btn" onclick="closeModal('modalMyAccount'); changeMyPassword();">
+        <span>🔑 Alterar Minha Senha de Acesso</span>
+        <span style="font-size: 0.78rem; color: var(--primary); font-weight: 700;">Alterar ➔</span>
+      </button>
+
+      <button type="button" class="sidebar-item-btn" onclick="closeModal('modalMyAccount'); openVaultRecoveryModal();">
+        <span>🛡️ Cofre de Recuperação (Pontos de Restauração)</span>
+        <span style="font-size: 0.74rem; color: var(--info); font-weight: 700;">Auto-Save</span>
+      </button>
+    </div>
+
+    <!-- 3. RODAPÉ: SAIR / BLOQUEAR E FECHAR -->
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-top: 10px; border-top: 1px solid var(--border);">
+      <button type="button" class="btn btn-outline" style="color: var(--danger); border-color: rgba(225, 29, 72, 0.35);" onclick="closeModal('modalMyAccount'); logout('Sessão bloqueada manualmente.');">
+        🔒 Bloquear / Sair
+      </button>
+      <button type="button" class="btn btn-primary" onclick="saveMyAccountProfileChanges(); closeModal('modalMyAccount');">
+        Concluir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MODAL: ESTÚDIO DE PERFIS DE CORES DO DASHBOARD ==================== -->
+<div class="modal-overlay" id="modalThemeColors" onclick="if (event.target === this) closeModal('modalThemeColors')">
+  <div class="modal modal-bottom-sheet" style="max-width: 520px;">
+    <div class="modal-handle-bar"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">🎨 Perfis de Cores do Dashboard</h3>
       <button class="modal-close" onclick="closeModal('modalThemeColors')">&times;</button>
     </div>
 
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
-      Escolha uma das paletas de azul prontas ou personalize cada cor do dashboard ao seu gosto:
-    </p>
-
-    <!-- PALETAS PRONTAS -->
-    <div style="margin-bottom: 20px;">
-      <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 8px;">
-        PALETAS PRÉ-DEFINIDAS
+    <!-- 1. PERFIS DE CORES CURADOS (1 TOQUE) -->
+    <div style="margin-bottom: 12px;">
+      <label style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 6px;">
+        Perfis de Cores Prontos (Toque para Aplicar)
       </label>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
-        <button type="button" class="btn btn-outline" style="justify-content: center; font-size: 0.8rem; border-color: #2563eb;" onclick="applyThemePreset('royal')">
-          🔹 Azul Real
+      <div class="theme-presets-grid" id="themePresetsGrid">
+        <button type="button" class="theme-preset-card" data-preset="emerald" onclick="applyThemePreset('emerald')">
+          <span class="theme-preset-name">🌿 Esmeralda</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #00A868;"></span>
+            <span class="theme-swatch-dot" style="background: #0ea5e9;"></span>
+            <span class="theme-swatch-dot" style="background: #e11d48;"></span>
+          </div>
         </button>
-        <button type="button" class="btn btn-outline" style="justify-content: center; font-size: 0.8rem; border-color: #0284c7;" onclick="applyThemePreset('ocean')">
-          🌊 Azul Oceano
+
+        <button type="button" class="theme-preset-card" data-preset="nubank" onclick="applyThemePreset('nubank')">
+          <span class="theme-preset-name">🟣 Roxo Nubank</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #820ad1;"></span>
+            <span class="theme-swatch-dot" style="background: #a855f7;"></span>
+            <span class="theme-swatch-dot" style="background: #10b981;"></span>
+          </div>
         </button>
-        <button type="button" class="btn btn-outline" style="justify-content: center; font-size: 0.8rem; border-color: #1e40af;" onclick="applyThemePreset('navy')">
-          🔷 Azul Noturno
+
+        <button type="button" class="theme-preset-card" data-preset="royal" onclick="applyThemePreset('royal')">
+          <span class="theme-preset-name">🔹 Azul Real</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #2563eb;"></span>
+            <span class="theme-swatch-dot" style="background: #0284c7;"></span>
+            <span class="theme-swatch-dot" style="background: #10b981;"></span>
+          </div>
         </button>
-        <button type="button" class="btn btn-outline" style="justify-content: center; font-size: 0.8rem; border-color: #06b6d4;" onclick="applyThemePreset('cyan')">
-          ⚡ Azul Ciano
+
+        <button type="button" class="theme-preset-card" data-preset="ocean" onclick="applyThemePreset('ocean')">
+          <span class="theme-preset-name">🌊 Azul Oceano</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #0284c7;"></span>
+            <span class="theme-swatch-dot" style="background: #06b6d4;"></span>
+            <span class="theme-swatch-dot" style="background: #10b981;"></span>
+          </div>
+        </button>
+
+        <button type="button" class="theme-preset-card" data-preset="gold" onclick="applyThemePreset('gold')">
+          <span class="theme-preset-name">✨ Ouro & Grafite</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #d97706;"></span>
+            <span class="theme-swatch-dot" style="background: #f59e0b;"></span>
+            <span class="theme-swatch-dot" style="background: #10b981;"></span>
+          </div>
+        </button>
+
+        <button type="button" class="theme-preset-card" data-preset="crimson" onclick="applyThemePreset('crimson')">
+          <span class="theme-preset-name">🌹 Carmim Rose</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #e11d48;"></span>
+            <span class="theme-swatch-dot" style="background: #f43f5e;"></span>
+            <span class="theme-swatch-dot" style="background: #10b981;"></span>
+          </div>
+        </button>
+
+        <button type="button" class="theme-preset-card" data-preset="indigo" onclick="applyThemePreset('indigo')">
+          <span class="theme-preset-name">🔮 Índigo Linear</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #4f46e5;"></span>
+            <span class="theme-swatch-dot" style="background: #6366f1;"></span>
+            <span class="theme-swatch-dot" style="background: #10b981;"></span>
+          </div>
+        </button>
+
+        <button type="button" class="theme-preset-card" data-preset="teal" onclick="applyThemePreset('teal')">
+          <span class="theme-preset-name">🌲 Verde Nórdico</span>
+          <div class="theme-swatch-dots">
+            <span class="theme-swatch-dot" style="background: #0d9488;"></span>
+            <span class="theme-swatch-dot" style="background: #14b8a6;"></span>
+            <span class="theme-swatch-dot" style="background: #10b981;"></span>
+          </div>
         </button>
       </div>
     </div>
 
-    <!-- SELETORES INDIVIDUAIS DE COR -->
-    <div style="background: var(--bg-card-subtle); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-      <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 12px;">
-        PERSONALIZAÇÃO DETALHADA DE CORES
+    <!-- 2. PERSONALIZAÇÃO LIVRE DE CADA ELEMENTO DO DASHBOARD -->
+    <div style="background: var(--bg-card-subtle); padding: 12px; border-radius: 14px; border: 1px solid var(--border); margin-bottom: 12px;">
+      <label style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 8px;">
+        Personalizar Cada Cor Individualmente
       </label>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 0.85rem;">Cor Primária (Botões & Realces):</span>
-          <input type="color" id="themeColorPrimary" class="color-picker-input" onchange="updateThemeCustomColor('primary', this.value)">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div class="color-control-row">
+          <span class="color-control-label">🎯 Cor Principal (Botões, Abas e Destaques)</span>
+          <div class="color-control-right">
+            <span class="color-hex-tag" id="hexThemePrimary">#00A868</span>
+            <input type="color" id="themeColorPrimary" class="color-picker-input" onchange="updateThemeCustomColor('primary', this.value)">
+          </div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 0.85rem;">Cor de Destaque Secundária:</span>
-          <input type="color" id="themeColorAccent" class="color-picker-input" onchange="updateThemeCustomColor('accent', this.value)">
+        <div class="color-control-row">
+          <span class="color-control-label">💎 Cor Secundária (Saldos e Indicadores)</span>
+          <div class="color-control-right">
+            <span class="color-hex-tag" id="hexThemeAccent">#0EA5E9</span>
+            <input type="color" id="themeColorAccent" class="color-picker-input" onchange="updateThemeCustomColor('accent', this.value)">
+          </div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 0.85rem;">Cor de Entradas (Receitas):</span>
-          <input type="color" id="themeColorSuccess" class="color-picker-input" onchange="updateThemeCustomColor('success', this.value)">
+        <div class="color-control-row">
+          <span class="color-control-label">📈 Cor de Entradas (Valores Positivos)</span>
+          <div class="color-control-right">
+            <span class="color-hex-tag" id="hexThemeSuccess">#00A868</span>
+            <input type="color" id="themeColorSuccess" class="color-picker-input" onchange="updateThemeCustomColor('success', this.value)">
+          </div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 0.85rem;">Cor de Saídas (Despesas):</span>
-          <input type="color" id="themeColorDanger" class="color-picker-input" onchange="updateThemeCustomColor('danger', this.value)">
+        <div class="color-control-row">
+          <span class="color-control-label">📉 Cor de Saídas (Despesas e Faturas)</span>
+          <div class="color-control-right">
+            <span class="color-hex-tag" id="hexThemeDanger">#E11D48</span>
+            <input type="color" id="themeColorDanger" class="color-picker-input" onchange="updateThemeCustomColor('danger', this.value)">
+          </div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 0.85rem;">Cor de Reservas (Metas):</span>
-          <input type="color" id="themeColorWarning" class="color-picker-input" onchange="updateThemeCustomColor('warning', this.value)">
+        <div class="color-control-row">
+          <span class="color-control-label">🏦 Cor de Reserva & Metas</span>
+          <div class="color-control-right">
+            <span class="color-hex-tag" id="hexThemeWarning">#F59E0B</span>
+            <input type="color" id="themeColorWarning" class="color-picker-input" onchange="updateThemeCustomColor('warning', this.value)">
+          </div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-size: 0.85rem;">Fundo dos Cartões:</span>
-          <input type="color" id="themeColorBgCard" class="color-picker-input" onchange="updateThemeCustomColor('bgCard', this.value)">
+        <div class="color-control-row">
+          <span class="color-control-label">🃏 Fundo dos Cards</span>
+          <div class="color-control-right">
+            <button type="button" class="chip-btn" style="padding: 2px 7px; font-size: 0.68rem;" onclick="updateThemeCustomColor('bgCard', '')">Auto</button>
+            <span class="color-hex-tag" id="hexThemeBgCard">Auto</span>
+            <input type="color" id="themeColorBgCard" class="color-picker-input" onchange="updateThemeCustomColor('bgCard', this.value)">
+          </div>
+        </div>
+
+        <div class="color-control-row">
+          <span class="color-control-label">🖥️ Fundo Geral do Painel</span>
+          <div class="color-control-right">
+            <button type="button" class="chip-btn" style="padding: 2px 7px; font-size: 0.68rem;" onclick="updateThemeCustomColor('bgMain', '')">Auto</button>
+            <span class="color-hex-tag" id="hexThemeBgMain">Auto</span>
+            <input type="color" id="themeColorBgMain" class="color-picker-input" onchange="updateThemeCustomColor('bgMain', this.value)">
+          </div>
         </div>
       </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-      <button type="button" class="btn btn-outline" onclick="resetThemeColors()">Restaurar Cores Padrão</button>
-      <button type="button" class="btn btn-primary" onclick="closeModal('modalThemeColors')">Salvar e Fechar</button>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+      <button type="button" class="btn btn-outline" onclick="resetThemeColors()">Restaurar Padrão</button>
+      <button type="button" class="btn btn-primary" onclick="closeModal('modalThemeColors')">Concluir</button>
     </div>
   </div>
 </div>
@@ -3994,12 +4299,117 @@ const MONTH_NAMES = [
 ];
 
 const DEFAULT_THEME_COLORS = {
+  preset: 'emerald',
   primary: '#00A868',
-  accent: '#00A868',
+  accent: '#0ea5e9',
   success: '#00A868',
   danger: '#e11d48',
   warning: '#f59e0b',
-  bgCard: ''
+  bgCard: '',
+  bgMain: ''
+};
+
+const CURATED_THEME_PRESETS = {
+  emerald: {
+    name: 'Esmeralda',
+    primary: '#00A868',
+    accent: '#0ea5e9',
+    success: '#00A868',
+    danger: '#e11d48',
+    warning: '#f59e0b',
+    bgCard: '',
+    bgMain: ''
+  },
+  nubank: {
+    name: 'Roxo Nubank',
+    primary: '#820ad1',
+    accent: '#a855f7',
+    success: '#10b981',
+    danger: '#f43f5e',
+    warning: '#f59e0b',
+    bgCard: '',
+    bgMain: ''
+  },
+  royal: {
+    name: 'Azul Real',
+    primary: '#2563eb',
+    accent: '#0284c7',
+    success: '#10b981',
+    danger: '#ef4444',
+    warning: '#f59e0b',
+    bgCard: '',
+    bgMain: ''
+  },
+  ocean: {
+    name: 'Azul Oceano',
+    primary: '#0284c7',
+    accent: '#06b6d4',
+    success: '#059669',
+    danger: '#e11d48',
+    warning: '#d97706',
+    bgCard: '',
+    bgMain: ''
+  },
+  gold: {
+    name: 'Ouro & Grafite',
+    primary: '#d97706',
+    accent: '#f59e0b',
+    success: '#10b981',
+    danger: '#ef4444',
+    warning: '#eab308',
+    bgCard: '',
+    bgMain: ''
+  },
+  crimson: {
+    name: 'Carmim Rose',
+    primary: '#e11d48',
+    accent: '#f43f5e',
+    success: '#10b981',
+    danger: '#be123c',
+    warning: '#f59e0b',
+    bgCard: '',
+    bgMain: ''
+  },
+  indigo: {
+    name: 'Índigo Linear',
+    primary: '#4f46e5',
+    accent: '#6366f1',
+    success: '#10b981',
+    danger: '#ef4444',
+    warning: '#f59e0b',
+    bgCard: '',
+    bgMain: ''
+  },
+  teal: {
+    name: 'Verde Nórdico',
+    primary: '#0d9488',
+    accent: '#14b8a6',
+    success: '#10b981',
+    danger: '#f43f5e',
+    warning: '#f59e0b',
+    bgCard: '',
+    bgMain: ''
+  },
+  navy: {
+    name: 'Azul Noturno',
+    primary: '#1d4ed8',
+    accent: '#3b82f6',
+    success: '#059669',
+    danger: '#e11d48',
+    warning: '#d97706',
+    bgCard: '',
+    bgMain: ''
+  },
+  cyan: {
+    name: 'Azul Ciano',
+    primary: '#0891b2',
+    accent: '#06b6d4',
+    success: '#10b981',
+    danger: '#ef4444',
+    warning: '#f59e0b',
+    bgCard: '',
+    bgMain: ''
+  }
 };
 
 const DEFAULT_CATEGORIES = [
@@ -4511,18 +4921,7 @@ function openSidebarMenu() {
   if (drawer) drawer.classList.add('active');
   if (overlay) overlay.classList.add('active');
 
-  const curUser = getActiveUser();
-  if (curUser) {
-    const uName = document.getElementById('sidebarUserName');
-    const uAvatar = document.getElementById('sidebarUserAvatar');
-    if (uName) uName.textContent = curUser.name;
-    if (uAvatar) {
-      uAvatar.style.backgroundColor = curUser.avatarColor || '#2563eb';
-      const parts = curUser.name.trim().split(' ');
-      const initials = parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0].substring(0, 2).toUpperCase();
-      uAvatar.textContent = initials;
-    }
-  }
+  renderUserHeader();
 
   const privStatus = document.getElementById('lblSidebarPrivacyStatus');
   if (privStatus) {
@@ -4574,21 +4973,149 @@ async function testCloudConnection() {
   }
 }
 
-function renderUserHeader() {
+function getEffectiveUserProfile() {
   const curUser = getActiveUser();
-  if (!curUser) return;
+  const savedProf = (appData && appData.userProfile) ? appData.userProfile : {};
+  const displayName = (savedProf.displayName || curUser.name || 'Usuário').trim();
+  const avatarColor = savedProf.avatarColor || curUser.avatarColor || '#00A868';
+  const photoDataUrl = savedProf.photoDataUrl || '';
+  const parts = displayName.split(/\s+/).filter(Boolean);
+  const initials = parts.length > 1
+    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+    : (displayName.substring(0, 2).toUpperCase() || 'US');
+  return { displayName, avatarColor, photoDataUrl, initials };
+}
 
+function renderAvatarElement(el, profile) {
+  if (!el || !profile) return;
+  el.style.backgroundColor = profile.avatarColor || 'var(--primary)';
+  if (profile.photoDataUrl) {
+    el.innerHTML = `<img src="${profile.photoDataUrl}" alt="${profile.displayName}">`;
+  } else {
+    el.textContent = profile.initials;
+  }
+}
+
+function renderUserHeader() {
+  const prof = getEffectiveUserProfile();
   const nameEl = document.getElementById('headerUserName');
   const avatarEl = document.getElementById('headerUserAvatar');
+  const sideNameEl = document.getElementById('sidebarUserName');
+  const sideAvatarEl = document.getElementById('sidebarUserAvatar');
 
-  if (nameEl) nameEl.textContent = curUser.name;
-  if (avatarEl) {
-    avatarEl.style.backgroundColor = curUser.avatarColor || 'var(--primary)';
-    // Iniciais do nome
-    const parts = curUser.name.trim().split(' ');
-    const initials = parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0].substring(0, 2).toUpperCase();
-    avatarEl.textContent = initials;
+  if (nameEl) nameEl.textContent = prof.displayName;
+  if (sideNameEl) sideNameEl.textContent = prof.displayName;
+  renderAvatarElement(avatarEl, prof);
+  renderAvatarElement(sideAvatarEl, prof);
+}
+
+function openMyAccountModal() {
+  const prof = getEffectiveUserProfile();
+  const previewEl = document.getElementById('myAccountAvatarPreview');
+  const headerNameEl = document.getElementById('myAccountHeaderName');
+  const inputNameEl = document.getElementById('myAccountDisplayName');
+  const inputColorEl = document.getElementById('myAccountAvatarColor');
+  const hexColorEl = document.getElementById('myAccountAvatarColorHex');
+  const btnRemPhoto = document.getElementById('btnRemoveProfilePhoto');
+
+  renderAvatarElement(previewEl, prof);
+  if (headerNameEl) headerNameEl.textContent = prof.displayName;
+  if (inputNameEl) inputNameEl.value = prof.displayName;
+  if (inputColorEl) inputColorEl.value = prof.avatarColor;
+  if (hexColorEl) hexColorEl.textContent = (prof.avatarColor || '#00A868').toUpperCase();
+  if (btnRemPhoto) btnRemPhoto.style.display = prof.photoDataUrl ? 'inline-flex' : 'none';
+
+  const privStatus = document.getElementById('lblSidebarPrivacyStatus');
+  if (privStatus) {
+    privStatus.textContent = isPrivacyMode ? 'Ativado' : 'Desativado';
+    privStatus.className = isPrivacyMode ? 'badge badge-info' : 'badge badge-fixed-regular';
   }
+
+  const lblLock = document.getElementById('lblAutoLockTime');
+  if (lblLock) {
+    lblLock.textContent = (typeof autoLockMinutes !== "undefined" && autoLockMinutes > 0) ? (autoLockMinutes + "m") : "Desativado";
+  }
+
+  openModal('modalMyAccount');
+}
+
+function saveMyAccountProfileChanges() {
+  if (!appData) return;
+  if (!appData.userProfile) appData.userProfile = {};
+
+  const newName = (document.getElementById('myAccountDisplayName')?.value || '').trim();
+  const newColor = document.getElementById('myAccountAvatarColor')?.value || '#00A868';
+
+  if (newName) {
+    appData.userProfile.displayName = newName;
+    activeDisplayName = newName;
+  }
+  if (newColor) {
+    appData.userProfile.avatarColor = newColor;
+    activeAvatarColor = newColor;
+  }
+
+  const hexColorEl = document.getElementById('myAccountAvatarColorHex');
+  if (hexColorEl) hexColorEl.textContent = newColor.toUpperCase();
+
+  const prof = getEffectiveUserProfile();
+  renderAvatarElement(document.getElementById('myAccountAvatarPreview'), prof);
+  const headerNameEl = document.getElementById('myAccountHeaderName');
+  if (headerNameEl) headerNameEl.textContent = prof.displayName;
+
+  persistData();
+}
+
+function handleProfilePhotoUpload(event) {
+  const file = event?.target?.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const size = 160;
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      // Corte central quadrado proporcional (object-fit: cover)
+      const minDim = Math.min(img.width, img.height);
+      const sx = (img.width - minDim) / 2;
+      const sy = (img.height - minDim) / 2;
+      ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.84);
+      if (!appData.userProfile) appData.userProfile = {};
+      appData.userProfile.photoDataUrl = compressedDataUrl;
+
+      const prof = getEffectiveUserProfile();
+      renderAvatarElement(document.getElementById('myAccountAvatarPreview'), prof);
+      const btnRem = document.getElementById('btnRemoveProfilePhoto');
+      if (btnRem) btnRem.style.display = 'inline-flex';
+
+      persistData();
+      showToast('📷 Foto de perfil atualizada com sucesso!', 2500);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeProfilePhoto() {
+  if (!appData || !appData.userProfile) return;
+  appData.userProfile.photoDataUrl = '';
+  const inputPhoto = document.getElementById('profilePhotoInput');
+  if (inputPhoto) inputPhoto.value = '';
+
+  const prof = getEffectiveUserProfile();
+  renderAvatarElement(document.getElementById('myAccountAvatarPreview'), prof);
+  const btnRem = document.getElementById('btnRemoveProfilePhoto');
+  if (btnRem) btnRem.style.display = 'none';
+
+  persistData();
+  showToast('🗑️ Foto de perfil removida.', 2200);
 }
 
 
@@ -5532,33 +6059,50 @@ function applyThemeStyles() {
   if (!appData.themeColors) appData.themeColors = { ...DEFAULT_THEME_COLORS };
   const colors = appData.themeColors;
 
-  // Migrar e limpar automaticamente cores antigas para garantir consistência visual
-  if (colors.primary === '#2563eb' || !colors.primary) colors.primary = '#00A868';
-  if (colors.accent === '#0284c7' || !colors.accent) colors.accent = '#00A868';
-  if (colors.bgCard === '#0f172a' || colors.bgCard === '#ffffff') colors.bgCard = '';
+  const primary = colors.primary || '#00A868';
+  const accent = colors.accent || primary;
+  const success = colors.success || '#00A868';
+  const danger = colors.danger || '#e11d48';
+  const warning = colors.warning || '#f59e0b';
 
-  const root = (typeof document !== "undefined" && document.documentElement) ? document.documentElement : null; if (!root || !root.style) return;
+  const root = (typeof document !== "undefined" && document.documentElement) ? document.documentElement : null;
+  if (!root || !root.style) return;
 
-  root.style.setProperty('--primary', colors.primary);
-  root.style.setProperty('--primary-hover', adjustBrightness(colors.primary, -15));
-  root.style.setProperty('--primary-light', hexToRgba(colors.primary, 0.12));
-  root.style.setProperty('--primary-glow', hexToRgba(colors.primary, 0.25));
-  root.style.setProperty('--success', colors.success || '#00A868');
-  root.style.setProperty('--danger', colors.danger || '#e11d48');
-  root.style.setProperty('--warning', colors.warning || '#f59e0b');
+  root.style.setProperty('--primary', primary);
+  root.style.setProperty('--primary-hover', adjustBrightness(primary, -12));
+  root.style.setProperty('--primary-dark', adjustBrightness(primary, -22));
+  root.style.setProperty('--primary-light', hexToRgba(primary, 0.12));
+  root.style.setProperty('--primary-glow', hexToRgba(primary, 0.25));
 
-  // Só aplica customização de bgCard se o usuário explicitamente alterou
-  if (colors.bgCard) {
+  root.style.setProperty('--accent-blue', accent);
+  root.style.setProperty('--accent-sky', accent);
+  root.style.setProperty('--info', accent);
+  root.style.setProperty('--info-light', hexToRgba(accent, 0.12));
+
+  root.style.setProperty('--success', success);
+  root.style.setProperty('--success-light', hexToRgba(success, 0.12));
+  root.style.setProperty('--danger', danger);
+  root.style.setProperty('--danger-light', hexToRgba(danger, 0.12));
+  root.style.setProperty('--warning', warning);
+  root.style.setProperty('--warning-light', hexToRgba(warning, 0.12));
+
+  if (colors.bgCard && colors.bgCard !== '#0f172a') {
     root.style.setProperty('--bg-card', colors.bgCard);
   } else {
     root.style.removeProperty('--bg-card');
   }
+
+  if (colors.bgMain) {
+    root.style.setProperty('--bg-main', colors.bgMain);
+  } else {
+    root.style.removeProperty('--bg-main');
+  }
 }
 
 function hexToRgba(hex, alpha) {
-  let c = hex.replace('#', '');
+  let c = (hex || '#00A868').replace('#', '');
   if (c.length === 3) c = c.split('').map(x => x + x).join('');
-  const num = parseInt(c, 16);
+  const num = parseInt(c, 16) || 0;
   const r = (num >> 16) & 255;
   const g = (num >> 8) & 255;
   const b = num & 255;
@@ -5566,9 +6110,9 @@ function hexToRgba(hex, alpha) {
 }
 
 function adjustBrightness(hex, percent) {
-  let c = hex.replace('#', '');
+  let c = (hex || '#00A868').replace('#', '');
   if (c.length === 3) c = c.split('').map(x => x + x).join('');
-  const num = parseInt(c, 16);
+  const num = parseInt(c, 16) || 0;
   let r = (num >> 16) + Math.round(255 * (percent / 100));
   let g = ((num >> 8) & 255) + Math.round(255 * (percent / 100));
   let b = (num & 255) + Math.round(255 * (percent / 100));
@@ -5578,72 +6122,74 @@ function adjustBrightness(hex, percent) {
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
+function syncThemeColorsModalUI() {
+  const colors = (appData && appData.themeColors) ? appData.themeColors : DEFAULT_THEME_COLORS;
+  const isDark = (typeof document !== 'undefined' && document.body && (document.body.classList && typeof document.body.classList.contains === 'function' && document.body.classList.contains('dark-theme')));
+  const defaultCardHex = isDark ? '#131926' : '#ffffff';
+  const defaultMainHex = isDark ? '#0b0f17' : '#f4f6f9';
+
+  const setPickerAndTag = (pickerId, tagId, val, fallbackHex, isAutoAllowed) => {
+    const picker = document.getElementById(pickerId);
+    const tag = document.getElementById(tagId);
+    const effVal = val || fallbackHex;
+    if (picker) picker.value = effVal;
+    if (tag) tag.textContent = (isAutoAllowed && !val) ? 'Auto' : effVal.toUpperCase();
+  };
+
+  setPickerAndTag('themeColorPrimary', 'hexThemePrimary', colors.primary, '#00A868', false);
+  setPickerAndTag('themeColorAccent', 'hexThemeAccent', colors.accent, '#0ea5e9', false);
+  setPickerAndTag('themeColorSuccess', 'hexThemeSuccess', colors.success, '#00A868', false);
+  setPickerAndTag('themeColorDanger', 'hexThemeDanger', colors.danger, '#e11d48', false);
+  setPickerAndTag('themeColorWarning', 'hexThemeWarning', colors.warning, '#f59e0b', false);
+  setPickerAndTag('themeColorBgCard', 'hexThemeBgCard', colors.bgCard, defaultCardHex, true);
+  setPickerAndTag('themeColorBgMain', 'hexThemeBgMain', colors.bgMain, defaultMainHex, true);
+
+  document.querySelectorAll('#themePresetsGrid .theme-preset-card').forEach(btn => {
+    const pKey = btn.getAttribute('data-preset');
+    const pObj = CURATED_THEME_PRESETS[pKey];
+    const isMatch = (colors.preset === pKey) || (pObj && pObj.primary.toLowerCase() === (colors.primary || '').toLowerCase() && !colors.preset);
+    btn.classList.toggle('active', !!isMatch);
+  });
+}
+
 function openThemeColorsModal() {
-  const colors = appData.themeColors || DEFAULT_THEME_COLORS;
-  document.getElementById('themeColorPrimary').value = colors.primary;
-  document.getElementById('themeColorAccent').value = colors.accent;
-  document.getElementById('themeColorSuccess').value = colors.success;
-  document.getElementById('themeColorDanger').value = colors.danger;
-  document.getElementById('themeColorWarning').value = colors.warning;
-  document.getElementById('themeColorBgCard').value = colors.bgCard || '#0f172a';
+  syncThemeColorsModalUI();
   openModal('modalThemeColors');
 }
 
 function updateThemeCustomColor(key, hex) {
   if (!appData.themeColors) appData.themeColors = { ...DEFAULT_THEME_COLORS };
   appData.themeColors[key] = hex;
+  appData.themeColors.preset = 'custom';
+  applyThemeStyles();
+  syncThemeColorsModalUI();
   persistData();
 }
 
-function applyThemePreset(preset) {
-  if (!appData.themeColors) appData.themeColors = { ...DEFAULT_THEME_COLORS };
-
-  if (preset === 'royal') {
-    appData.themeColors = {
-      primary: '#2563eb',
-      accent: '#0284c7',
-      success: '#10b981',
-      danger: '#ef4444',
-      warning: '#f59e0b',
-      bgCard: '#0f172a'
-    };
-  } else if (preset === 'ocean') {
-    appData.themeColors = {
-      primary: '#0284c7',
-      accent: '#06b6d4',
-      success: '#10b981',
-      danger: '#f43f5e',
-      warning: '#fbbf24',
-      bgCard: '#0c1b2f'
-    };
-  } else if (preset === 'navy') {
-    appData.themeColors = {
-      primary: '#1d4ed8',
-      accent: '#3b82f6',
-      success: '#059669',
-      danger: '#e11d48',
-      warning: '#d97706',
-      bgCard: '#0a1120'
-    };
-  } else if (preset === 'cyan') {
-    appData.themeColors = {
-      primary: '#0891b2',
-      accent: '#06b6d4',
-      success: '#10b981',
-      danger: '#ef4444',
-      warning: '#f59e0b',
-      bgCard: '#081726'
-    };
-  }
-
-  openThemeColorsModal();
+function applyThemePreset(presetKey) {
+  const preset = CURATED_THEME_PRESETS[presetKey] || CURATED_THEME_PRESETS.emerald;
+  appData.themeColors = {
+    preset: presetKey,
+    primary: preset.primary,
+    accent: preset.accent,
+    success: preset.success,
+    danger: preset.danger,
+    warning: preset.warning,
+    bgCard: preset.bgCard || '',
+    bgMain: preset.bgMain || ''
+  };
+  applyThemeStyles();
+  syncThemeColorsModalUI();
   persistData();
+  showToast(`🎨 Perfil de cores "${preset.name}" aplicado!`, 2200);
 }
 
 function resetThemeColors() {
   appData.themeColors = { ...DEFAULT_THEME_COLORS };
-  openThemeColorsModal();
+  applyThemeStyles();
+  syncThemeColorsModalUI();
   persistData();
+  showToast('🎨 Cores padrão restauradas!', 2200);
 }
 
 // ==========================================
