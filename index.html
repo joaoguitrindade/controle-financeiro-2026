@@ -1922,19 +1922,89 @@
     .sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border); }
     .cloud-info-card { padding: 10px 12px; background: var(--bg-card-subtle); border-radius: 10px; font-size: 0.76rem; color: var(--text-muted); }
 
+    /* BOTÃO DE AÇÃO FLUTUANTE (FAB) — SEMPRE VISÍVEL E FLUIDO NO CANTO DA TELA */
+    :root {
+      --fab-scroll-y: 0px;
+      --fab-elastic-y: 0px;
+    }
+
+    .floating-action-btn {
+      position: fixed;
+      left: clamp(16px, 2.6vw, 28px);
+      right: auto;
+      bottom: calc(24px + var(--safe-bottom));
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 10px 26px var(--primary-glow), 0 4px 12px rgba(15, 23, 42, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 400;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 960;
+      user-select: none;
+      touch-action: manipulation;
+      will-change: transform, opacity, box-shadow;
+      transform: translate3d(0, calc(var(--fab-scroll-y, 0px) + var(--fab-elastic-y, 0px)), 0) scale(1);
+      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, opacity 0.25s ease, background 0.2s ease;
+    }
+
+    .floating-action-btn:hover {
+      transform: translate3d(0, calc(var(--fab-scroll-y, 0px) - 4px), 0) scale(1.07);
+      box-shadow: 0 14px 32px var(--primary-glow), 0 6px 16px rgba(15, 23, 42, 0.28), inset 0 1px 2px rgba(255, 255, 255, 0.45);
+    }
+
+    .floating-action-btn:active {
+      transform: translate3d(0, var(--fab-scroll-y, 0px), 0) scale(0.91);
+      transition-duration: 0.1s;
+    }
+
+    .floating-action-btn.fab-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(0, 24px, 0) scale(0.75);
+    }
+
+    /* MENU INFERIOR MOBILE FLUIDO (DOCK GLASSMORPHIC COM REAÇÃO AO SCROLL SUBIR/DESCER) */
     .mobile-bottom-nav {
       display: none;
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: calc(58px + var(--safe-bottom));
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      padding: 0 8px var(--safe-bottom);
-      z-index: 900;
+      bottom: calc(10px + var(--safe-bottom));
+      left: 12px;
+      right: 12px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      border-radius: 20px;
+      padding: 0 8px;
+      z-index: 940;
       justify-content: space-around;
       align-items: center;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.06);
+      will-change: transform, opacity;
+      transform: translate3d(0, var(--mobile-nav-offset-y, 0px), 0);
+      opacity: var(--mobile-nav-opacity, 1);
+      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease, box-shadow 0.25s ease;
+    }
+
+    body.dark-theme .mobile-bottom-nav {
+      background: rgba(19, 25, 38, 0.86);
+      border-color: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .mobile-bottom-nav.nav-hidden {
+      transform: translate3d(0, calc(100% + 28px + var(--safe-bottom)), 0) !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     .mobile-nav-item {
@@ -1948,23 +2018,52 @@
       font-size: 0.68rem;
       font-weight: 600;
       cursor: pointer;
-      padding: 4px 8px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      min-width: 56px;
+      min-height: 46px;
+      transition: color 0.18s ease, transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease;
+      touch-action: manipulation;
     }
-    .mobile-nav-item.active { color: var(--primary); }
-    .m-nav-icon { font-size: 1.15rem; line-height: 1; margin-bottom: 2px; }
-    .m-nav-center-action { position: relative; top: -10px; }
+
+    .mobile-nav-item.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .mobile-nav-item:active {
+      transform: scale(0.9);
+    }
+
+    .m-nav-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .m-nav-center-action {
+      position: relative;
+      top: -8px;
+      background: transparent !important;
+    }
+
     .m-nav-fab-circle {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
-      box-shadow: 0 4px 12px var(--primary-glow);
-      border: 2px solid var(--bg-main);
+      box-shadow: 0 6px 16px var(--primary-glow);
+      border: 2.5px solid var(--bg-card);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .m-nav-center-action:active .m-nav-fab-circle {
+      transform: scale(0.9);
     }
 
     .toast-container {
@@ -2084,6 +2183,20 @@
 
       #dashboardMainContainer .mobile-bottom-nav {
         display: flex;
+      }
+
+      /* Em dispositivos móveis, o botão flutuante fica no canto acima da barra e desliza para o canto inferior quando a barra recolhe ao descer */
+      .floating-action-btn {
+        width: 52px;
+        height: 52px;
+        left: 14px;
+        right: auto;
+        bottom: calc(80px + var(--safe-bottom));
+        --fab-scroll-y: 0px;
+      }
+
+      body.nav-scroll-hidden .floating-action-btn {
+        --fab-scroll-y: 62px;
       }
 
       .header-nav-group,
@@ -2975,7 +3088,7 @@
       </div>
       <span class="m-nav-label" style="font-weight: 700; color: var(--primary);">Lançar</span>
     </button>
-    <button type="button" class="mobile-nav-item" onclick="switchView('monthly')" title="Extrato Completo">
+    <button type="button" class="mobile-nav-item" id="mNavExtrato" onclick="scrollToExtratoSection()" title="Ir para o Extrato de Movimentações">
       <span class="m-nav-icon">📚</span>
       <span class="m-nav-label">Extrato</span>
     </button>
@@ -5536,7 +5649,127 @@ function formatUserEmail(userInput) {
 // ============================================================
 // RECONHECIMENTO DE GESTOS DE TOQUE (SWIPE) EM CELULARES E TABLETS
 // ============================================================
+function scrollToExtratoSection() {
+  switchView('monthly');
+  const searchEl = document.getElementById('txSearch');
+  const cardEl = searchEl ? searchEl.closest('.card') : null;
+  if (cardEl && typeof cardEl.scrollIntoView === 'function') {
+    cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// =========================================================================
+// MOTOR DE NAVEGAÇÃO FLUIDA REATIVA AO MOVIMENTO DE SUBIR E DESCER (60/120FPS GPU)
+// =========================================================================
+let _lastScrollY = 0;
+let _scrollTicking = false;
+let _touchStartYForNav = 0;
+let _elasticResetTimer = null;
+
+function setMobileNavHiddenState(shouldHide) {
+  const bNav = document.getElementById('mobileBottomNav');
+  if (!bNav) return;
+  if (shouldHide) {
+    bNav.classList.add('nav-hidden');
+    if (document.body && document.body.classList) {
+      document.body.classList.add('nav-scroll-hidden');
+    }
+  } else {
+    bNav.classList.remove('nav-hidden');
+    if (document.body && document.body.classList) {
+      document.body.classList.remove('nav-scroll-hidden');
+    }
+  }
+}
+
+function syncFabVisibilityState() {
+  const fab = document.getElementById('globalFabBtn');
+  if (!fab) return;
+  const dash = document.getElementById('dashboardMainContainer');
+  const isDashVisible = dash && dash.style.display !== 'none';
+  const anyModalOpen = typeof document.querySelector === 'function' && !!document.querySelector('.modal-overlay.open');
+  if (fab.classList) {
+    fab.classList.toggle('fab-hidden', !isDashVisible || anyModalOpen);
+  }
+}
+
+function handleFluidViewportScroll() {
+  const currentY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+  const deltaY = currentY - _lastScrollY;
+  const root = document.documentElement;
+
+  // 1. Efeito elástico sutil no botão flutuante (FAB) acompanhando a inércia do scroll
+  if (root && root.style && Math.abs(deltaY) > 1) {
+    const elasticOffset = Math.max(-6, Math.min(6, deltaY * 0.18));
+    root.style.setProperty('--fab-elastic-y', `${elasticOffset.toFixed(1)}px`);
+    if (_elasticResetTimer) clearTimeout(_elasticResetTimer);
+    _elasticResetTimer = setTimeout(() => {
+      root.style.setProperty('--fab-elastic-y', '0px');
+    }, 140);
+  }
+
+  // 2. Comportamento fluido do menu inferior mobile ao subir e descer
+  const maxScroll = Math.max(0, (document.documentElement.scrollHeight || 0) - (window.innerHeight || 0));
+  const isNearTop = currentY <= 36;
+  const isNearBottom = maxScroll > 80 && (currentY >= maxScroll - 24);
+
+  if (isNearTop) {
+    setMobileNavHiddenState(false);
+  } else if (deltaY > 7 && currentY > 56 && !isNearBottom) {
+    // Usuário deslizando para baixo (descendo na página) -> recolhe suavemente o menu inferior
+    setMobileNavHiddenState(true);
+  } else if (deltaY < -5) {
+    // Usuário deslizando para cima (subindo na página) -> revela suavemente o menu inferior
+    setMobileNavHiddenState(false);
+  }
+
+  _lastScrollY = currentY;
+  _scrollTicking = false;
+}
+
+function initFluidScrollAndFabEngine() {
+  if (typeof window === 'undefined' || typeof window.addEventListener !== 'function') return;
+
+  window.addEventListener('scroll', () => {
+    if (!_scrollTicking) {
+      _scrollTicking = true;
+      if (typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(handleFluidViewportScroll);
+      } else {
+        handleFluidViewportScroll();
+      }
+    }
+  }, { passive: true });
+
+  // Resposta imediata ao gesto de toque (subir/descer o dedo em telas móveis)
+  window.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches.length === 1) {
+      _touchStartYForNav = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!e.touches || e.touches.length !== 1) return;
+    const currentTouchY = e.touches[0].clientY;
+    const fingerDeltaY = _touchStartYForNav - currentTouchY; // > 0 = dedo subindo (página descendo)
+    const currentScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
+
+    if (currentScrollY <= 36) {
+      setMobileNavHiddenState(false);
+    } else if (fingerDeltaY > 18 && currentScrollY > 56) {
+      setMobileNavHiddenState(true);
+      _touchStartYForNav = currentTouchY;
+    } else if (fingerDeltaY < -14) {
+      setMobileNavHiddenState(false);
+      _touchStartYForNav = currentTouchY;
+    }
+  }, { passive: true });
+
+  syncFabVisibilityState();
+}
+
 function initTouchGestures() {
+  initFluidScrollAndFabEngine();
   const container = document.getElementById('sectionMonthly');
   if (!container || typeof container.addEventListener !== 'function') return;
 
@@ -6886,6 +7119,7 @@ function renderMultiYearTable() {
 }
 
 function renderAll() {
+  if (typeof syncFabVisibilityState === 'function') syncFabVisibilityState();
   if (currentView === 'annual') {
     renderAnnualView();
   } else {
@@ -8084,11 +8318,15 @@ function populateDropdowns() {
 // TRANSAÇÕES (NOVA, EDITAR, SALVAR, EXCLUIR)
 // ==========================================
 function openModal(id) {
-  document.getElementById(id).classList.add('open');
+  const el = document.getElementById(id);
+  if (el && el.classList) el.classList.add('open');
+  if (typeof syncFabVisibilityState === 'function') syncFabVisibilityState();
 }
 
 function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+  const el = document.getElementById(id);
+  if (el && el.classList) el.classList.remove('open');
+  if (typeof syncFabVisibilityState === 'function') syncFabVisibilityState();
 }
 
 // =========================================================================
@@ -10799,9 +11037,12 @@ window.addEventListener('DOMContentLoaded', async () => {
 </div>
 
 
-<!-- BOTÃO DE AÇÃO FLUTUANTE (FAB VERDE INSPIRADO NA IMAGEM) -->
-<button class="floating-action-btn" onclick="openNewTransactionModal()" title="Lançar Movimentação (+)">
-  +
+<!-- BOTÃO DE AÇÃO FLUTUANTE (FAB) — ATALHO FLUIDO SEMPRE NO CANTO DA TELA -->
+<button type="button" id="globalFabBtn" class="floating-action-btn" onclick="openNewTransactionModal()" title="Lançar Nova Movimentação (+)" aria-label="Lançar Nova Movimentação">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;">
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+  </svg>
 </button>
 
 
