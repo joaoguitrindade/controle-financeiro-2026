@@ -105,7 +105,6 @@
     }
 
     html {
-      scroll-behavior: smooth;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
       max-width: 100%;
@@ -1922,15 +1921,10 @@
     .sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border); }
     .cloud-info-card { padding: 10px 12px; background: var(--bg-card-subtle); border-radius: 10px; font-size: 0.76rem; color: var(--text-muted); }
 
-    /* BOTÃO DE AÇÃO FLUTUANTE (FAB) — SEMPRE VISÍVEL E FLUIDO NO CANTO DA TELA */
-    :root {
-      --fab-scroll-y: 0px;
-      --fab-elastic-y: 0px;
-    }
-
+    /* BOTÃO DE AÇÃO FLUTUANTE (FAB DESKTOP/TABLET) — NO CANTO INFERIOR ESQUERDO */
     .floating-action-btn {
       position: fixed;
-      left: clamp(16px, 2.6vw, 28px);
+      left: clamp(18px, 2.6vw, 28px);
       right: auto;
       bottom: calc(24px + var(--safe-bottom));
       width: 56px;
@@ -1939,39 +1933,37 @@
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
       color: #ffffff;
       border: 1.5px solid rgba(255, 255, 255, 0.28);
-      box-shadow: 0 10px 26px var(--primary-glow), 0 4px 12px rgba(15, 23, 42, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 8px 24px var(--primary-glow), 0 4px 10px rgba(15, 23, 42, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.75rem;
-      font-weight: 400;
-      line-height: 1;
       cursor: pointer;
       z-index: 960;
       user-select: none;
       touch-action: manipulation;
-      will-change: transform, opacity, box-shadow;
-      transform: translate3d(0, calc(var(--fab-scroll-y, 0px) + var(--fab-elastic-y, 0px)), 0) scale(1);
-      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, opacity 0.25s ease, background 0.2s ease;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
     }
 
     .floating-action-btn:hover {
-      transform: translate3d(0, calc(var(--fab-scroll-y, 0px) - 4px), 0) scale(1.07);
-      box-shadow: 0 14px 32px var(--primary-glow), 0 6px 16px rgba(15, 23, 42, 0.28), inset 0 1px 2px rgba(255, 255, 255, 0.45);
+      transform: translate3d(0, -3px, 0) scale(1.06);
+      box-shadow: 0 12px 28px var(--primary-glow), 0 6px 14px rgba(15, 23, 42, 0.24);
     }
 
     .floating-action-btn:active {
-      transform: translate3d(0, var(--fab-scroll-y, 0px), 0) scale(0.91);
-      transition-duration: 0.1s;
+      transform: translate3d(0, 0, 0) scale(0.92);
+      transition-duration: 0.08s;
     }
 
     .floating-action-btn.fab-hidden {
-      opacity: 0;
+      transform: translate3d(0, 80px, 0) scale(0.7);
       pointer-events: none;
-      transform: translate3d(0, 24px, 0) scale(0.75);
     }
 
-    /* MENU INFERIOR MOBILE FLUIDO (DOCK GLASSMORPHIC COM REAÇÃO AO SCROLL SUBIR/DESCER) */
+    /* MENU INFERIOR MOBILE ULTRA-FLUIDO (120FPS COMPOSITE LAYER PURO EM TRANSFORM) */
     .mobile-bottom-nav {
       display: none;
       position: fixed;
@@ -1979,31 +1971,33 @@
       left: 12px;
       right: 12px;
       height: 60px;
-      background: rgba(255, 255, 255, 0.86);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid rgba(226, 232, 240, 0.85);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
       border-radius: 20px;
       padding: 0 8px;
       z-index: 940;
       justify-content: space-around;
       align-items: center;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.06);
-      will-change: transform, opacity;
-      transform: translate3d(0, var(--mobile-nav-offset-y, 0px), 0);
-      opacity: var(--mobile-nav-opacity, 1);
-      transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease, box-shadow 0.25s ease;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      contain: layout style;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     body.dark-theme .mobile-bottom-nav {
-      background: rgba(19, 25, 38, 0.86);
+      background: rgba(19, 25, 38, 0.94);
       border-color: rgba(255, 255, 255, 0.09);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
     }
 
+    /* Transição 100% via GPU translate3d (sem animar opacity junto com blur, eliminando micro-engasgos) */
     .mobile-bottom-nav.nav-hidden {
-      transform: translate3d(0, calc(100% + 28px + var(--safe-bottom)), 0) !important;
-      opacity: 0 !important;
+      transform: translate3d(0, calc(100% + 26px + var(--safe-bottom)), 0) !important;
       pointer-events: none !important;
     }
 
@@ -2185,18 +2179,9 @@
         display: flex;
       }
 
-      /* Em dispositivos móveis, o botão flutuante fica no canto acima da barra e desliza para o canto inferior quando a barra recolhe ao descer */
+      /* Em dispositivos mobile, o botão lateral flutuante não aparece (o lançamento fica centralizado no dock inferior) */
       .floating-action-btn {
-        width: 52px;
-        height: 52px;
-        left: 14px;
-        right: auto;
-        bottom: calc(80px + var(--safe-bottom));
-        --fab-scroll-y: 0px;
-      }
-
-      body.nav-scroll-hidden .floating-action-btn {
-        --fab-scroll-y: 62px;
+        display: none !important;
       }
 
       .header-nav-group,
@@ -5365,7 +5350,7 @@ function resetInactivityTimer() {
 }
 
 // Listeners globais passivos essenciais (sem mousemove contínuo para 0% de sobrecarga)
-['keydown', 'click', 'touchstart', 'scroll'].forEach(evt => {
+['keydown', 'click', 'touchstart'].forEach(evt => {
   window.addEventListener(evt, resetInactivityTimer, { passive: true });
 });
 
@@ -5662,65 +5647,54 @@ function scrollToExtratoSection() {
 // MOTOR DE NAVEGAÇÃO FLUIDA REATIVA AO MOVIMENTO DE SUBIR E DESCER (60/120FPS GPU)
 // =========================================================================
 let _lastScrollY = 0;
+let _scrollAccumDelta = 0;
 let _scrollTicking = false;
-let _touchStartYForNav = 0;
-let _elasticResetTimer = null;
+let _isMobileNavHidden = false;
 
 function setMobileNavHiddenState(shouldHide) {
+  const targetState = !!shouldHide;
+  if (_isMobileNavHidden === targetState) return; // Guard O(1): Zero mutação DOM se o estado já for o mesmo!
+  _isMobileNavHidden = targetState;
+
   const bNav = document.getElementById('mobileBottomNav');
-  if (!bNav) return;
-  if (shouldHide) {
+  if (!bNav || !bNav.classList) return;
+  if (targetState) {
     bNav.classList.add('nav-hidden');
-    if (document.body && document.body.classList) {
-      document.body.classList.add('nav-scroll-hidden');
-    }
   } else {
     bNav.classList.remove('nav-hidden');
-    if (document.body && document.body.classList) {
-      document.body.classList.remove('nav-scroll-hidden');
-    }
   }
 }
 
 function syncFabVisibilityState() {
   const fab = document.getElementById('globalFabBtn');
-  if (!fab) return;
+  if (!fab || !fab.classList) return;
   const dash = document.getElementById('dashboardMainContainer');
   const isDashVisible = dash && dash.style.display !== 'none';
   const anyModalOpen = typeof document.querySelector === 'function' && !!document.querySelector('.modal-overlay.open');
-  if (fab.classList) {
-    fab.classList.toggle('fab-hidden', !isDashVisible || anyModalOpen);
-  }
+  fab.classList.toggle('fab-hidden', !isDashVisible || anyModalOpen);
 }
 
 function handleFluidViewportScroll() {
   const currentY = Math.max(0, window.scrollY || window.pageYOffset || 0);
   const deltaY = currentY - _lastScrollY;
-  const root = document.documentElement;
 
-  // 1. Efeito elástico sutil no botão flutuante (FAB) acompanhando a inércia do scroll
-  if (root && root.style && Math.abs(deltaY) > 1) {
-    const elasticOffset = Math.max(-6, Math.min(6, deltaY * 0.18));
-    root.style.setProperty('--fab-elastic-y', `${elasticOffset.toFixed(1)}px`);
-    if (_elasticResetTimer) clearTimeout(_elasticResetTimer);
-    _elasticResetTimer = setTimeout(() => {
-      root.style.setProperty('--fab-elastic-y', '0px');
-    }, 140);
+  // Acumula apenas movimentos na mesma direção (histerese anti-trepidação para iOS/Android)
+  if ((deltaY > 0 && _scrollAccumDelta < 0) || (deltaY < 0 && _scrollAccumDelta > 0)) {
+    _scrollAccumDelta = 0;
   }
+  _scrollAccumDelta += deltaY;
 
-  // 2. Comportamento fluido do menu inferior mobile ao subir e descer
-  const maxScroll = Math.max(0, (document.documentElement.scrollHeight || 0) - (window.innerHeight || 0));
-  const isNearTop = currentY <= 36;
-  const isNearBottom = maxScroll > 80 && (currentY >= maxScroll - 24);
-
-  if (isNearTop) {
+  if (currentY <= 40) {
     setMobileNavHiddenState(false);
-  } else if (deltaY > 7 && currentY > 56 && !isNearBottom) {
-    // Usuário deslizando para baixo (descendo na página) -> recolhe suavemente o menu inferior
+    _scrollAccumDelta = 0;
+  } else if (_scrollAccumDelta > 12 && currentY > 60) {
+    // Movimento consistente para baixo -> recolhe a barra inferior com fluidez 120fps
     setMobileNavHiddenState(true);
-  } else if (deltaY < -5) {
-    // Usuário deslizando para cima (subindo na página) -> revela suavemente o menu inferior
+    _scrollAccumDelta = 0;
+  } else if (_scrollAccumDelta < -8) {
+    // Movimento consistente para cima -> revela a barra inferior imediatamente
     setMobileNavHiddenState(false);
+    _scrollAccumDelta = 0;
   }
 
   _lastScrollY = currentY;
@@ -5738,30 +5712,6 @@ function initFluidScrollAndFabEngine() {
       } else {
         handleFluidViewportScroll();
       }
-    }
-  }, { passive: true });
-
-  // Resposta imediata ao gesto de toque (subir/descer o dedo em telas móveis)
-  window.addEventListener('touchstart', (e) => {
-    if (e.touches && e.touches.length === 1) {
-      _touchStartYForNav = e.touches[0].clientY;
-    }
-  }, { passive: true });
-
-  window.addEventListener('touchmove', (e) => {
-    if (!e.touches || e.touches.length !== 1) return;
-    const currentTouchY = e.touches[0].clientY;
-    const fingerDeltaY = _touchStartYForNav - currentTouchY; // > 0 = dedo subindo (página descendo)
-    const currentScrollY = Math.max(0, window.scrollY || window.pageYOffset || 0);
-
-    if (currentScrollY <= 36) {
-      setMobileNavHiddenState(false);
-    } else if (fingerDeltaY > 18 && currentScrollY > 56) {
-      setMobileNavHiddenState(true);
-      _touchStartYForNav = currentTouchY;
-    } else if (fingerDeltaY < -14) {
-      setMobileNavHiddenState(false);
-      _touchStartYForNav = currentTouchY;
     }
   }, { passive: true });
 
@@ -7146,15 +7096,20 @@ function switchView(view) {
 
 function selectMonth(idx) {
   currentMonthIdx = idx;
+  let activePillEl = null;
   document.querySelectorAll('.month-pill').forEach((el, i) => {
-    el.classList.toggle('active', i === idx);
-    if (i === idx) {
-      try {
-        el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      } catch(e) {}
-    }
+    const isAct = (i === idx);
+    el.classList.toggle('active', isAct);
+    if (isAct) activePillEl = el;
   });
   renderMonthlyView();
+  if (activePillEl && typeof window.requestAnimationFrame === 'function') {
+    window.requestAnimationFrame(() => {
+      try {
+        activePillEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      } catch(e) {}
+    });
+  }
 }
 
 function prevMonth() {
@@ -10945,96 +10900,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   updateCloudStatusBadge(!!supabaseClient);
 });
 </script>
-
-<!-- ==================== MODAL: SINCRONIZAÇÃO EM NUVEM ==================== -->
-<!-- ==================== MODAL: GERENCIAR USUÁRIOS ==================== -->
-<div class="modal-overlay" id="modalMyProfile">
-  <div class="modal" style="max-width: 520px;">
-    <div class="modal-handle-bar"></div>
-    <div class="modal-header">
-      <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
-        👤 Minha Conta
-      </h3>
-      <button class="modal-close" onclick="closeModal('modalMyProfile')">&times;</button>
-    </div>
-
-    <div style="background: var(--bg-card-subtle); padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 16px;">
-      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
-        <div class="user-avatar-circle" id="profileModalAvatar" style="width: 48px; height: 48px; font-size: 1.2rem; background: var(--primary);">
-          JG
-        </div>
-        <div>
-          <h4 id="profileModalName" style="color: var(--text-main); font-size: 1.1rem; font-weight: 700;">João Guilherme</h4>
-          <span style="font-size: 0.78rem; color: #34d399; display: flex; align-items: center; gap: 4px;">
-            ☁️ Supabase Cloud: Armazenamento Criptografado Ativo
-          </span>
-        </div>
-      </div>
-
-      <div class="form-group" style="margin-bottom: 12px;">
-        <label>Cor do seu Avatar</label>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <input type="color" id="profileModalColor" class="color-picker-input" onchange="updateMyAvatarColor(this.value)">
-          <span style="font-size: 0.8rem; color: var(--text-muted);">Clique para escolher sua cor pessoal</span>
-        </div>
-      </div>
-
-      <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
-        <button type="button" class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="changeMyPassword()">
-          🔑 Alterar Minha Senha de Acesso
-        </button>
-      </div>
-    </div>
-
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <button type="button" class="btn btn-outline" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3);" onclick="closeModal('modalMyProfile'); logout();">
-        🔒 Bloquear / Sair
-      </button>
-      <button type="button" class="btn btn-primary" onclick="closeModal('modalMyProfile')">Concluir</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- ==================== MODAL: CONFIGURAÇÃO DO SUPABASE ==================== -->
-<div class="modal-overlay" id="modalSupabaseConfig">
-  <div class="modal" style="max-width: 520px;">
-    <div class="modal-handle-bar"></div>
-    <div class="modal-header">
-      <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
-        ⚡ Conexão com o Supabase
-      </h3>
-      <button class="modal-close" onclick="closeModal('modalSupabaseConfig')">&times;</button>
-    </div>
-
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
-      Insira as credenciais do seu projeto Supabase para ativar o banco de dados em nuvem e login multi-dispositivo.
-    </p>
-
-    <form onsubmit="saveSupabaseConfig(event)">
-      <div class="form-group">
-        <label>Project URL (URL do Projeto Supabase)</label>
-        <input type="url" id="cfgSupabaseUrl" class="form-control" placeholder="https://xyzcompany.supabase.co" required>
-        <small style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">
-          Encontrado no Supabase: <em>Project Settings ➔ API ➔ Project URL</em>
-        </small>
-      </div>
-
-      <div class="form-group" style="margin-top: 14px;">
-        <label>Anon Public Key (Chave Pública Anon)</label>
-        <textarea id="cfgSupabaseKey" class="form-control" rows="3" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..." required style="font-family: monospace; font-size: 0.8rem;"></textarea>
-        <small style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">
-          Encontrado em: <em>Project Settings ➔ API ➔ Project API keys ➔ anon (public)</em>
-        </small>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-        <button type="button" class="btn btn-outline" onclick="closeModal('modalSupabaseConfig')">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Salvar e Conectar</button>
-      </div>
-    </form>
-  </div>
-</div>
 
 
 <!-- BOTÃO DE AÇÃO FLUTUANTE (FAB) — ATALHO FLUIDO SEMPRE NO CANTO DA TELA -->
