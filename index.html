@@ -22,10 +22,13 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-    <style id="appThemeAndStyles">
+        <style id="appThemeAndStyles">
     /* =========================================================================
-       CONTROLE FINANCEIRO — DESIGN SYSTEM MINIMALISTA (APPLE / NUBANK / LINEAR)
-       Arquitetura CSS Unificada, Sem Sobreposições, Mobile & Tablet First
+       CONTROLE FINANCEIRO — COINBASE & NERDWALLET EDITION (APPLE HIG / SF PRO)
+       - Tipografia Nativa Apple: SF Pro Display, SF Pro Text & SF Mono Tabular
+       - Superfícies Arquiteturais Coinbase (#F7F8FA / #FFFFFF / #0A0B0D / #141519)
+       - Indicadores e Barras de Saúde Financeira NerdWallet (#00A868 / #0052FF)
+       - Micro-interações Silenciosas (-2px hover lift, 0.98 press, 120fps Mobile Nav)
        ========================================================================= */
 
     :root {
@@ -34,70 +37,105 @@
       --safe-left: env(safe-area-inset-left, 0px);
       --safe-right: env(safe-area-inset-right, 0px);
 
-      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, monospace;
+      /* Tipografia Oficial Apple (SF Pro Display / SF Pro Text / SF Mono) */
+      --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
-      --bg-main: #f4f6f9;
-      --bg-card: #ffffff;
-      --bg-card-hover: #f8fafc;
-      --bg-card-subtle: #f1f5f9;
-      --border: #e2e8f0;
-      --border-subtle: #edf2f7;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --text-dim: #94a3b8;
+      /* Paleta Light Inspirada em Coinbase & NerdWallet */
+      --bg-main: #F7F8FA;
+      --bg-card: #FFFFFF;
+      --bg-card-hover: #F9FAFB;
+      --bg-card-subtle: #F1F3F6;
+      --bg-glass: rgba(255, 255, 255, 0.86);
+      --border: #E5E7EB;
+      --border-subtle: #EEF0F4;
+      --border-strong: #D1D5DB;
+      --text-main: #0A0B0D;
+      --text-muted: #5B616E;
+      --text-dim: #8A919E;
 
+      /* Cores Funcionais (NerdWallet Emerald + Coinbase Blue) */
       --primary: #00A868;
-      --primary-hover: #008f58;
+      --primary-hover: #008F58;
       --primary-light: rgba(0, 168, 104, 0.10);
-      --primary-glow: rgba(0, 168, 104, 0.22);
+      --primary-glow: rgba(0, 168, 104, 0.18);
+
+      --coinbase-blue: #0052FF;
+      --coinbase-blue-light: rgba(0, 82, 255, 0.09);
 
       --success: #00A868;
-      --success-light: rgba(0, 168, 104, 0.12);
-      --danger: #e11d48;
-      --danger-light: rgba(225, 29, 72, 0.10);
-      --warning: #f59e0b;
-      --warning-light: rgba(245, 158, 11, 0.12);
-      --info: #0284c7;
-      --info-light: rgba(2, 132, 199, 0.10);
-      --accent-blue: #0284c7;
-      --accent-sky: #0ea5e9;
+      --success-light: rgba(0, 168, 104, 0.10);
+      --danger: #CF202F;
+      --danger-light: rgba(207, 32, 47, 0.09);
+      --warning: #D97706;
+      --warning-light: rgba(217, 119, 6, 0.10);
+      --info: #0052FF;
+      --info-light: rgba(0, 82, 255, 0.09);
+      --accent-blue: #0052FF;
+      --accent-sky: #0052FF;
+      --accent-temp: #0284C7;
+      --accent-temp-light: rgba(2, 132, 199, 0.10);
 
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 20px;
+      /* Escala Apple / Coinbase de Raios */
+      --radius-xs: 8px;
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-pill: 9999px;
 
-      --shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
-      --shadow-lg: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+      /* Elevação Sutil Apple / Coinbase */
+      --shadow-xs: 0 1px 2px rgba(10, 11, 13, 0.03);
+      --shadow: 0 2px 8px -2px rgba(10, 11, 13, 0.05), 0 1px 2px rgba(10, 11, 13, 0.03);
+      --shadow-hover: 0 10px 24px -6px rgba(10, 11, 13, 0.08), 0 2px 6px rgba(10, 11, 13, 0.04);
+      --shadow-lg: 0 24px 48px -12px rgba(10, 11, 13, 0.16), 0 4px 12px rgba(10, 11, 13, 0.05);
+      --card-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
-      --card-debt-balloon-bg: #fff1f2;
-      --card-debt-balloon-border: #fecdd3;
-      --card-debt-balloon-text: #9f1239;
-      --card-debt-balloon-sub: #be123c;
+      --card-debt-balloon-bg: #FFF1F2;
+      --card-debt-balloon-border: #FECDD3;
+      --card-debt-balloon-text: #9F1239;
+      --card-debt-balloon-sub: #BE123C;
     }
 
     body.dark-theme {
-      --bg-main: #0b0f17;
-      --bg-card: #131926;
-      --bg-card-hover: #1a2234;
-      --bg-card-subtle: #182032;
-      --border: #1e293b;
-      --border-subtle: #1a2436;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
-      --accent-sky: #38bdf8;
-      --shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+      /* Paleta Dark Inspirada em Coinbase Advanced & Apple Wallet Dark */
+      --bg-main: #0A0B0D;
+      --bg-card: #141519;
+      --bg-card-hover: #1B1D24;
+      --bg-card-subtle: #1E2026;
+      --bg-glass: rgba(20, 21, 25, 0.86);
+      --border: #262830;
+      --border-subtle: #1D1F26;
+      --border-strong: #353844;
+      --text-main: #F5F6F8;
+      --text-muted: #8A919E;
+      --text-dim: #5B616E;
 
-      --card-debt-balloon-bg: rgba(225, 29, 72, 0.12);
-      --card-debt-balloon-border: rgba(244, 63, 94, 0.25);
-      --card-debt-balloon-text: #fda4af;
-      --card-debt-balloon-sub: #fb7185;
+      --danger: #F04452;
+      --danger-light: rgba(240, 68, 82, 0.14);
+      --warning: #F59E0B;
+      --warning-light: rgba(245, 158, 11, 0.14);
+      --info: #3B82F6;
+      --info-light: rgba(59, 130, 246, 0.14);
+      --accent-blue: #3B82F6;
+      --accent-sky: #38BDF8;
+      --accent-temp: #38BDF8;
+      --accent-temp-light: rgba(56, 189, 248, 0.14);
+
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.45);
+      --shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+      --shadow-hover: 0 12px 28px -4px rgba(0, 0, 0, 0.65);
+      --shadow-lg: 0 24px 56px -8px rgba(0, 0, 0, 0.78);
+      --card-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+      --card-debt-balloon-bg: rgba(240, 68, 82, 0.10);
+      --card-debt-balloon-border: rgba(240, 68, 82, 0.25);
+      --card-debt-balloon-text: #FDA4AF;
+      --card-debt-balloon-sub: #FB7185;
     }
 
-    /* 1. RESET & BASE */
+    /* 1. RESET & TIPOGRAFIA APPLE */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -114,20 +152,33 @@
       font-family: var(--font);
       background-color: var(--bg-main);
       color: var(--text-main);
-      line-height: 1.45;
+      line-height: 1.47059;
+      font-weight: 400;
+      letter-spacing: -0.011em;
       font-size: 0.9rem;
-      padding: 16px 20px calc(80px + var(--safe-bottom));
+      padding: 16px 24px calc(88px + var(--safe-bottom));
       min-height: 100vh;
       min-height: 100dvh;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
       overflow-x: hidden;
       max-width: 100%;
     }
 
-    .font-mono, .kpi-value, .tx-summary-val, .fixed-item-val, .bank-inv-amount, td, th {
-      font-feature-settings: "tnum" 1, "cv05" 1;
+    h1, h2, h3, h4, .current-month-heading, .modal-title, .auth-title, .kpi-value {
+      font-family: var(--font-display);
+    }
+
+    /* Números Tabulares de Precisão Bancária (Apple SF Pro + SF Mono) */
+    .font-mono, .kpi-value, .tx-summary-val, .fixed-item-val, .bank-inv-amount, .tx-value-amount, td, th {
       font-variant-numeric: tabular-nums;
-      letter-spacing: -0.015em;
+      font-feature-settings: "tnum" 1;
+    }
+
+    .font-mono {
+      font-family: var(--font-mono);
+      letter-spacing: -0.02em;
     }
 
     .val-pos { color: var(--success) !important; }
@@ -137,17 +188,18 @@
     .val-neutral { color: var(--text-muted) !important; }
     .val-warning { color: var(--warning) !important; }
 
+    /* Alinhamento Estrito de Bordas (Equal Left & Right Content Edges) */
     .container {
       width: 100%;
-      max-width: 1360px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
-    /* 2. SISTEMA DE GRIDS RESPONSIVOS (SEM ESMAGAMENTO EM TABLETS E CELULARES) */
+    /* 2. SISTEMA DE GRIDS BENTO (COINBASE / NERDWALLET) */
     .grid {
       display: grid;
-      gap: 14px;
-      margin-bottom: 18px;
+      gap: 16px;
+      margin-bottom: 20px;
     }
 
     .grid-5 {
@@ -166,65 +218,109 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    /* 3. HEADER LIMPO E COMPACTO */
+    /* 3. TOP APP BAR ESTILO COINBASE & APPLE GLASS */
     header {
+      position: sticky;
+      top: 10px;
+      z-index: 900;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding-bottom: 14px;
-      margin-bottom: 14px;
-      border-bottom: 1px solid var(--border);
+      gap: 16px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
+      background: var(--bg-glass);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow), var(--card-inset-top);
     }
 
     .brand-title {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       min-width: 0;
     }
 
     .brand-icon {
-      width: 38px;
-      height: 38px;
-      min-width: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent-blue) 100%);
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: var(--font-display);
       font-size: 0.95rem;
       font-weight: 800;
-      color: #fff;
-      box-shadow: 0 3px 10px var(--primary-glow);
+      letter-spacing: -0.03em;
+      box-shadow: 0 4px 12px var(--primary-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
 
     .brand-text {
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
     }
 
     .brand-text h1 {
-      font-size: clamp(1rem, 1.6vw, 1.25rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: clamp(1rem, 1.35vw, 1.15rem);
+      font-weight: 700;
+      letter-spacing: -0.026em;
       color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 1.18;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .brand-text h1 span {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: 1px solid rgba(0, 168, 104, 0.2);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      letter-spacing: -0.01em;
     }
 
     .brand-text p {
-      display: none;
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: -0.005em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .header-nav-group {
       display: flex;
       align-items: center;
       gap: 6px;
-      background: var(--bg-card);
-      padding: 4px 6px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+      background: var(--bg-card-subtle);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .header-nav-group .btn-primary {
+      border-radius: var(--radius-pill);
+      padding: 7px 16px;
+      min-height: 34px;
+      font-size: 0.81rem;
+      font-weight: 600;
     }
 
     .header-nav-divider {
@@ -235,23 +331,28 @@
 
     .btn-nav-item {
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
       color: var(--text-muted);
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      min-height: 36px;
-      transition: background-color 0.15s ease, color 0.15s ease;
+      gap: 6px;
+      min-height: 34px;
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
     }
 
     .btn-nav-item:hover {
-      background: var(--bg-card-hover);
+      background: var(--bg-card);
       color: var(--text-main);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .btn-nav-item:active {
+      transform: scale(0.97);
     }
 
     .header-right-actions {
@@ -264,25 +365,34 @@
     .user-profile-badge {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 4px 8px;
-      border-radius: 10px;
+      gap: 9px;
+      padding: 4px 12px 4px 5px;
+      border-radius: var(--radius-pill);
       cursor: pointer;
       border: 1px solid var(--border);
       background: var(--bg-card);
+      box-shadow: var(--shadow-xs);
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .user-profile-badge:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-strong);
+      transform: translate3d(0, -1px, 0);
     }
 
     .user-avatar-circle {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       color: #fff;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       flex-shrink: 0;
+      letter-spacing: -0.02em;
     }
 
     .user-badge-details {
@@ -292,13 +402,15 @@
     }
 
     .user-badge-name {
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-size: 0.79rem;
+      font-weight: 600;
       color: var(--text-main);
+      letter-spacing: -0.01em;
     }
 
     .user-badge-sub {
-      font-size: 0.68rem;
+      font-size: 0.67rem;
+      font-weight: 500;
       color: var(--text-muted);
     }
 
@@ -309,17 +421,31 @@
       width: 38px;
       height: 38px;
       min-width: 38px;
-      border-radius: 10px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       cursor: pointer;
+      box-shadow: var(--shadow-xs);
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
     }
 
-    /* 4. NAVEGAÇÃO PRINCIPAL, ANO E BARRA DE MESES */
+    .btn-sidebar-toggle:hover {
+      background: var(--bg-card-subtle);
+      border-color: var(--border-strong);
+    }
+
+    .btn-sidebar-toggle:active {
+      transform: scale(0.95);
+    }
+
+    /* 4. DECK DE CONTROLE DE VISÃO & SCRUBBER DE MESES (COINBASE TIMEFRAME PILLS) */
     .nav-wrapper {
-      margin-bottom: 14px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .main-nav {
@@ -327,56 +453,79 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 12px;
+    }
+
+    .main-nav > div:first-child {
+      display: inline-flex !important;
+      gap: 4px !important;
+      background: var(--bg-card-subtle);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
     }
 
     .nav-btn {
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 0.82rem;
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.81rem;
       font-weight: 600;
       color: var(--text-muted);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: transparent;
+      border: 1px solid transparent;
       cursor: pointer;
-      min-height: 38px;
+      min-height: 34px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.15s ease;
+      gap: 7px;
+      letter-spacing: -0.01em;
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .nav-btn:hover:not(.active) {
+      color: var(--text-main);
     }
 
     .nav-btn.active {
-      color: #fff;
-      background: var(--primary);
-      border-color: var(--primary);
-      box-shadow: 0 2px 8px var(--primary-glow);
+      color: var(--text-main);
+      background: var(--bg-card);
+      border-color: var(--border);
+      font-weight: 700;
+      box-shadow: var(--shadow-xs);
+    }
+
+    body.dark-theme .nav-btn.active {
+      background: var(--bg-card);
+      border-color: var(--border-strong);
+      color: #FFFFFF;
     }
 
     .year-selector-widget {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      padding: 3px 8px;
-      border-radius: 10px;
-      min-height: 38px;
+      padding: 4px 10px 4px 14px;
+      border-radius: var(--radius-pill);
+      min-height: 40px;
+      box-shadow: var(--shadow-xs);
     }
 
     .year-selector-label {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     .year-stepper {
       display: inline-flex;
       align-items: center;
       background: var(--bg-card-subtle);
-      border-radius: 8px;
+      border-radius: var(--radius-pill);
+      padding: 2px;
       overflow: hidden;
     }
 
@@ -384,39 +533,56 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 0.8rem;
-      padding: 4px 10px;
+      font-size: 0.72rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
       cursor: pointer;
-      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.14s ease, color 0.14s ease;
     }
 
     .year-step-btn:hover:not(:disabled) {
-      background: var(--primary);
-      color: #fff;
+      background: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: var(--shadow-xs);
     }
 
     .year-select-input {
       background: transparent;
       border: none;
-      font-family: var(--font-mono);
-      font-size: 0.88rem;
-      font-weight: 800;
+      font-family: var(--font-display);
+      font-size: 0.86rem;
+      font-weight: 700;
       color: var(--text-main);
       padding: 2px 6px;
-      min-height: 30px;
+      min-height: 28px;
       width: auto;
       cursor: pointer;
     }
 
     .year-range-pill {
-      display: none;
+      display: inline-flex;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      padding-left: 8px;
+      border-left: 1px solid var(--border);
     }
 
+    /* Scrubber de Meses estilo Coinbase Timeframe Selector */
     .months-bar {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding: 4px 0 6px;
+      padding: 5px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xs);
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
@@ -426,112 +592,234 @@
     }
 
     .month-pill {
-      flex: 0 0 auto;
-      min-width: 68px;
+      flex: 1 1 0;
+      min-width: 74px;
       min-height: 36px;
       padding: 6px 10px;
-      border-radius: 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid transparent;
       color: var(--text-muted);
       cursor: pointer;
+      font-family: var(--font);
       font-size: 0.78rem;
       font-weight: 600;
+      letter-spacing: -0.01em;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+    }
+
+    .month-pill:hover:not(.active) {
+      background: var(--bg-card-subtle);
+      color: var(--text-main);
     }
 
     .month-pill.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-      box-shadow: 0 2px 8px var(--primary-glow);
+      background: var(--text-main);
+      color: var(--bg-card);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(10, 11, 13, 0.14);
     }
 
-    /* CABEÇALHO DO MÊS SELECIONADO */
+    body.dark-theme .month-pill.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 10px var(--primary-glow);
+    }
+
+    /* 5. BANNER EXECUTIVO DO MÊS (COINBASE PORTFOLIO HEADER) */
     .month-navigation-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding: 14px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .month-hero-left {
+      display: flex;
+      align-items: center;
       gap: 12px;
-      margin-bottom: 14px;
+      min-width: 0;
+    }
+
+    .month-hero-stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-card-subtle);
+      padding: 3px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
     }
 
     .btn-month-nav-arrow {
-      width: 38px;
-      height: 38px;
-      min-width: 38px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 50%;
       background: var(--bg-card);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-subtle);
       color: var(--text-main);
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       padding: 0;
+      box-shadow: var(--shadow-xs);
+      transition: background-color 0.14s ease, transform 0.12s ease;
+    }
+
+    .btn-month-nav-arrow:hover {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .month-hero-titles {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .month-hero-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--primary);
     }
 
     .current-month-heading {
-      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+      font-size: clamp(1.25rem, 2vw, 1.55rem);
       font-weight: 800;
-      text-align: center;
+      text-align: left;
       color: var(--text-main);
-      letter-spacing: -0.02em;
-      flex: 1;
+      letter-spacing: -0.032em;
+      line-height: 1.15;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    /* 5. CARDS & KPIS (DESIGN LIMPO, SEM OVERFLOW) */
+    .month-hero-quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-quick-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+
+    .btn-quick-pill:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translate3d(0, -1px, 0);
+    }
+
+    /* 6. CARDS & BENTO KPIS (COINBASE + NERDWALLET WEALTH CARDS) */
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
+      padding: 18px 20px;
+      box-shadow: var(--shadow), var(--card-inset-top);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
       min-width: 0;
       overflow: hidden;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
       min-width: 0;
     }
 
     .card-title {
-      font-size: 0.84rem;
+      font-family: var(--font-display);
+      font-size: 0.94rem;
       font-weight: 700;
       color: var(--text-main);
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       min-width: 0;
       line-height: 1.25;
+      letter-spacing: -0.02em;
     }
 
-    /* KPIs Centralizados com Respiro */
+    .section-icon-badge {
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* KPI Cards Estilo Coinbase Asset Card + NerdWallet Metric Pill */
     .card-kpi-centered {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      text-align: center;
-      padding: 14px 12px;
-      gap: 6px;
+      text-align: left;
+      padding: 16px 18px;
+      gap: 10px;
+      position: relative;
+      border-radius: var(--radius-lg);
+    }
+
+    .card-kpi-centered:hover {
+      transform: translate3d(0, -2px, 0);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-hover), var(--card-inset-top);
+    }
+
+    /* Destaque Especial para o Card de Salário Livre (Hero Spotlight) */
+    .card-kpi-spotlight {
+      background: linear-gradient(180deg, rgba(0, 82, 255, 0.04) 0%, var(--bg-card) 65%);
+      border-color: rgba(0, 82, 255, 0.22);
+    }
+
+    body.dark-theme .card-kpi-spotlight {
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.07) 0%, var(--bg-card) 65%);
+      border-color: rgba(56, 189, 248, 0.24);
     }
 
     .card-kpi-centered .card-header {
@@ -539,23 +827,51 @@
       justify-content: space-between;
       flex-wrap: nowrap;
       gap: 6px;
-      margin-bottom: 2px;
+      margin-bottom: 0;
     }
 
+    .kpi-header-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .kpi-orb {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .kpi-orb-income { background: var(--success-light); color: var(--success); }
+    .kpi-orb-fixed { background: var(--danger-light); color: var(--danger); }
+    .kpi-orb-salary { background: var(--info-light); color: var(--info); }
+    .kpi-orb-bank { background: rgba(14, 165, 233, 0.12); color: #0284C7; }
+    body.dark-theme .kpi-orb-bank { color: #38BDF8; }
+    .kpi-orb-goal { background: var(--warning-light); color: var(--warning); }
+
     .card-kpi-centered .card-title {
-      font-size: 0.78rem;
+      font-family: var(--font);
+      font-size: 0.76rem;
       color: var(--text-muted);
-      font-weight: 700;
+      font-weight: 600;
+      letter-spacing: -0.01em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .kpi-value {
-      font-size: clamp(1.2rem, 1.8vw + 0.5rem, 1.65rem);
-      font-weight: 800;
-      font-family: var(--font-mono);
-      line-height: 1.15;
+      font-size: clamp(1.32rem, 1.8vw + 0.45rem, 1.76rem);
+      font-weight: 700;
+      font-family: var(--font-display);
+      letter-spacing: -0.038em;
+      line-height: 1.08;
       width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -563,19 +879,22 @@
     }
 
     .kpi-sub {
-      font-size: 0.73rem;
+      font-size: 0.74rem;
+      font-weight: 500;
       color: var(--text-muted);
-      line-height: 1.3;
+      line-height: 1.35;
       width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-subtle);
     }
 
     .kpi-sub-lines {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 4px 8px;
       font-size: 0.72rem;
       color: var(--text-muted);
@@ -586,125 +905,138 @@
       width: 100%;
       height: 6px;
       background: var(--bg-card-subtle);
-      border-radius: 999px;
+      border-radius: var(--radius-pill);
       overflow: hidden;
-      margin: 4px 0;
+      margin: 2px 0;
     }
 
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--primary) 0%, var(--accent-sky) 100%);
-      border-radius: 999px;
-      transition: width 0.3s ease;
+      border-radius: var(--radius-pill);
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    /* 6. BOTÕES & BADGES COMPACTOS */
+    /* 7. BOTÕES & PILLS (COINBASE & APPLE HIG) */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 8px 14px;
-      border-radius: 10px;
+      padding: 8px 15px;
+      border-radius: var(--radius-sm);
       font-size: 0.82rem;
       font-weight: 600;
       border: 1px solid transparent;
       cursor: pointer;
       min-height: 38px;
-      transition: all 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
       touch-action: manipulation;
       text-align: center;
       line-height: 1.2;
+      letter-spacing: -0.01em;
     }
 
-    .btn:active {
-      transform: scale(0.97);
+    .btn:hover:not(:disabled) {
+      transform: translate3d(0, -1px, 0);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translate3d(0, 0, 0) scale(0.98);
     }
 
     .btn-primary {
       background: var(--primary);
-      color: #fff;
-      box-shadow: 0 2px 8px var(--primary-glow);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px var(--primary-glow);
     }
 
     .btn-primary:hover {
       background: var(--primary-hover);
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
     .btn-outline {
-      background: transparent;
+      background: var(--bg-card);
       border-color: var(--border);
       color: var(--text-main);
+      box-shadow: var(--shadow-xs);
     }
 
     .btn-outline:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--primary);
+      background: var(--bg-card-subtle);
+      border-color: var(--border-strong);
     }
 
     .btn-icon {
-      background: transparent;
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-card-subtle);
+      border: 1px solid transparent;
       color: var(--text-muted);
-      padding: 4px 8px;
-      border-radius: 8px;
+      padding: 5px 7px;
+      border-radius: var(--radius-xs);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-width: 32px;
       min-height: 32px;
-      font-size: 0.82rem;
-      transition: all 0.15s ease;
+      font-size: 0.8rem;
+      transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.12s ease;
     }
 
     .btn-icon:hover {
       background: var(--bg-card-hover);
-      border-color: var(--border);
+      border-color: var(--border-strong);
       color: var(--text-main);
+    }
+
+    .btn-icon:active {
+      transform: scale(0.94);
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-size: 0.68rem;
-      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 0.69rem;
+      font-weight: 600;
+      letter-spacing: -0.005em;
       line-height: 1.3;
       max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      border: 1px solid transparent;
     }
 
     .badge-success { background: var(--success-light); color: var(--success); }
     .badge-danger { background: var(--danger-light); color: var(--danger); }
-    .badge-warning { background: var(--warning-light); color: #d97706; }
-    body.dark-theme .badge-warning { color: #fbbf24; }
+    .badge-warning { background: var(--warning-light); color: #B45309; }
+    body.dark-theme .badge-warning { color: #FBBF24; }
     .badge-info { background: var(--info-light); color: var(--info); }
-    body.dark-theme .badge-info { color: #38bdf8; }
+    body.dark-theme .badge-info { color: #60A5FA; }
     .badge-primary { background: var(--primary-light); color: var(--primary); }
 
     .badge-third-party {
-      background: rgba(245, 158, 11, 0.14);
-      color: #d97706;
-      font-weight: 700;
+      background: var(--warning-light);
+      color: #B45309;
+      font-weight: 600;
     }
-    body.dark-theme .badge-third-party { color: #fbbf24; }
+    body.dark-theme .badge-third-party { color: #FBBF24; }
 
     .badge-temp {
-      background: rgba(139, 92, 246, 0.14);
-      color: #7c3aed;
-      font-weight: 700;
+      background: var(--accent-temp-light);
+      color: var(--accent-temp);
+      font-weight: 600;
     }
-    body.dark-theme .badge-temp { color: #c4b5fd; }
+    body.dark-theme .badge-temp { color: #38BDF8; }
 
     .badge-temp-last {
       background: var(--success-light);
       color: var(--success);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .badge-fixed-regular {
@@ -713,84 +1045,150 @@
       font-weight: 600;
     }
 
-    /* 7. FATURAS DE CARTÃO DE CRÉDITO (COMPACTO E PROPORCIONAL) */
+    /* 8. CARTÕES DE CRÉDITO ESTILO APPLE WALLET & NERDWALLET */
     .bank-card-pro {
       background: var(--bg-card-subtle);
       border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
+      border-radius: var(--radius-md);
+      padding: 13px 15px;
+      margin-bottom: 10px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 9px;
       min-width: 0;
+      transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .bank-card-pro:hover {
+      background: var(--bg-card);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow);
+      transform: translate3d(0, -1px, 0);
     }
 
     .bank-card-top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       min-width: 0;
     }
 
     .bank-card-brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 11px;
       min-width: 0;
       flex: 1;
     }
 
-    .bank-name-label {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text-main);
+    /* Mini Cartão Físico Estilo Apple Wallet */
+    .wallet-card-emblem {
+      position: relative;
+      width: 40px;
+      height: 26px;
+      min-width: 40px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.35);
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .wallet-card-emblem::before {
+      content: '';
+      width: 8px;
+      height: 6px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 100%);
+      opacity: 0.92;
+      pointer-events: none;
     }
 
     .color-picker-input-mini {
-      width: 20px;
-      height: 20px;
-      min-width: 20px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.4);
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
       cursor: pointer;
-      background: transparent;
+      border: none;
       padding: 0;
+    }
+
+    .bank-brand-text-col {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      gap: 1px;
+    }
+
+    .bank-name-label {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.015em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .bank-sub-caption {
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--text-muted);
     }
 
     .bank-card-amount-block {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       flex-shrink: 0;
     }
 
     .bank-inv-amount {
-      font-size: 0.96rem;
-      font-weight: 800;
+      font-family: var(--font-display);
+      font-size: 1.04rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
     }
 
     .btn-icon-mini {
-      background: transparent;
-      border: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       color: var(--text-muted);
-      padding: 2px 4px;
-      font-size: 0.78rem;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
       cursor: pointer;
+      transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+    }
+
+    .btn-icon-mini:hover {
+      background: var(--bg-card-subtle);
+      border-color: var(--border-strong);
+      color: var(--text-main);
     }
 
     .bank-card-bottom-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
       font-size: 0.72rem;
       color: var(--text-muted);
+      padding-top: 8px;
+      border-top: 1px solid var(--border-subtle);
     }
 
     .bank-split-pills {
@@ -802,29 +1200,42 @@
 
     .split-pill {
       background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 1px 6px;
-      border-radius: 6px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
       font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .split-pill strong {
+      font-weight: 700;
+      color: var(--text-main);
     }
 
     .split-third {
-      background: rgba(245, 158, 11, 0.12);
-      color: #d97706;
-      border-color: transparent;
+      background: var(--warning-light);
+      color: #B45309;
+      border-color: rgba(217, 119, 6, 0.22);
     }
+    body.dark-theme .split-third { color: #FBBF24; }
 
     .bank-debt-info {
-      font-size: 0.7rem;
+      font-size: 0.71rem;
+      font-weight: 500;
       color: var(--text-muted);
+    }
+
+    .bank-debt-info strong {
+      font-weight: 700;
+      color: var(--text-main);
     }
 
     .card-total-debt-summary-pro {
       background: var(--card-debt-balloon-bg);
       border: 1px solid var(--card-debt-balloon-border);
-      border-radius: 10px;
-      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      padding: 11px 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -834,18 +1245,21 @@
     }
 
     .summary-title {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--card-debt-balloon-text);
+      letter-spacing: -0.01em;
     }
 
     .summary-amount {
-      font-size: 0.95rem;
+      font-family: var(--font-display);
+      font-size: 1rem;
       font-weight: 800;
       color: var(--card-debt-balloon-text);
+      letter-spacing: -0.03em;
     }
 
-    /* 8. CHECKLIST DE DESPESAS FIXAS (SEM SOBREPOSIÇÃO EM MOBILE/TABLET) */
+    /* 9. CHECKLIST DE DESPESAS FIXAS (NERDWALLET RECURRING BILLS) */
     .fixed-checklist-toolbar {
       display: flex;
       align-items: center;
@@ -861,25 +1275,39 @@
       overflow-x: auto;
       scrollbar-width: none;
       width: 100%;
+      background: var(--bg-card-subtle);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
     }
 
     .fixed-filter-pills::-webkit-scrollbar { display: none; }
 
     .fixed-filter-pill {
-      background: var(--bg-card-subtle);
+      flex: 1 1 auto;
+      text-align: center;
+      background: transparent;
       color: var(--text-muted);
       border: 1px solid transparent;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 0.72rem;
+      border-radius: var(--radius-pill);
+      padding: 5px 11px;
+      font-size: 0.73rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
+      transition: background-color 0.14s ease, color 0.14s ease, box-shadow 0.14s ease;
+    }
+
+    .fixed-filter-pill:hover:not(.active) {
+      color: var(--text-main);
     }
 
     .fixed-filter-pill.active {
-      background: var(--primary);
-      color: #fff;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--border);
+      font-weight: 700;
+      box-shadow: var(--shadow-xs);
     }
 
     .fixed-item-card {
@@ -888,15 +1316,23 @@
       justify-content: space-between;
       background: var(--bg-card-subtle);
       border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 10px 12px;
-      margin-bottom: 6px;
-      gap: 10px;
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      margin-bottom: 8px;
+      gap: 12px;
       min-width: 0;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .fixed-item-card:hover {
+      background: var(--bg-card);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-xs);
+      transform: translate3d(0, -1px, 0);
     }
 
     .fixed-item-card.is-paid {
-      opacity: 0.72;
+      opacity: 0.68;
     }
 
     .fixed-item-left {
@@ -904,14 +1340,14 @@
     }
 
     .fixed-circle-icon {
-      width: 34px;
-      height: 34px;
-      min-width: 34px;
-      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
     }
 
@@ -932,10 +1368,11 @@
     }
 
     .fixed-item-title {
-      font-size: 0.86rem;
-      font-weight: 700;
+      font-size: 0.87rem;
+      font-weight: 600;
       color: var(--text-main);
       line-height: 1.25;
+      letter-spacing: -0.012em;
       overflow-wrap: anywhere;
     }
 
@@ -945,7 +1382,7 @@
     }
 
     .fixed-item-meta {
-      font-size: 0.71rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       line-height: 1.3;
     }
@@ -954,22 +1391,22 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-top: 3px;
+      margin-top: 4px;
       max-width: 180px;
     }
 
     .fixed-temp-progress-track {
       flex: 1;
-      height: 3px;
-      background: rgba(148, 163, 184, 0.25);
-      border-radius: 999px;
+      height: 4px;
+      background: rgba(138, 145, 158, 0.22);
+      border-radius: var(--radius-pill);
       overflow: hidden;
     }
 
     .fixed-temp-progress-fill {
       height: 100%;
-      background: #8b5cf6;
-      border-radius: 999px;
+      background: var(--accent-temp);
+      border-radius: var(--radius-pill);
     }
 
     .fixed-temp-progress-fill.is-last-month {
@@ -980,13 +1417,15 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 4px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
     .fixed-item-val {
-      font-size: 0.9rem;
-      font-weight: 800;
+      font-family: var(--font-display);
+      font-size: 0.94rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
       white-space: nowrap;
     }
 
@@ -997,60 +1436,86 @@
     }
 
     .btn-fixed-toggle {
-      border: none;
-      padding: 3px 9px;
-      border-radius: 6px;
+      border: 1px solid transparent;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
       font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
+      transition: background-color 0.14s ease, transform 0.12s ease;
+    }
+
+    .btn-fixed-toggle:active {
+      transform: scale(0.95);
     }
 
     .btn-fixed-toggle.btn-unpaid {
       background: var(--primary);
       color: #fff;
+      box-shadow: 0 2px 5px var(--primary-glow);
     }
 
     .btn-fixed-toggle.btn-paid {
-      background: rgba(148, 163, 184, 0.2);
+      background: var(--bg-card);
+      border-color: var(--border);
       color: var(--text-muted);
     }
 
     .btn-del-fixed, .btn-edit-fixed {
-      background: transparent;
-      border: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       cursor: pointer;
-      font-size: 0.78rem;
-      padding: 3px 5px;
-      border-radius: 6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: var(--text-muted);
+      transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease;
     }
 
-    /* 9. EXTRATO DE MOVIMENTAÇÕES (TABELA DESKTOP & TIMELINE MOBILE/TABLET) */
+    .btn-del-fixed:hover, .btn-edit-fixed:hover {
+      background: var(--bg-card-subtle);
+      border-color: var(--border-strong);
+      color: var(--text-main);
+    }
+
+    /* 10. EXTRATO DE MOVIMENTAÇÕES (COINBASE LEDGER TABLE & NERDWALLET CASHFLOW BAR) */
     .card-highlighted {
-      border: 1px solid rgba(0, 168, 104, 0.3);
+      border: 1px solid var(--border);
     }
 
     .transactions-summary-strip {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
+      gap: 0;
       background: var(--bg-card-subtle);
-      padding: 10px 12px;
-      border-radius: 12px;
+      padding: 0;
+      border-radius: var(--radius-md);
       border: 1px solid var(--border-subtle);
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      overflow: hidden;
     }
 
     .tx-summary-item {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
       min-width: 0;
+      padding: 12px 16px;
+      border-right: 1px solid var(--border);
+    }
+
+    .tx-summary-item:last-child {
+      border-right: none;
     }
 
     .tx-summary-label {
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--text-muted);
       white-space: nowrap;
       overflow: hidden;
@@ -1058,8 +1523,10 @@
     }
 
     .tx-summary-val {
-      font-size: 0.92rem;
-      font-weight: 800;
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1069,33 +1536,44 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       align-items: center;
     }
 
     .search-input {
-      flex: 1 1 220px;
-      min-height: 38px;
-      padding: 7px 12px;
-      border-radius: 10px;
+      flex: 1 1 240px;
+      min-height: 40px;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
       border: 1px solid var(--border);
-      background: var(--bg-card);
+      background: var(--bg-card-subtle);
       color: var(--text-main);
       font-size: 0.84rem;
+      transition: background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+    }
+
+    .search-input:focus {
+      background: var(--bg-card);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
     }
 
     .filter-selects-group {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      flex: 2 1 340px;
+      flex: 2 1 360px;
     }
 
     .filter-selects-group select {
       flex: 1 1 120px;
-      min-height: 38px;
-      padding: 6px 10px;
+      min-height: 40px;
+      padding: 6px 12px;
       font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      border: 1px solid var(--border);
       width: auto;
     }
 
@@ -1103,8 +1581,8 @@
       width: 100%;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border-radius: 12px;
-      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
       background: var(--bg-card);
     }
 
@@ -1112,23 +1590,24 @@
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.84rem;
+      font-size: 0.85rem;
     }
 
     th {
       background: var(--bg-card-subtle);
       color: var(--text-muted);
-      font-weight: 700;
-      padding: 10px 12px;
+      font-family: var(--font);
+      font-weight: 600;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--border);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       white-space: nowrap;
     }
 
     td {
-      padding: 10px 12px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--border-subtle);
       vertical-align: middle;
     }
@@ -1137,16 +1616,20 @@
     tr:hover td { background: var(--bg-card-hover); }
 
     .tx-title {
+      font-family: var(--font);
       font-size: 0.88rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-main);
       display: block;
       line-height: 1.25;
+      letter-spacing: -0.012em;
     }
 
     .tx-value-amount {
-      font-weight: 800;
-      font-size: 0.92rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.94rem;
+      letter-spacing: -0.025em;
       white-space: nowrap;
     }
 
@@ -1155,12 +1638,14 @@
       border: 1px solid var(--border);
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
     }
 
     .bank-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
     }
@@ -1172,7 +1657,6 @@
       .mobile-tx-meta { display: none !important; }
     }
 
-    /* Em telas <= 960px (Tablets e Celulares), usa Cards estilo Nubank sem sobreposição */
     @media (max-width: 960px) {
       .transactions-table-wrapper {
         background: transparent !important;
@@ -1184,7 +1668,7 @@
       .transactions-table-wrapper tbody {
         display: flex !important;
         flex-direction: column !important;
-        gap: 6px !important;
+        gap: 8px !important;
         width: 100% !important;
       }
 
@@ -1199,8 +1683,8 @@
         justify-content: space-between !important;
         background: var(--bg-card-subtle) !important;
         border: 1px solid var(--border-subtle) !important;
-        border-radius: 12px !important;
-        padding: 10px 12px !important;
+        border-radius: var(--radius-md) !important;
+        padding: 11px 13px !important;
         gap: 10px !important;
         width: 100% !important;
       }
@@ -1225,11 +1709,11 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        width: 36px !important;
-        height: 36px !important;
-        min-width: 36px !important;
-        border-radius: 50% !important;
-        font-size: 1.05rem !important;
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        border-radius: 11px !important;
+        font-size: 1.02rem !important;
       }
 
       .transactions-table-wrapper tbody tr.tx-row-item td.col-desc {
@@ -1269,7 +1753,7 @@
         order: 4 !important;
         display: flex !important;
         align-items: center !important;
-        gap: 2px !important;
+        gap: 3px !important;
         padding: 0 !important;
         border: none !important;
         flex-shrink: 0 !important;
@@ -1283,50 +1767,18 @@
       }
     }
 
-    /* 10. FORMULÁRIOS E MODAIS ENXUTOS (ERGONOMIA MOBILE & TABLET) */
+    /* 11. FORMULÁRIOS E MODAIS APPLE HIG */
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      margin-bottom: 10px;
+      gap: 5px;
+      margin-bottom: 11px;
       min-width: 0;
     }
 
     .form-group label {
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .form-control, input, select, textarea {
-      width: 100%;
-      min-height: 40px;
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 0.88rem;
-      outline: none;
-      max-width: 100%;
-    }
-
-    .form-control:focus, input:focus, select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px var(--primary-light);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      align-items: end;
-    }
-
-    .form-group label {
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-size: 0.74rem;
+      font-weight: 600;
       color: var(--text-muted);
       white-space: nowrap;
       overflow: hidden;
@@ -1337,12 +1789,39 @@
       gap: 4px;
     }
 
+    .form-control, input, select, textarea {
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.86rem;
+      outline: none;
+      max-width: 100%;
+      transition: border-color 0.14s ease, box-shadow 0.14s ease;
+    }
+
+    .form-control:focus, input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: end;
+    }
+
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      background: rgba(10, 11, 13, 0.58);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -1357,11 +1836,11 @@
     .modal {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: var(--radius-xl);
       width: 100%;
-      max-width: 460px;
-      padding: 18px 20px;
-      box-shadow: var(--shadow-lg);
+      max-width: 470px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow-lg), var(--card-inset-top);
       max-height: min(92vh, 92dvh);
       overflow-y: auto;
       overflow-x: hidden;
@@ -1372,13 +1851,16 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
       gap: 8px;
     }
 
     .modal-title {
-      font-size: 1.02rem;
-      font-weight: 800;
+      font-size: 1.04rem;
+      font-weight: 700;
+      letter-spacing: -0.022em;
       color: var(--text-main);
       min-width: 0;
     }
@@ -1387,7 +1869,7 @@
       background: var(--bg-card-subtle);
       border: none;
       color: var(--text-muted);
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       cursor: pointer;
       width: 30px;
       height: 30px;
@@ -1396,36 +1878,42 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      transition: background-color 0.14s ease, color 0.14s ease;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-main);
     }
 
     .modal-handle-bar {
       width: 36px;
       height: 4px;
-      background: var(--border);
-      border-radius: 999px;
-      margin: 0 auto 8px;
+      background: var(--border-strong);
+      border-radius: var(--radius-pill);
+      margin: 0 auto 10px;
       display: none;
     }
 
-    /* Segmented Control e Hero Input Alinhado (R$ colado ao valor) */
+    /* Segmented Control Apple HIG & Hero Input */
     .segmented-control {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       background: var(--bg-card-subtle);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
       padding: 3px;
       gap: 3px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .segmented-btn {
       border: none;
       background: transparent;
-      padding: 6px 6px;
+      padding: 7px 6px;
       border-radius: 8px;
       font-size: 0.76rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
       display: flex;
@@ -1433,12 +1921,14 @@
       justify-content: center;
       gap: 4px;
       white-space: nowrap;
+      transition: all 0.14s ease;
     }
 
     .segmented-btn.active {
       background: var(--bg-card);
       color: var(--text-main);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      font-weight: 700;
+      box-shadow: var(--shadow-xs);
     }
 
     .hero-amount-container {
@@ -1446,11 +1936,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 10px 14px 12px;
-      margin-bottom: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
       background: var(--bg-card-subtle);
-      border-radius: 14px;
-      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
     }
 
     .hero-amount-label {
@@ -1459,7 +1949,7 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--text-muted);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .hero-amount-box {
@@ -1471,10 +1961,10 @@
     }
 
     .hero-currency-prefix {
-      font-size: 1.25rem;
-      font-weight: 800;
+      font-size: 1.3rem;
+      font-weight: 700;
       color: var(--text-muted);
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       user-select: none;
     }
 
@@ -1482,22 +1972,22 @@
       background: transparent !important;
       border: none !important;
       outline: none !important;
-      font-family: var(--font-mono) !important;
-      font-size: 1.95rem !important;
+      font-family: var(--font-display) !important;
+      font-size: 2.1rem !important;
       font-weight: 800 !important;
       color: var(--text-main) !important;
       text-align: left !important;
       width: 4.5ch !important;
       min-width: 4ch !important;
       max-width: 14ch !important;
-      min-height: 34px !important;
+      min-height: 36px !important;
       padding: 0 !important;
       margin: 0 !important;
       box-shadow: none !important;
-      line-height: 1.1 !important;
+      line-height: 1.08 !important;
+      letter-spacing: -0.038em !important;
     }
 
-    /* Seletor Inline de Perfil / Repetição (Substitui o menu avançado colapsável) */
     .inline-pill-selector {
       display: flex;
       align-items: center;
@@ -1505,14 +1995,14 @@
       gap: 8px;
       background: var(--bg-card-subtle);
       border: 1px solid var(--border-subtle);
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
       padding: 6px 10px;
       margin-bottom: 10px;
     }
 
     .inline-pill-label {
       font-size: 0.74rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-muted);
       white-space: nowrap;
     }
@@ -1521,7 +2011,7 @@
       display: inline-flex;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: var(--radius-pill);
       padding: 2px;
       gap: 2px;
     }
@@ -1531,16 +2021,17 @@
       background: transparent;
       color: var(--text-muted);
       font-size: 0.72rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
+      font-weight: 600;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.14s ease;
     }
 
     .inline-pill-btn.active {
       background: var(--primary);
       color: #fff;
+      font-weight: 700;
     }
 
     .inline-pill-btn.active[data-author="TERCEIROS"] {
@@ -1574,27 +2065,33 @@
       background: var(--bg-card-subtle);
       border: 1px solid var(--border);
       color: var(--text-muted);
-      padding: 4px 10px;
-      border-radius: 999px;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
       font-size: 0.72rem;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+      transition: all 0.14s ease;
     }
 
-    /* Painel Compacto de Parcelamento e Competência */
+    .chip-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-main);
+      border-color: var(--border-strong);
+    }
+
     .competence-date-card {
       background: var(--bg-card-subtle);
       border: 1px solid var(--border-subtle);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 8px 10px;
       margin-bottom: 10px;
     }
 
     .competence-date-card.is-different-month {
-      border-color: rgba(14, 165, 233, 0.4);
-      background: rgba(14, 165, 233, 0.05);
+      border-color: rgba(0, 82, 255, 0.35);
+      background: rgba(0, 82, 255, 0.05);
     }
 
     .competence-header-row {
@@ -1607,10 +2104,10 @@
     }
 
     .competence-badge {
-      font-size: 0.68rem;
+      font-size: 0.66rem;
       font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 999px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
       background: var(--primary-light);
       color: var(--primary);
     }
@@ -1634,7 +2131,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-muted);
-      border-radius: 999px;
+      border-radius: var(--radius-pill);
       padding: 3px 8px;
       font-size: 0.69rem;
       font-weight: 600;
@@ -1649,9 +2146,9 @@
     }
 
     .installment-wizard-card {
-      background: rgba(2, 132, 199, 0.05);
-      border: 1px solid rgba(2, 132, 199, 0.22);
-      border-radius: 12px;
+      background: var(--info-light);
+      border: 1px solid rgba(0, 82, 255, 0.2);
+      border-radius: var(--radius-md);
       padding: 10px 12px;
       margin-bottom: 10px;
       display: flex;
@@ -1665,7 +2162,7 @@
       gap: 4px;
       background: var(--bg-card);
       padding: 3px;
-      border-radius: 8px;
+      border-radius: var(--radius-xs);
       border: 1px solid var(--border);
     }
 
@@ -1715,11 +2212,10 @@
       color: var(--primary);
     }
 
-    /* Seletor de Duração Temporária no Modal de Fixa */
     .duration-selector-card {
-      background: rgba(139, 92, 246, 0.05);
-      border: 1px solid rgba(139, 92, 246, 0.22);
-      border-radius: 12px;
+      background: var(--accent-temp-light);
+      border: 1px solid rgba(2, 132, 199, 0.24);
+      border-radius: var(--radius-md);
       padding: 10px 12px;
       margin-bottom: 10px;
     }
@@ -1732,13 +2228,13 @@
     }
 
     .duration-step-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--border);
       background: var(--bg-card);
       color: var(--text-main);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -1751,19 +2247,20 @@
       gap: 4px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      height: 38px;
+      border-radius: var(--radius-sm);
+      height: 36px;
     }
 
     .duration-number-input {
       width: 50px !important;
-      min-height: 32px !important;
+      min-height: 30px !important;
       border: none !important;
       background: transparent !important;
       text-align: center;
-      font-size: 1.1rem !important;
+      font-family: var(--font-display) !important;
+      font-size: 1.05rem !important;
       font-weight: 800;
-      color: #8b5cf6 !important;
+      color: var(--accent-temp) !important;
       padding: 0 !important;
     }
 
@@ -1780,28 +2277,29 @@
       background: var(--bg-card);
       color: var(--text-muted);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
     }
 
     .duration-pill-btn.active {
-      background: #8b5cf6;
+      background: var(--accent-temp);
       color: #fff;
-      border-color: #8b5cf6;
+      border-color: var(--accent-temp);
+      font-weight: 700;
     }
 
     .fixed-preview-banner {
       background: var(--bg-card-subtle);
       border: 1px solid var(--border);
       border-left: 3px solid var(--primary);
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       padding: 8px 10px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--text-muted);
       margin-bottom: 10px;
     }
 
-    .fixed-preview-banner.is-temp { border-left-color: #8b5cf6; }
+    .fixed-preview-banner.is-temp { border-left-color: var(--accent-temp); }
 
     .advanced-options-toggle-wrapper {
       margin: 6px 0;
@@ -1822,7 +2320,7 @@
     .advanced-options-content {
       background: var(--bg-card-subtle);
       padding: 10px;
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--border-subtle);
       margin-bottom: 10px;
     }
@@ -1834,40 +2332,42 @@
       text-align: left;
       width: 100%;
       padding: 10px 12px;
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       line-height: 1.35;
     }
 
-    /* 11. SIDEBAR, BOTTOM NAV, AUTH, TOAST & EMPTY STATES */
+    /* 12. SIDEBAR, BOTTOM NAV, AUTH, TOAST & EMPTY STATES */
     .view-section { display: none; }
     .view-section.active { display: block; }
 
     .chart-container {
       position: relative;
-      height: 250px;
+      height: 255px;
       width: 100%;
     }
 
     .empty-fixed-state, .empty-state-card {
-      padding: 24px 14px;
+      padding: 28px 16px;
       text-align: center;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.81rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .empty-state-icon { font-size: 2.2rem; }
+    .empty-state-icon { font-size: 2rem; }
     .empty-state-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main); }
     .empty-state-desc { font-size: 0.78rem; color: var(--text-muted); max-width: 280px; }
 
     .sidebar-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(10, 11, 13, 0.56);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
@@ -1879,7 +2379,7 @@
       position: fixed;
       top: 0;
       right: 0;
-      width: min(340px, 88vw);
+      width: min(350px, 88vw);
       height: 100dvh;
       background: var(--bg-card);
       border-left: 1px solid var(--border);
@@ -1887,39 +2387,46 @@
       display: flex;
       flex-direction: column;
       transform: translateX(100%);
-      transition: transform 0.25s ease;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
       overflow-y: auto;
+      box-shadow: var(--shadow-lg);
     }
     .sidebar-drawer.active { transform: translateX(0); }
 
     .sidebar-header {
-      padding: 14px 16px;
+      padding: 16px 18px;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .sidebar-user-block { display: flex; align-items: center; gap: 10px; }
-    .sidebar-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
-    .sidebar-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
-    .sidebar-section-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .sidebar-close-btn { background: var(--bg-card-subtle); border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1.25rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .sidebar-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 18px; flex: 1; }
+    .sidebar-section-title { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 7px; }
     .sidebar-item-btn {
       display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 10px 12px;
+      padding: 10px 13px;
       background: var(--bg-card-subtle);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
       color: var(--text-main);
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       font-weight: 600;
       cursor: pointer;
       margin-bottom: 6px;
+      transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.12s ease;
     }
-    .sidebar-footer { padding: 12px 16px; border-top: 1px solid var(--border); }
-    .cloud-info-card { padding: 10px 12px; background: var(--bg-card-subtle); border-radius: 10px; font-size: 0.76rem; color: var(--text-muted); }
+    .sidebar-item-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-strong);
+      transform: translate3d(0, -1px, 0);
+    }
+    .sidebar-footer { padding: 14px 18px; border-top: 1px solid var(--border); }
+    .cloud-info-card { padding: 12px 14px; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; }
 
     /* BOTÃO DE AÇÃO FLUTUANTE (FAB DESKTOP/TABLET) — NO CANTO INFERIOR ESQUERDO */
     .floating-action-btn {
@@ -1927,13 +2434,13 @@
       left: clamp(18px, 2.6vw, 28px);
       right: auto;
       bottom: calc(24px + var(--safe-bottom));
-      width: 56px;
-      height: 56px;
+      width: 54px;
+      height: 54px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      background: var(--primary);
       color: #ffffff;
-      border: 1.5px solid rgba(255, 255, 255, 0.28);
-      box-shadow: 0 8px 24px var(--primary-glow), 0 4px 10px rgba(15, 23, 42, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow: 0 10px 26px var(--primary-glow), 0 4px 10px rgba(10, 11, 13, 0.16);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1945,16 +2452,17 @@
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       transform: translate3d(0, 0, 0) scale(1);
-      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease;
+      transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.15s ease, box-shadow 0.2s ease;
     }
 
     .floating-action-btn:hover {
-      transform: translate3d(0, -3px, 0) scale(1.06);
-      box-shadow: 0 12px 28px var(--primary-glow), 0 6px 14px rgba(15, 23, 42, 0.24);
+      background: var(--primary-hover);
+      transform: translate3d(0, -2px, 0) scale(1.05);
+      box-shadow: 0 14px 30px var(--primary-glow), 0 6px 14px rgba(10, 11, 13, 0.22);
     }
 
     .floating-action-btn:active {
-      transform: translate3d(0, 0, 0) scale(0.92);
+      transform: translate3d(0, 0, 0) scale(0.94);
       transition-duration: 0.08s;
     }
 
@@ -1970,17 +2478,17 @@
       bottom: calc(10px + var(--safe-bottom));
       left: 12px;
       right: 12px;
-      height: 60px;
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(226, 232, 240, 0.9);
+      height: 62px;
+      background: var(--bg-glass);
+      backdrop-filter: saturate(180%) blur(16px);
+      -webkit-backdrop-filter: saturate(180%) blur(16px);
+      border: 1px solid var(--border);
       border-radius: 20px;
       padding: 0 8px;
       z-index: 940;
       justify-content: space-around;
       align-items: center;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      box-shadow: 0 10px 28px rgba(10, 11, 13, 0.12);
       contain: layout style;
       will-change: transform;
       backface-visibility: hidden;
@@ -1990,12 +2498,10 @@
     }
 
     body.dark-theme .mobile-bottom-nav {
-      background: rgba(19, 25, 38, 0.94);
-      border-color: rgba(255, 255, 255, 0.09);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      border-color: var(--border-strong);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
     }
 
-    /* Transição 100% via GPU translate3d (sem animar opacity junto com blur, eliminando micro-engasgos) */
     .mobile-bottom-nav.nav-hidden {
       transform: translate3d(0, calc(100% + 26px + var(--safe-bottom)), 0) !important;
       pointer-events: none !important;
@@ -2009,14 +2515,14 @@
       align-items: center;
       justify-content: center;
       color: var(--text-muted);
-      font-size: 0.68rem;
+      font-size: 0.67rem;
       font-weight: 600;
       cursor: pointer;
       padding: 6px 10px;
       border-radius: 12px;
       min-width: 56px;
       min-height: 46px;
-      transition: color 0.18s ease, transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease;
+      transition: color 0.16s ease, transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.16s ease;
       touch-action: manipulation;
     }
 
@@ -2026,13 +2532,16 @@
     }
 
     .mobile-nav-item:active {
-      transform: scale(0.9);
+      transform: scale(0.92);
     }
 
     .m-nav-icon {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       line-height: 1;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .m-nav-center-action {
@@ -2045,7 +2554,7 @@
       width: 46px;
       height: 46px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      background: var(--primary);
       color: #fff;
       display: flex;
       align-items: center;
@@ -2053,11 +2562,11 @@
       font-size: 1.5rem;
       box-shadow: 0 6px 16px var(--primary-glow);
       border: 2.5px solid var(--bg-card);
-      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .m-nav-center-action:active .m-nav-fab-circle {
-      transform: scale(0.9);
+      transform: scale(0.92);
     }
 
     .toast-container {
@@ -2072,19 +2581,21 @@
       pointer-events: none;
     }
     .toast-item {
-      background: #0f172a;
-      color: #fff;
-      padding: 9px 14px;
-      border-radius: 10px;
+      background: #0A0B0D;
+      color: #F5F6F8;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
       font-size: 0.8rem;
       font-weight: 600;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       opacity: 0;
       transform: translateY(-8px);
       transition: all 0.2s ease;
     }
     .toast-item.visible { opacity: 1; transform: translateY(0); }
 
+    /* TELA DE LOGIN ESTILO COINBASE / APPLE ID */
     #authScreen {
       min-height: 92dvh;
       display: flex;
@@ -2095,72 +2606,79 @@
     .auth-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
+      border-radius: var(--radius-xl);
+      padding: 32px 28px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: var(--shadow-lg);
+      max-width: 410px;
+      box-shadow: var(--shadow-lg), var(--card-inset-top);
     }
-    .auth-header { text-align: center; margin-bottom: 18px; }
+    .auth-header { text-align: center; margin-bottom: 22px; }
     .auth-logo {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 10px;
-      border-radius: 14px;
-      background: var(--primary-light);
-      color: var(--primary);
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 14px;
+      border-radius: 16px;
+      background: var(--primary);
+      color: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 6px 18px var(--primary-glow);
     }
-    .auth-title { font-size: 1.2rem; font-weight: 800; }
-    .auth-subtitle { font-size: 0.78rem; color: var(--text-muted); }
+    .auth-title { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.03em; }
+    .auth-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
     .auth-tabs {
       display: flex;
       background: var(--bg-card-subtle);
-      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
       padding: 3px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
     .auth-tab-btn {
       flex: 1;
-      padding: 7px;
+      padding: 8px;
       border: none;
       background: transparent;
       font-size: 0.8rem;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--text-muted);
-      border-radius: 8px;
+      border-radius: var(--radius-pill);
       cursor: pointer;
+      transition: all 0.14s ease;
     }
-    .auth-tab-btn.active { background: var(--bg-card); color: var(--primary); }
+    .auth-tab-btn.active {
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-weight: 700;
+      box-shadow: var(--shadow-xs);
+    }
     .auth-error {
       background: var(--danger-light);
       color: var(--danger);
-      padding: 8px 12px;
-      border-radius: 8px;
+      border: 1px solid rgba(207, 32, 47, 0.22);
+      padding: 9px 13px;
+      border-radius: var(--radius-sm);
       font-size: 0.8rem;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       display: none;
       align-items: center;
       gap: 6px;
     }
 
     .tab-pills { display: flex; gap: 6px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
-    .tab-pill-btn { padding: 6px 12px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; border-radius: 8px; cursor: pointer; }
+    .tab-pill-btn { padding: 6px 14px; border: none; background: transparent; color: var(--text-muted); font-weight: 600; font-size: 0.8rem; border-radius: var(--radius-pill); cursor: pointer; }
     .tab-pill-btn.active { background: var(--primary); color: #fff; }
     .color-picker-input { width: 30px; height: 30px; border: none; border-radius: 6px; cursor: pointer; background: transparent; }
 
     /* =========================================================================
-       12. RESPONSIVIDADE ESPECÍFICA: TABLETS (680px - 1100px) & SMARTPHONES (<= 679px)
+       13. RESPONSIVIDADE ESPECÍFICA: TABLETS (680px - 1100px) & SMARTPHONES (<= 768px)
        ========================================================================= */
 
-    /* Tablets e Notebooks Compactos (<= 1100px) */
     @media (max-width: 1100px) {
       .grid-5 {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       }
-      /* Em tablets, Cartões e Despesas Fixas ficam 1 por linha (100% da largura) para NUNCA esmagar os itens */
       .grid-2 {
         grid-template-columns: 1fr;
       }
@@ -2169,17 +2687,27 @@
       }
     }
 
-    /* Smartphones e Telas Móveis (<= 768px) */
     @media (max-width: 768px) {
       body {
-        padding: 10px 10px calc(74px + var(--safe-bottom));
+        padding: 10px 12px calc(78px + var(--safe-bottom));
+      }
+
+      header {
+        position: relative;
+        top: 0;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+      }
+
+      .brand-text p,
+      .month-hero-quick-actions {
+        display: none !important;
       }
 
       #dashboardMainContainer .mobile-bottom-nav {
         display: flex;
       }
 
-      /* Em dispositivos mobile, o botão lateral flutuante não aparece (o lançamento fica centralizado no dock inferior) */
       .floating-action-btn {
         display: none !important;
       }
@@ -2191,7 +2719,7 @@
       }
 
       .main-nav {
-        margin-bottom: 6px;
+        margin-bottom: 0;
       }
 
       .year-selector-widget {
@@ -2199,10 +2727,13 @@
         justify-content: space-between;
       }
 
-      /* KPIs no Celular: 2 colunas bem proporcionadas + 5º card ocupando a linha inteira */
+      .month-navigation-header {
+        padding: 10px 12px;
+      }
+
       .grid-5 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
+        gap: 10px;
       }
 
       .grid-5 > .card:last-child {
@@ -2210,23 +2741,30 @@
       }
 
       .card-kpi-centered {
-        padding: 10px 10px;
+        padding: 13px 14px;
       }
 
       .card-kpi-centered .card-header {
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
         gap: 4px;
       }
 
       .kpi-value {
-        font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+        font-size: clamp(1.12rem, 4.4vw, 1.38rem);
       }
 
       .transactions-summary-strip {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-        padding: 8px 10px;
+      }
+
+      .tx-summary-item:nth-child(2) {
+        border-right: none;
+      }
+
+      .tx-summary-item:nth-child(1),
+      .tx-summary-item:nth-child(2) {
+        border-bottom: 1px solid var(--border);
       }
 
       .filter-selects-group {
@@ -2246,17 +2784,16 @@
       }
 
       .modal {
-        border-radius: 20px 20px 0 0;
+        border-radius: 22px 22px 0 0;
         max-width: 100%;
         max-height: 88dvh;
-        padding: 14px 14px calc(18px + var(--safe-bottom));
+        padding: 16px 16px calc(20px + var(--safe-bottom));
       }
 
       .modal-handle-bar {
         display: block;
       }
 
-      /* Previne auto-zoom no iOS mantendo layout enxuto */
       .form-control, input, select, textarea {
         font-size: 16px;
       }
@@ -2269,34 +2806,34 @@
       gap: 14px;
       background: var(--bg-card-subtle);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: var(--radius-md);
       padding: 14px;
       margin-bottom: 14px;
     }
 
     .account-avatar-wrapper {
       position: relative;
-      width: 68px;
-      height: 68px;
-      min-width: 68px;
+      width: 66px;
+      height: 66px;
+      min-width: 66px;
       border-radius: 50%;
       cursor: pointer;
     }
 
     .account-avatar-large {
-      width: 68px;
-      height: 68px;
+      width: 66px;
+      height: 66px;
       border-radius: 50%;
       background: var(--primary);
       color: #fff;
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       border: 2px solid var(--bg-card);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow);
     }
 
     .account-avatar-large img,
@@ -2312,17 +2849,17 @@
       position: absolute;
       bottom: -2px;
       right: -2px;
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
+      background: var(--text-main);
+      color: var(--bg-card);
       border: 2px solid var(--bg-card);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-size: 0.7rem;
+      box-shadow: var(--shadow-xs);
     }
 
     .theme-presets-grid {
@@ -2337,12 +2874,12 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 9px 11px;
-      border-radius: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
       background: var(--bg-card-subtle);
-      border: 1.5px solid var(--border);
+      border: 1px solid var(--border);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.14s ease;
       text-align: left;
     }
 
@@ -2354,7 +2891,7 @@
     .theme-preset-card.active {
       border-color: var(--primary);
       background: var(--primary-light);
-      box-shadow: 0 2px 8px var(--primary-glow);
+      box-shadow: 0 2px 6px var(--primary-glow);
     }
 
     .theme-preset-name {
@@ -2385,10 +2922,10 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding: 7px 10px;
+      padding: 8px 11px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
     }
 
     .color-control-label {
@@ -2411,12 +2948,11 @@
       font-weight: 700;
       color: var(--text-muted);
       background: var(--bg-card-subtle);
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 6px;
       border: 1px solid var(--border);
     }
 
-    /* Telas muito estreitas (<= 360px) */
     @media (max-width: 360px) {
       .grid-5 {
         grid-template-columns: 1fr;
@@ -2426,6 +2962,409 @@
       }
       .theme-presets-grid {
         grid-template-columns: 1fr;
+      }
+    }
+
+    /* =========================================================================
+       14. OPEN-CANVAS TOPBAR FULL-BLEED & EDITORIAL PERIOD HERO (v18)
+       Zero caixas empilhadas, zero pílulas aninhadas, respiro estilo Apple/Coinbase
+       ========================================================================= */
+    body {
+      padding-top: 0 !important;
+    }
+
+    header.app-topbar {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 920 !important;
+      width: 100vw !important;
+      margin-left: calc(50% - 50vw) !important;
+      margin-right: calc(50% - 50vw) !important;
+      margin-bottom: 22px !important;
+      background: var(--bg-glass) !important;
+      backdrop-filter: saturate(180%) blur(20px) !important;
+      -webkit-backdrop-filter: saturate(180%) blur(20px) !important;
+      border: none !important;
+      border-bottom: 1px solid var(--border) !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      display: block !important;
+    }
+
+    .app-topbar-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      min-width: 0;
+      height: 100%;
+    }
+
+    .brand-title {
+      gap: 10px !important;
+    }
+
+    .brand-icon {
+      width: 32px !important;
+      height: 32px !important;
+      min-width: 32px !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px var(--primary-glow) !important;
+    }
+
+    .brand-text h1 {
+      font-size: 0.98rem !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.024em !important;
+    }
+
+    /* Abas Underline estilo Coinbase / NerdWallet (Zero caixas cinzas) */
+    .topbar-tabs {
+      display: flex;
+      align-items: stretch;
+      gap: 20px;
+      height: 100%;
+    }
+
+    .topbar-tabs .nav-btn {
+      background: transparent !important;
+      border: none !important;
+      border-bottom: 2px solid transparent !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 0 2px !important;
+      min-height: 60px !important;
+      height: 100%;
+      font-size: 0.84rem !important;
+      font-weight: 500 !important;
+      color: var(--text-muted) !important;
+      transition: color 0.15s ease, border-color 0.15s ease !important;
+    }
+
+    .topbar-tabs .nav-btn:hover:not(.active) {
+      color: var(--text-main) !important;
+    }
+
+    .topbar-tabs .nav-btn.active {
+      color: var(--text-main) !important;
+      font-weight: 600 !important;
+      border-bottom-color: var(--primary) !important;
+    }
+
+    /* Lado Direito Limpo (Sem caixinhas em cada botão) */
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .topbar-cta {
+      height: 36px !important;
+      min-height: 36px !important;
+      padding: 0 16px !important;
+      border-radius: 9999px !important;
+      font-size: 0.81rem !important;
+      font-weight: 600 !important;
+    }
+
+    .topbar-ghost-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background-color 0.14s ease, color 0.14s ease;
+    }
+
+    .topbar-ghost-btn:hover {
+      background: var(--bg-card-subtle);
+      color: var(--text-main);
+    }
+
+    .topbar-icon-btn {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.96rem;
+      transition: background-color 0.14s ease, color 0.14s ease;
+    }
+
+    .topbar-icon-btn:hover {
+      background: var(--bg-card-subtle);
+      color: var(--text-main);
+    }
+
+    .topbar-sync-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent !important;
+      border: none !important;
+    }
+
+    .topbar-sync-status .cloud-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      flex-shrink: 0;
+    }
+
+    .topbar-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 2px;
+    }
+
+    .topbar-user-btn {
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      box-shadow: none !important;
+      padding: 4px 8px 4px 4px !important;
+      border-radius: 9999px !important;
+      gap: 8px !important;
+    }
+
+    .topbar-user-btn:hover {
+      background: var(--bg-card-subtle) !important;
+      transform: none !important;
+    }
+
+    .topbar-user-btn .user-avatar-circle {
+      width: 28px !important;
+      height: 28px !important;
+      border-radius: 50% !important;
+      font-size: 0.72rem !important;
+    }
+
+    .topbar-user-btn .user-badge-name {
+      font-size: 0.81rem !important;
+      font-weight: 600 !important;
+    }
+
+    /* CABEÇALHO EDITORIAL DO PERÍODO (CENTRALIZADO COM SETAS DISCRETAS NOS CANTOS) */
+    .period-hero-band {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .period-centered-bar {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px;
+      margin: 0 !important;
+      padding: 2px 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .period-centered-bar .current-month-heading {
+      flex: 1;
+      text-align: center !important;
+      font-size: clamp(1.38rem, 2vw, 1.72rem) !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.03em !important;
+      color: var(--text-main) !important;
+      line-height: 1.15;
+      margin: 0 !important;
+    }
+
+    .period-edge-arrow {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.14s ease, color 0.14s ease, border-color 0.14s ease, transform 0.12s ease;
+    }
+
+    .period-edge-arrow:hover {
+      background: var(--bg-card);
+      border-color: var(--border);
+      color: var(--text-main);
+    }
+
+    .period-edge-arrow:active {
+      transform: scale(0.92);
+    }
+
+    /* SCRUBBER ABERTO DE 12 MESES */
+    .period-hero-band .months-bar {
+      background: transparent !important;
+      border: none !important;
+      border-bottom: 1px solid var(--border) !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 0 0 10px 0 !important;
+      gap: 6px !important;
+      margin: 0 !important;
+      scroll-snap-type: x proximity;
+    }
+
+    .period-hero-band .month-pill {
+      flex: 1 1 0;
+      min-width: 52px !important;
+      min-height: 34px !important;
+      padding: 5px 10px !important;
+      border-radius: 9999px !important;
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      color: var(--text-muted) !important;
+      font-size: 0.8rem !important;
+      font-weight: 500 !important;
+      scroll-snap-align: center;
+    }
+
+    .period-hero-band .month-pill:hover:not(.active) {
+      background: var(--bg-card-subtle) !important;
+      color: var(--text-main) !important;
+    }
+
+    .period-hero-band .month-pill.active {
+      background: var(--primary) !important;
+      color: #FFFFFF !important;
+      font-weight: 600 !important;
+      box-shadow: 0 2px 8px var(--primary-glow) !important;
+    }
+
+    /* =========================================================================
+       OTIMIZAÇÃO DEDICADA PARA DISPOSITIVOS MÓVEIS (<= 768px)
+       ========================================================================= */
+    @media (max-width: 768px) {
+      body {
+        padding: 0 12px calc(82px + var(--safe-bottom)) !important;
+      }
+
+      .hide-mobile,
+      .topbar-tabs {
+        display: none !important;
+      }
+
+      header.app-topbar {
+        margin-bottom: 14px !important;
+      }
+
+      .app-topbar-inner {
+        padding: 0 12px !important;
+        height: 54px !important;
+      }
+
+      .brand-icon {
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+      }
+
+      .brand-text h1 {
+        font-size: 0.94rem !important;
+      }
+
+      .topbar-right {
+        gap: 6px !important;
+      }
+
+      .topbar-sync-status {
+        padding: 0 4px !important;
+      }
+
+      .topbar-user-btn {
+        padding: 2px !important;
+      }
+
+      .topbar-icon-btn {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+      }
+
+      .period-hero-band {
+        gap: 8px !important;
+        margin-bottom: 14px !important;
+      }
+
+      .period-centered-bar .current-month-heading {
+        font-size: 1.28rem !important;
+      }
+
+      .period-edge-arrow {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        color: var(--text-muted);
+      }
+
+      .period-hero-band .months-bar {
+        padding: 2px 2px 10px !important;
+        gap: 4px !important;
+      }
+
+      .period-hero-band .month-pill {
+        flex: 0 0 auto !important;
+        min-width: 56px !important;
+        min-height: 36px !important;
+        padding: 6px 14px !important;
+        font-size: 0.82rem !important;
+      }
+
+      .grid {
+        gap: 10px !important;
+        margin-bottom: 14px !important;
+      }
+
+      .card {
+        padding: 14px 14px !important;
+        border-radius: 16px !important;
+      }
+
+      .card-kpi-centered {
+        padding: 13px 14px !important;
+      }
+
+      .fixed-item-card,
+      .bank-card-pro {
+        padding: 11px 12px !important;
       }
     }
   </style>
@@ -2473,7 +3412,7 @@
         </div>
       </div>
 
-      <button type="submit" id="btnSubmitLogin" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 0.9rem; font-weight: 600; border-radius: 10px; margin-top: 10px; background: linear-gradient(145deg, #00A868 0%, #00935b 100%); border: none; box-shadow: 0 6px 18px rgba(0, 168, 104, 0.35);">
+      <button type="submit" id="btnSubmitLogin" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px 16px; font-size: 0.88rem; font-weight: 700; border-radius: 999px; margin-top: 10px;">
         Acessar Conta
       </button>
     </form>
@@ -2508,7 +3447,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 0.9rem; font-weight: 600; border-radius: 10px; margin-top: 10px; background: linear-gradient(145deg, #00A868 0%, #00935b 100%); border: none; box-shadow: 0 6px 18px rgba(0, 168, 104, 0.35);">
+      <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px 16px; font-size: 0.88rem; font-weight: 700; border-radius: 999px; margin-top: 10px;">
         Criar Minha Conta
       </button>
     </form>
@@ -2639,111 +3578,127 @@
   </div>
 </aside>
 
-  <!-- HEADER -->
-  <header>
-    <div class="brand-title">
-      <div class="brand-icon">CF</div>
-      <div class="brand-text">
-        <h1>Controle Financeiro <span id="headerYearDisplay">2026</span></h1>
-        <p>Planejamento e Gestão Orçamentária Anual</p>
-      </div>
-    </div>
-
-    <!-- NAVEGAÇÃO CENTRAL LIMPA: BANCOS, CATEGORIAS, CONFIGURAR MÊS E LANÇAR -->
-    <div class="header-nav-group">
-      <button class="btn btn-primary" onclick="openNewTransactionModal()">
-        <span>+</span> Lançar Movimentação
-      </button>
-      <div class="header-nav-divider"></div>
-      <button class="btn-nav-item" onclick="openMonthConfigModal()" title="Configurações e Metas do Mês">
-        ⚙️ Configurar Mês
-      </button>
-      <div class="header-nav-divider"></div>
-      <button class="btn-nav-item" id="btnHeaderThemeToggle" onclick="toggleTheme()" title="Alternar entre Modo Claro e Modo Escuro">
-        <span id="themeToggleIcon">🌙</span> <span id="themeToggleText">Modo Escuro</span>
-      </button>
-    </div>
-
-    <!-- AÇÕES DA DIREITA: STATUS NUVEM, BADGE DO USUÁRIO E BOTÃO DO MENU LATERAL -->
-    <div class="header-right-actions">
-      <div id="badgeSupabaseCloud" style="display: inline-flex; align-items: center; gap: 7px; background: rgba(16, 185, 129, 0.08); color: #34d399; font-size: 0.74rem; font-weight: 500; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(16, 185, 129, 0.2);" title="Banco de dados em nuvem Supabase ativo">
-        <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-        Nuvem Conectada
-      </div>
-
-      <div class="user-profile-badge" onclick="openMyAccountModal()" title="Abrir Minha Conta, Foto de Perfil e Segurança">
-        <div class="user-avatar-circle" id="headerUserAvatar">JG</div>
-        <div class="user-badge-details">
-          <span class="user-badge-name" id="headerUserName">João Guilherme</span>
-          <span class="user-badge-sub">👤 Minha Conta</span>
+  <!-- ==================== TOPBAR FULL-BLEED (COINBASE / NERDWALLET / APPLE HIG) ==================== -->
+  <header class="app-topbar">
+    <div class="app-topbar-inner">
+      <!-- ESQUERDA: MARCA + ABAS UNDERLINE -->
+      <div class="topbar-left">
+        <div class="brand-title">
+          <div class="brand-icon" aria-hidden="true">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+              <polyline points="16 7 22 7 22 13"></polyline>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>Controle Financeiro <span id="headerYearDisplay" style="display:none;">2026</span></h1>
+          </div>
         </div>
+
+        <nav class="topbar-tabs" aria-label="Navegação Principal">
+          <button type="button" class="nav-btn active" id="btnViewMonthly" onclick="switchView('monthly')">
+            Visão Mensal
+          </button>
+          <button type="button" class="nav-btn" id="btnViewAnnual" onclick="switchView('annual')">
+            Visão Anual
+          </button>
+        </nav>
       </div>
 
-      <button class="btn-sidebar-toggle" onclick="toggleSidebarMenu()" title="Abrir Menu Lateral (Segurança, Backups, Tema e Configurações)">
-        ☰
-      </button>
+      <!-- DIREITA: CONFIGURAÇÕES, TEMA, SINCRONIZAÇÃO, PERFIL E MENU -->
+      <div class="topbar-right">
+        <button type="button" class="topbar-ghost-btn hide-mobile" onclick="openMonthConfigModal()" title="Configurações e Metas do Mês">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+          <span>Configurar Mês</span>
+        </button>
+
+        <button type="button" class="topbar-icon-btn hide-mobile" id="btnHeaderThemeToggle" onclick="toggleTheme()" title="Alternar entre Modo Claro e Modo Escuro" aria-label="Alternar tema">
+          <span id="themeToggleIcon">🌙</span>
+          <span id="themeToggleText" style="display:none;">Modo Escuro</span>
+        </button>
+
+        <div id="badgeSupabaseCloud" class="topbar-sync-status" title="Banco de dados em nuvem Supabase ativo">
+          <span class="cloud-dot"></span>
+          <span class="cloud-text hide-mobile">Sincronizado</span>
+        </div>
+
+        <div class="topbar-divider hide-mobile"></div>
+
+        <div class="user-profile-badge topbar-user-btn" onclick="openMyAccountModal()" title="Abrir Minha Conta, Foto de Perfil e Segurança">
+          <div class="user-avatar-circle" id="headerUserAvatar">JG</div>
+          <div class="user-badge-details">
+            <span class="user-badge-name" id="headerUserName">João Guilherme</span>
+          </div>
+          <svg class="hide-mobile" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-dim);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+
+        <button type="button" class="topbar-icon-btn" onclick="toggleSidebarMenu()" title="Abrir Menu Lateral (Backups, Tema e Configurações)" aria-label="Menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- NAVIGATION -->
-  <div class="nav-wrapper">
-    <div class="main-nav">
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button class="nav-btn" id="btnViewAnnual" onclick="switchView('annual')">📊 Visão Geral Anual</button>
-        <button class="nav-btn active" id="btnViewMonthly" onclick="switchView('monthly')">📅 Visão Mensal & Movimentações</button>
-      </div>
+  <!-- Controles de ano ocultos para compatibilidade de script (seletor principal permanece no menu lateral) -->
+  <div style="display: none;" aria-hidden="true">
+    <button type="button" id="btnPrevYear" onclick="changeYearStep(-1)"></button>
+    <select id="globalYearSelector" onchange="switchYear(parseInt(this.value, 10))">
+      <option value="2026">2026</option>
+      <option value="2027">2027</option>
+      <option value="2028">2028</option>
+      <option value="2029">2029</option>
+      <option value="2030">2030</option>
+      <option value="2031">2031</option>
+    </select>
+    <button type="button" id="btnNextYear" onclick="changeYearStep(1)"></button>
+  </div>
 
-      <!-- SELETOR DE ANO MULTI-ANO (2026 - 2031) -->
-      <div class="year-selector-widget">
-        <span class="year-selector-label">Exercício:</span>
-        <div class="year-stepper">
-          <button type="button" class="year-step-btn" id="btnPrevYear" onclick="changeYearStep(-1)" title="Ano Anterior">◀</button>
-          <select id="globalYearSelector" class="year-select-input" onchange="switchYear(parseInt(this.value, 10))" title="Selecione o ano do planejamento">
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-            <option value="2030">2030</option>
-            <option value="2031">2031</option>
-          </select>
-          <button type="button" class="year-step-btn" id="btnNextYear" onclick="changeYearStep(1)" title="Próximo Ano">▶</button>
-        </div>
-        <span class="year-range-pill" title="Planejamento Financeiro de 6 anos (2026 a 2031)">2026 – 2031</span>
-      </div>
+  <!-- ==================== CABEÇALHO EDITORIAL DO PERÍODO (CENTRALIZADO COM SETAS NOS CANTOS) ==================== -->
+  <div class="period-hero-band">
+    <div class="month-navigation-header period-centered-bar" id="monthNavHeaderInline">
+      <button type="button" class="period-edge-arrow" onclick="prevMonth()" title="Mês Anterior" id="btnPrevMonth" aria-label="Mês Anterior">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <h2 id="currentMonthHeading" class="current-month-heading">Janeiro 2026</h2>
+
+      <button type="button" class="period-edge-arrow" onclick="nextMonth()" title="Próximo Mês" id="btnNextMonth" aria-label="Próximo Mês">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
     </div>
 
-    <!-- MONTH SELECTOR -->
+    <!-- SCRUBBER ABERTO DE 12 MESES -->
     <div class="months-bar" id="monthsBar" style="display: flex;">
-      <button class="month-pill active" onclick="selectMonth(0)">01. Jan</button>
-      <button class="month-pill" onclick="selectMonth(1)">02. Fev</button>
-      <button class="month-pill" onclick="selectMonth(2)">03. Mar</button>
-      <button class="month-pill" onclick="selectMonth(3)">04. Abr</button>
-      <button class="month-pill" onclick="selectMonth(4)">05. Mai</button>
-      <button class="month-pill" onclick="selectMonth(5)">06. Jun</button>
-      <button class="month-pill" onclick="selectMonth(6)">07. Jul</button>
-      <button class="month-pill" onclick="selectMonth(7)">08. Ago</button>
-      <button class="month-pill" onclick="selectMonth(8)">09. Set</button>
-      <button class="month-pill" onclick="selectMonth(9)">10. Out</button>
-      <button class="month-pill" onclick="selectMonth(10)">11. Nov</button>
-      <button class="month-pill" onclick="selectMonth(11)">12. Dez</button>
+      <button type="button" class="month-pill active" onclick="selectMonth(0)">Jan</button>
+      <button type="button" class="month-pill" onclick="selectMonth(1)">Fev</button>
+      <button type="button" class="month-pill" onclick="selectMonth(2)">Mar</button>
+      <button type="button" class="month-pill" onclick="selectMonth(3)">Abr</button>
+      <button type="button" class="month-pill" onclick="selectMonth(4)">Mai</button>
+      <button type="button" class="month-pill" onclick="selectMonth(5)">Jun</button>
+      <button type="button" class="month-pill" onclick="selectMonth(6)">Jul</button>
+      <button type="button" class="month-pill" onclick="selectMonth(7)">Ago</button>
+      <button type="button" class="month-pill" onclick="selectMonth(8)">Set</button>
+      <button type="button" class="month-pill" onclick="selectMonth(9)">Out</button>
+      <button type="button" class="month-pill" onclick="selectMonth(10)">Nov</button>
+      <button type="button" class="month-pill" onclick="selectMonth(11)">Dez</button>
     </div>
   </div>
 
   <!-- ==================== VIEW: MENSAL DETALHADA ==================== -->
   <div id="sectionMonthly" class="view-section active">
-    <div class="month-navigation-header">
-      <button type="button" class="btn btn-month-nav-arrow btn-month-prev" onclick="prevMonth()" title="Mês Anterior" id="btnPrevMonth">‹</button>
-      <h2 id="currentMonthHeading" class="current-month-heading">Janeiro 2026</h2>
-      <button type="button" class="btn btn-month-nav-arrow btn-month-next" onclick="nextMonth()" title="Próximo Mês" id="btnNextMonth">›</button>
-    </div>
 
-    <!-- KPIS DO MÊS SELECIONADO (5 CARDS MINIMALISTAS E SEM SOBREPOSIÇÃO) -->
+    <!-- KPIS DO MÊS SELECIONADO (BENTO WEALTH GRID COINBASE & NERDWALLET) -->
     <div class="grid grid-5 kpi-grid-centered" id="monthlyKpiGrid">
       <!-- 1. ENTRADAS -->
       <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">💵 Entradas</span>
-          <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.7rem; min-height: 26px;" onclick="openIncomesModal()">+ Gerenciar</button>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-income" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </span>
+            <span class="card-title">Entradas</span>
+          </div>
+          <button class="btn btn-outline" style="padding: 3px 9px; font-size: 0.69rem; min-height: 26px; border-radius: 999px;" onclick="openIncomesModal()">+ Gerenciar</button>
         </div>
         <div class="kpi-value val-pos" id="monthIncomeTotal">R$ 1.000,00</div>
         <div id="monthIncomesList" class="kpi-sub"></div>
@@ -2752,17 +3707,27 @@
       <!-- 2. DESPESAS FIXAS -->
       <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">📌 Fixas</span>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-fixed" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+            </span>
+            <span class="card-title">Fixas</span>
+          </div>
           <span class="badge badge-danger" id="monthFixedStatusBadge">R$ 0,00</span>
         </div>
         <div class="kpi-value val-neg" id="monthFixedTotal">R$ 0,00</div>
         <div class="kpi-sub" id="monthFixedPaidSub">0/0 pagas</div>
       </div>
 
-      <!-- 3. SALÁRIO LIVRE -->
-      <div class="card card-kpi-centered">
+      <!-- 3. SALÁRIO LIVRE (SPOTLIGHT CARD) -->
+      <div class="card card-kpi-centered card-kpi-spotlight">
         <div class="card-header">
-          <span class="card-title">💼 Salário Livre</span>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-salary" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="2"></rect><path d="M16 14h.01"></path><path d="M2 10h20"></path></svg>
+            </span>
+            <span class="card-title">Salário Livre</span>
+          </div>
           <span class="badge badge-info">Proventos</span>
         </div>
         <div class="kpi-value" id="monthSalaryRemaining" style="color: var(--accent-sky);">R$ 1.000,00</div>
@@ -2772,10 +3737,15 @@
       <!-- 4. SALDO NOS BANCOS -->
       <div class="card card-kpi-centered" id="cardBankMoney">
         <div class="card-header">
-          <span class="card-title">🏦 Nos Bancos</span>
-          <button class="btn btn-outline" style="padding: 2px 8px; font-size: 0.7rem; min-height: 26px;" onclick="openEditBankMoneyModal()">⚙️ Saldo</button>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-bank" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"></line><line x1="6" y1="18" x2="6" y2="11"></line><line x1="10" y1="18" x2="10" y2="11"></line><line x1="14" y1="18" x2="14" y2="11"></line><line x1="18" y1="18" x2="18" y2="11"></line><polygon points="12 2 20 7 4 7"></polygon></svg>
+            </span>
+            <span class="card-title">Nos Bancos</span>
+          </div>
+          <button class="btn btn-outline" style="padding: 3px 9px; font-size: 0.69rem; min-height: 26px; border-radius: 999px;" onclick="openEditBankMoneyModal()">Saldo</button>
         </div>
-        <div class="kpi-value val-pos" id="monthBankMoneyTotal" style="color: #38bdf8;">R$ 0,00</div>
+        <div class="kpi-value val-pos" id="monthBankMoneyTotal" style="color: #0284C7;">R$ 0,00</div>
         <div class="kpi-sub" id="monthBankMoneySub">
           <span>Débito/PIX: <strong class="val-neg font-mono" id="monthDebitPixOut">-R$ 0,00</strong></span>
         </div>
@@ -2784,7 +3754,12 @@
       <!-- 5. RESERVA & META OU GASTO DIÁRIO (OPCIONAL / CONFIGURÁVEL NO MENU CONFIGURAR MÊS) -->
       <div class="card card-kpi-centered" id="cardFifthKpi">
         <div class="card-header">
-          <span class="card-title" id="monthFifthCardTitle">🎯 Reserva</span>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-goal" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+            </span>
+            <span class="card-title" id="monthFifthCardTitle">🎯 Reserva</span>
+          </div>
           <span class="badge badge-warning" id="monthGoalBadge" style="cursor: pointer;" onclick="openMonthConfigModal()" title="Clique para configurar (Reserva ou Gasto Diário)">Meta</span>
         </div>
         <div class="kpi-value" id="monthSavedTotal" style="color: var(--warning);">R$ 0,00</div>
@@ -2795,12 +3770,17 @@
       </div>
     </div>
 
-    <!-- SEÇÕES DO MÊS: CARTÕES & DESPESAS FIXAS -->
+    <!-- SEÇÕES DO MÊS: CARTÕES (APPLE WALLET STYLE) & DESPESAS FIXAS (NERDWALLET BILLS) -->
     <div class="grid grid-2">
       <!-- FATURAS DE CARTÃO DINÂMICAS -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">💳 Cartões de Crédito</span>
+          <span class="card-title">
+            <span class="section-icon-badge" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            </span>
+            <span>Cartões de Crédito</span>
+          </span>
           <span class="badge badge-primary" id="monthCardsTotalBadge">R$ 0,00</span>
         </div>
         <div id="dynamicCardsContainer"></div>
@@ -2810,12 +3790,17 @@
       <div class="card">
         <div class="card-header">
           <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
-            <span class="card-title">✅ Despesas Fixas</span>
+            <span class="card-title">
+              <span class="section-icon-badge" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </span>
+              <span>Despesas Fixas</span>
+            </span>
             <span id="fixedChecklistSummaryText" class="badge badge-fixed-regular">0/0</span>
           </div>
           <div style="display: flex; gap: 6px; align-items: center;">
-            <button class="btn btn-outline" style="padding: 4px 9px; font-size: 0.72rem; min-height: 30px; color: #8b5cf6; border-color: rgba(139,92,246,0.35);" onclick="openAddFixedModal('temporary')">⏳ Temporária</button>
-            <button class="btn btn-primary" style="padding: 4px 10px; font-size: 0.72rem; min-height: 30px;" onclick="openAddFixedModal('annual')">+ Fixa</button>
+            <button class="btn btn-outline" style="padding: 4px 11px; font-size: 0.73rem; min-height: 30px; border-radius: 999px; color: var(--accent-temp); border-color: rgba(2, 132, 199, 0.3);" onclick="openAddFixedModal('temporary')">Temporária</button>
+            <button class="btn btn-primary" style="padding: 4px 12px; font-size: 0.73rem; min-height: 30px; border-radius: 999px;" onclick="openAddFixedModal('annual')">+ Fixa</button>
           </div>
         </div>
 
@@ -2823,7 +3808,7 @@
           <div class="fixed-filter-pills" id="fixedFilterPills">
             <button type="button" class="fixed-filter-pill active" data-filter="ALL" onclick="setFixedExpenseFilter('ALL')">Todas</button>
             <button type="button" class="fixed-filter-pill" data-filter="PENDING" onclick="setFixedExpenseFilter('PENDING')">Pendentes</button>
-            <button type="button" class="fixed-filter-pill" data-filter="TEMPORARY" onclick="setFixedExpenseFilter('TEMPORARY')">⏳ Temporárias</button>
+            <button type="button" class="fixed-filter-pill" data-filter="TEMPORARY" onclick="setFixedExpenseFilter('TEMPORARY')">Temporárias</button>
             <button type="button" class="fixed-filter-pill" data-filter="PAID" onclick="setFixedExpenseFilter('PAID')">Pagas ✓</button>
           </div>
         </div>
@@ -2832,11 +3817,16 @@
       </div>
     </div>
 
-    <!-- EXTRATO DE MOVIMENTAÇÕES MENSAIS -->
+    <!-- EXTRATO DE MOVIMENTAÇÕES MENSAIS (COINBASE LEDGER) -->
     <div class="card card-highlighted" style="margin-bottom: 24px;">
       <div class="card-header">
-        <span class="card-title" style="font-size: 1rem;">⚡ Movimentações do Mês</span>
-        <button class="btn btn-primary" onclick="openNewTransactionModal()" style="padding: 7px 14px; font-size: 0.82rem;">
+        <span class="card-title" style="font-size: 1rem;">
+          <span class="section-icon-badge" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </span>
+          <span>Movimentações do Mês</span>
+        </span>
+        <button class="btn btn-primary" onclick="openNewTransactionModal()" style="padding: 7px 16px; font-size: 0.82rem; border-radius: 999px;">
           <span>+</span> Lançar
         </button>
       </div>
@@ -2904,38 +3894,58 @@
 
   <!-- ==================== VIEW: ANUAL CONSOLIDADA ==================== -->
   <div id="sectionAnnual" class="view-section">
-    <!-- KPIS ANUAIS -->
+    <!-- KPIS ANUAIS (COINBASE & NERDWALLET WEALTH SUMMARY) -->
     <div class="grid grid-4" style="margin-bottom: 24px;">
-      <div class="card">
+      <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">💰 Total de Entradas</span>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-income" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+            </span>
+            <span class="card-title">Total de Entradas</span>
+          </div>
           <span class="badge badge-success" id="kpiYearBadge">Ano 2026</span>
         </div>
         <div class="kpi-value val-pos" id="annualTotalIncome">R$ 12.010,00</div>
         <div class="kpi-sub">Média de <span id="annualAvgIncome" class="val-pos">R$ 1.000,83</span>/mês</div>
       </div>
 
-      <div class="card">
+      <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">📉 Total de Despesas</span>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-fixed" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="7" x2="7" y2="17"></line><polyline points="17 17 7 17 7 7"></polyline></svg>
+            </span>
+            <span class="card-title">Total de Despesas</span>
+          </div>
           <span class="badge badge-danger">Fixas + Variáveis</span>
         </div>
         <div class="kpi-value val-neg" id="annualTotalExpenses">R$ 0,00</div>
         <div class="kpi-sub">Faturas + Contas Fixas + Variáveis</div>
       </div>
 
-      <div class="card">
+      <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">💳 Total em Faturas</span>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-salary" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            </span>
+            <span class="card-title">Total em Faturas</span>
+          </div>
           <span class="badge badge-primary">Cartões de Crédito</span>
         </div>
         <div class="kpi-value" id="annualTotalCards" style="color: var(--accent-sky);">R$ 0,00</div>
         <div class="kpi-sub">Total acumulado em cartões cadastrados</div>
       </div>
 
-      <div class="card">
+      <div class="card card-kpi-centered">
         <div class="card-header">
-          <span class="card-title">🎯 Meta de Reserva Acumulada</span>
+          <div class="kpi-header-left">
+            <span class="kpi-orb kpi-orb-goal" aria-hidden="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+            </span>
+            <span class="card-title">Meta de Reserva Acumulada</span>
+          </div>
           <span class="badge badge-warning" id="annualGoalBadge">0% da Meta</span>
         </div>
         <div class="kpi-value" id="annualSavedAmount" style="color: var(--warning);">R$ 0,00</div>
@@ -3057,28 +4067,28 @@
     
   </div>
 
-  <!-- BARRA DE NAVEGAÇÃO INFERIOR PARA SMARTPHONES E TABLETS -->
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR ESTILO APPLE / COINBASE DOCK (120FPS) -->
   <nav class="mobile-bottom-nav" id="mobileBottomNav">
     <button type="button" class="mobile-nav-item active" id="mNavMonthly" onclick="switchView('monthly')" title="Visão Mensal">
-      <span class="m-nav-icon">📅</span>
+      <span class="m-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
       <span class="m-nav-label">Mensal</span>
     </button>
     <button type="button" class="mobile-nav-item" id="mNavAnnual" onclick="switchView('annual')" title="Visão Anual">
-      <span class="m-nav-icon">📊</span>
+      <span class="m-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></span>
       <span class="m-nav-label">Anual</span>
     </button>
     <button type="button" class="mobile-nav-item m-nav-center-action" onclick="openNewTransactionModal()" title="Lançar Nova Movimentação">
       <div class="m-nav-fab-circle">
-        <span>+</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
       </div>
       <span class="m-nav-label" style="font-weight: 700; color: var(--primary);">Lançar</span>
     </button>
     <button type="button" class="mobile-nav-item" id="mNavExtrato" onclick="scrollToExtratoSection()" title="Ir para o Extrato de Movimentações">
-      <span class="m-nav-icon">📚</span>
+      <span class="m-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></span>
       <span class="m-nav-label">Extrato</span>
     </button>
     <button type="button" class="mobile-nav-item" onclick="openSidebarMenu()" title="Menu e Configurações">
-      <span class="m-nav-icon">☰</span>
+      <span class="m-nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg></span>
       <span class="m-nav-label">Mais</span>
     </button>
   </nav>
@@ -3774,7 +4784,7 @@
       </label>
       <div class="theme-presets-grid" id="themePresetsGrid">
         <button type="button" class="theme-preset-card" data-preset="emerald" onclick="applyThemePreset('emerald')">
-          <span class="theme-preset-name">🌿 Esmeralda</span>
+          <span class="theme-preset-name">🌿 NerdWallet Emerald</span>
           <div class="theme-swatch-dots">
             <span class="theme-swatch-dot" style="background: #00A868;"></span>
             <span class="theme-swatch-dot" style="background: #0ea5e9;"></span>
@@ -3792,7 +4802,7 @@
         </button>
 
         <button type="button" class="theme-preset-card" data-preset="royal" onclick="applyThemePreset('royal')">
-          <span class="theme-preset-name">🔹 Azul Real</span>
+          <span class="theme-preset-name">💙 Coinbase Blue</span>
           <div class="theme-swatch-dots">
             <span class="theme-swatch-dot" style="background: #2563eb;"></span>
             <span class="theme-swatch-dot" style="background: #0284c7;"></span>
@@ -4045,7 +5055,7 @@
       <!-- PAINEL INTERATIVO: QUANTOS MESES SERÁ DESPESA FIXA (VISÍVEL NO MODO TEMPORÁRIA) -->
       <div id="fixedDurationSection" class="duration-selector-card" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <label style="margin: 0; font-size: 0.82rem; font-weight: 800; color: #8b5cf6;">⏳ Por quantos meses ela será despesa fixa?</label>
+          <label style="margin: 0; font-size: 0.82rem; font-weight: 700; color: var(--accent-temp);">⏳ Por quantos meses ela será despesa fixa?</label>
           <span style="font-size: 0.72rem; color: var(--text-muted);">1º mês: <strong id="fixedStartMonthLabel">Jan/2026</strong></span>
         </div>
         <div style="margin-top: 8px;">
@@ -5606,16 +6616,14 @@ function updateCloudStatusBadge(isOnline) {
   const badge = document.getElementById('badgeSupabaseCloud');
   if (badge) {
     if (isOnline) {
-      badge.style.background = 'rgba(16, 185, 129, 0.08)';
-      badge.style.color = '#34d399';
-      badge.style.borderColor = 'rgba(16, 185, 129, 0.2)';
-      badge.innerHTML = '<span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; display: inline-block;"></span> Nuvem Conectada';
+      badge.style.background = '';
+      badge.style.color = '';
+      badge.innerHTML = '<span class="cloud-dot" style="background: #10B981;"></span> <span class="cloud-text hide-mobile">Sincronizado</span>';
       badge.title = 'Conectado e sincronizado com o banco Supabase (PostgreSQL + RLS)';
     } else {
-      badge.style.background = 'rgba(239, 68, 68, 0.08)';
-      badge.style.color = '#f87171';
-      badge.style.borderColor = 'rgba(239, 68, 68, 0.2)';
-      badge.innerHTML = '<span style="width: 6px; height: 6px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Nuvem Desconectada';
+      badge.style.background = '';
+      badge.style.color = 'var(--danger)';
+      badge.innerHTML = '<span class="cloud-dot" style="background: var(--danger);"></span> <span class="cloud-text hide-mobile">Offline</span>';
       badge.title = 'Verifique sua conexão ou status do serviço Supabase';
     }
   }
@@ -6308,8 +7316,8 @@ function adjustBrightness(hex, percent) {
 function syncThemeColorsModalUI() {
   const colors = (appData && appData.themeColors) ? appData.themeColors : DEFAULT_THEME_COLORS;
   const isDark = (typeof document !== 'undefined' && document.body && (document.body.classList && typeof document.body.classList.contains === 'function' && document.body.classList.contains('dark-theme')));
-  const defaultCardHex = isDark ? '#131926' : '#ffffff';
-  const defaultMainHex = isDark ? '#0b0f17' : '#f4f6f9';
+  const defaultCardHex = isDark ? '#141519' : '#FFFFFF';
+  const defaultMainHex = isDark ? '#0A0B0D' : '#F7F8FA';
 
   const setPickerAndTag = (pickerId, tagId, val, fallbackHex, isAutoAllowed) => {
     const picker = document.getElementById(pickerId);
@@ -7082,6 +8090,8 @@ function switchView(view) {
   document.getElementById('btnViewAnnual').classList.toggle('active', view === 'annual');
   document.getElementById('btnViewMonthly').classList.toggle('active', view === 'monthly');
   document.getElementById('monthsBar').style.display = view === 'monthly' ? 'flex' : 'none';
+  const mNavInline = document.getElementById('monthNavHeaderInline');
+  if (mNavInline) mNavInline.style.display = view === 'monthly' ? 'flex' : 'none';
   document.getElementById('sectionAnnual').classList.toggle('active', view === 'annual');
   document.getElementById('sectionMonthly').classList.toggle('active', view === 'monthly');
 
@@ -7191,12 +8201,19 @@ function renderMonthlyView() {
       bCard.innerHTML = `
         <div class="bank-card-top-row">
           <div class="bank-card-brand">
-            <input type="color" value="${b.color || '#2563eb'}" class="color-picker-input-mini" onchange="updateBankColorByName('${b.name}', this.value)" title="Cor">
-            <span class="bank-name-label">${b.name}</span>
+            <label class="wallet-card-emblem" style="background: ${b.color || '#0052FF'};" title="Clique para alterar a cor do cartão ${b.name}">
+              <input type="color" value="${b.color || '#0052FF'}" class="color-picker-input-mini" onchange="updateBankColorByName('${b.name}', this.value)">
+            </label>
+            <div class="bank-brand-text-col">
+              <span class="bank-name-label">${b.name}</span>
+              <span class="bank-sub-caption">${cardInvoice > 0 ? 'Fatura em aberto neste mês' : 'Sem lançamentos na fatura'}</span>
+            </div>
           </div>
           <div class="bank-card-amount-block">
             <strong class="val-neg font-mono bank-inv-amount">${formatBRL(cardInvoice)}</strong>
-            <button type="button" class="btn-icon-mini" onclick="openEditBankModalByName('${b.name}')" title="Personalizar">⚙️</button>
+            <button type="button" class="btn-icon-mini" onclick="openEditBankModalByName('${b.name}')" title="Configurar Cartão">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
           </div>
         </div>
         <div class="bank-card-bottom-row">
@@ -7204,7 +8221,7 @@ function renderMonthlyView() {
             <span class="split-pill">Titular: <strong>${formatBRL(cardUserInvoice)}</strong></span>
             ${cardThirdPartyInvoice > 0 ? `<span class="split-pill split-third">Terceiros: <strong>${formatBRL(cardThirdPartyInvoice)}</strong></span>` : ''}
           </div>
-          ${cardFuture > 0 ? `<div class="bank-debt-info">Futuro: <strong>${formatBRL(cardFuture)}</strong></div>` : ''}
+          ${cardFuture > 0 ? `<div class="bank-debt-info">Próximas faturas: <strong>${formatBRL(cardFuture)}</strong></div>` : `<div class="bank-debt-info">Sem parcelas futuras</div>`}
         </div>
       `;
       cardFrag.appendChild(bCard);
@@ -7259,12 +8276,18 @@ function renderMonthlyView() {
       item.className = `fixed-item-card ${f.paid ? 'is-paid' : 'is-pending'}`;
 
       let iconBg = f.paid
-        ? 'rgba(0, 168, 104, 0.12)'
-        : (isCardInv ? 'rgba(2, 132, 199, 0.12)' : (isTemp ? 'rgba(139, 92, 246, 0.14)' : 'rgba(225, 29, 72, 0.12)'));
+        ? 'var(--success-light)'
+        : (isCardInv ? 'var(--info-light)' : (isTemp ? 'var(--accent-temp-light)' : 'var(--danger-light)'));
       let iconColor = f.paid
         ? 'var(--success)'
-        : (isCardInv ? '#0284c7' : (isTemp ? '#8b5cf6' : 'var(--danger)'));
-      let iconSymbol = f.paid ? '✓' : (isCardInv ? '💳' : (isTemp ? (isLastTempMonth ? '🎉' : '⏳') : '📌'));
+        : (isCardInv ? 'var(--info)' : (isTemp ? 'var(--accent-temp)' : 'var(--danger)'));
+      let iconSymbol = f.paid
+        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        : (isCardInv
+            ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>'
+            : (isTemp
+                ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'
+                : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>'));
 
       let recurrenceBadgeHtml = '';
       if (isTemp) {
@@ -7320,8 +8343,8 @@ function renderMonthlyView() {
             <button type="button" class="btn-fixed-toggle ${f.paid ? 'btn-paid' : 'btn-unpaid'}" onclick="toggleFixedPaid('${f.id}')">
               ${f.paid ? 'Pago ✓' : 'Pagar'}
             </button>
-            ${!f.cardRefBankId ? `<button type="button" class="btn-edit-fixed" onclick="openEditFixedModal('${f.id}')" title="Editar">✏️</button>` : ''}
-            ${!f.cardRefBankId ? `<button type="button" class="btn-del-fixed" onclick="deleteFixedExpense('${f.id}')" title="Excluir">🗑️</button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-edit-fixed" onclick="openEditFixedModal('${f.id}')" title="Editar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-del-fixed" onclick="deleteFixedExpense('${f.id}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>` : ''}
           </div>
         </div>
       `;
@@ -7596,11 +8619,11 @@ function renderTransactionsTable() {
       <td class="col-installment">${installmentCell}</td>
       <td class="col-value">${valueCell}</td>
       <td class="col-actions">
-        <button class="btn-icon" onclick="editTransaction('${t.id}')" title="Editar">
-          ✏️
+        <button class="btn-icon" onclick="editTransaction('${t.id}')" title="Editar Lançamento">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
         </button>
-        <button class="btn-icon" style="color: var(--danger);" onclick="deleteTransaction('${t.id}')" title="Excluir">
-          🗑️
+        <button class="btn-icon" style="color: var(--danger);" onclick="deleteTransaction('${t.id}')" title="Excluir Lançamento">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
         </button>
       </td>
     `;
