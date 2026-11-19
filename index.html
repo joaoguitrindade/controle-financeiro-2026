@@ -144,7 +144,7 @@
 
     html {
       -webkit-tap-highlight-color: transparent;
-      overflow-x: hidden;
+      overflow-x: clip;
       max-width: 100%;
     }
 
@@ -162,7 +162,7 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
-      overflow-x: hidden;
+      overflow-x: clip;
       max-width: 100%;
     }
 
@@ -2592,41 +2592,49 @@
       pointer-events: none;
     }
 
-    /* MENU INFERIOR MOBILE ULTRA-FLUIDO (120FPS SPRING COMPOSITE LAYER) */
+    /* MENU INFERIOR MOBILE ULTRA-FLUIDO (DESCIDA LENTA, FLUIDA E VISUAL 120FPS) */
     .mobile-bottom-nav {
       display: none;
       position: fixed;
-      bottom: calc(10px + var(--safe-bottom));
+      bottom: calc(12px + var(--safe-bottom));
       left: 12px;
       right: 12px;
-      height: 60px;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
-      border-radius: 20px;
+      height: 62px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: saturate(180%) blur(18px);
+      -webkit-backdrop-filter: saturate(180%) blur(18px);
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      border-radius: 22px;
       padding: 0 8px;
       z-index: 940;
       justify-content: space-around;
       align-items: center;
-      box-shadow: 0 10px 26px rgba(10, 11, 13, 0.14);
+      box-shadow: 0 12px 32px rgba(10, 11, 13, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.75);
       contain: layout style;
-      will-change: transform;
+      will-change: transform, opacity;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
-      transform: translate3d(0, 0, 0);
-      transition: transform 0.34s cubic-bezier(0.32, 0.72, 0, 1);
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition:
+        transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     body.dark-theme .mobile-bottom-nav {
-      background: rgba(20, 21, 25, 0.96);
-      border-color: var(--border-strong);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.58);
+      background: rgba(20, 21, 25, 0.92);
+      border-color: rgba(255, 255, 255, 0.10);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
 
+    /* Descida mais lenta, suave e visual ao rolar para baixo */
     .mobile-bottom-nav.nav-hidden {
-      transform: translate3d(0, calc(100% + 28px + var(--safe-bottom)), 0) !important;
+      transform: translate3d(0, calc(100% + 36px + var(--safe-bottom)), 0) scale(0.93) !important;
+      opacity: 0 !important;
       pointer-events: none !important;
+      transition:
+        transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.46s cubic-bezier(0.22, 1, 0.36, 1) !important;
     }
 
     .mobile-nav-item {
@@ -3706,6 +3714,209 @@
 
       .bank-sub-caption {
         line-height: 1.25;
+      }
+    }
+
+    /* =========================================================================
+       17. ANIMAÇÕES FLUIDAS EM TODOS OS MENUS (DESKTOP & MOBILE) + SAFE-AREA iOS DEFINITIVA
+       ========================================================================= */
+
+    /* 17.1 MODAIS E BOTTOM SHEETS — TRANSIÇÃO FLUIDA EM TODOS OS 14 MODAIS */
+    .modal-overlay {
+      display: flex !important;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      background: rgba(10, 11, 13, 0.54);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition:
+        opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* Animação Desktop: elevação + escala elástica suave */
+    .modal-overlay .modal {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0) scale(0.96);
+      will-change: transform, opacity;
+      transition:
+        transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .modal-overlay.open .modal {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    /* 17.2 SIDEBAR DRAWER — DESLIZE SPRING + ENTRADA SUAVE DAS SEÇÕES */
+    .sidebar-overlay {
+      transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+
+    .sidebar-drawer {
+      will-change: transform;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+      transition: transform 0.42s cubic-bezier(0.32, 0.72, 0, 1) !important;
+    }
+
+    .sidebar-drawer .sidebar-body > div {
+      opacity: 0;
+      transform: translate3d(14px, 0, 0);
+      transition:
+        opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .sidebar-drawer.active .sidebar-body > div {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .sidebar-drawer.active .sidebar-body > div:nth-child(1) { transition-delay: 0.04s; }
+    .sidebar-drawer.active .sidebar-body > div:nth-child(2) { transition-delay: 0.08s; }
+    .sidebar-drawer.active .sidebar-body > div:nth-child(3) { transition-delay: 0.12s; }
+    .sidebar-drawer.active .sidebar-body > div:nth-child(4) { transition-delay: 0.16s; }
+    .sidebar-drawer.active .sidebar-body > div:nth-child(5) { transition-delay: 0.20s; }
+
+    /* 17.3 TRANSIÇÃO SUAVE NA TROCA DE ABAS, VISÕES E CONTROLES SEGMENTADOS */
+    @keyframes fluidPanelReveal {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 8px, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    .view-section.active {
+      animation: fluidPanelReveal 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    #tabContentCategories,
+    #tabContentBanks {
+      animation: fluidPanelReveal 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .month-pill,
+    .nav-btn,
+    .tab-pill-btn,
+    .segmented-btn,
+    .fixed-filter-pill,
+    .inline-pill-btn,
+    .sidebar-item-btn,
+    .topbar-ghost-btn,
+    .topbar-icon-btn,
+    .topbar-user-btn {
+      transition:
+        background-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.18s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    }
+
+    .month-pill:active,
+    .tab-pill-btn:active,
+    .segmented-btn:active,
+    .fixed-filter-pill:active,
+    .sidebar-item-btn:active,
+    .topbar-icon-btn:active {
+      transform: scale(0.95) !important;
+    }
+
+    /* 17.4 CORREÇÃO DEFINITIVA DA SAFE-AREA DO iPHONE (SAFARI & PWA STANDALONE) */
+    #authScreen {
+      padding-top: calc(16px + var(--safe-top));
+      padding-bottom: calc(16px + var(--safe-bottom));
+    }
+
+    @media (max-width: 768px) {
+      /* Animação Bottom-Sheet nativa Apple iOS nos modais mobile */
+      .modal-overlay .modal {
+        opacity: 1;
+        transform: translate3d(0, 100%, 0);
+        transition: transform 0.44s cubic-bezier(0.32, 0.72, 0, 1);
+      }
+
+      .modal-overlay.open .modal {
+        transform: translate3d(0, 0, 0);
+      }
+
+      /* Topbar respeita rigorosamente a Safe-Area superior do iPhone (Notch / Dynamic Island) */
+      header.app-topbar {
+        position: sticky !important;
+        top: 0 !important;
+        padding-top: max(env(safe-area-inset-top, 0px), 10px) !important;
+        background: var(--bg-glass) !important;
+      }
+
+      .modal-overlay {
+        padding-top: calc(max(env(safe-area-inset-top, 0px), 14px) + 12px) !important;
+      }
+
+      .modal {
+        max-height: calc(100dvh - max(env(safe-area-inset-top, 0px), 14px) - 18px) !important;
+      }
+
+      .sidebar-drawer {
+        padding-top: max(env(safe-area-inset-top, 0px), 10px) !important;
+      }
+
+      .toast-container {
+        top: calc(max(env(safe-area-inset-top, 0px), 12px) + 10px) !important;
+      }
+    }
+
+    /* Modo PWA Standalone no iPhone (Tela de Início com black-translucent): blindagem absoluta contra Notch e Dynamic Island */
+    @media all and (display-mode: standalone) {
+      header.app-topbar {
+        padding-top: max(env(safe-area-inset-top, 0px), 48px) !important;
+      }
+
+      .sidebar-drawer {
+        padding-top: max(env(safe-area-inset-top, 0px), 48px) !important;
+      }
+
+      .modal-overlay {
+        padding-top: calc(max(env(safe-area-inset-top, 0px), 48px) + 12px) !important;
+      }
+
+      .modal {
+        max-height: calc(100dvh - max(env(safe-area-inset-top, 0px), 48px) - 16px) !important;
+      }
+
+      .toast-container {
+        top: calc(max(env(safe-area-inset-top, 0px), 48px) + 8px) !important;
+      }
+
+      #authScreen {
+        padding-top: calc(max(env(safe-area-inset-top, 0px), 48px) + 16px) !important;
+      }
+    }
+
+    /* Acessibilidade: respeita preferência de movimento reduzido do sistema */
+    @media (prefers-reduced-motion: reduce) {
+      .modal-overlay,
+      .modal-overlay .modal,
+      .sidebar-overlay,
+      .sidebar-drawer,
+      .sidebar-drawer .sidebar-body > div,
+      .mobile-bottom-nav,
+      .floating-action-btn,
+      .view-section.active {
+        transition-duration: 0.01ms !important;
+        animation: none !important;
       }
     }
   </style>
@@ -6372,6 +6583,7 @@ function openSidebarMenu() {
   const overlay = document.getElementById('sidebarOverlay');
   if (drawer) drawer.classList.add('active');
   if (overlay) overlay.classList.add('active');
+  if (typeof syncBodyOverlayScrollLock === 'function') syncBodyOverlayScrollLock();
 
   renderUserHeader();
 
@@ -6392,6 +6604,7 @@ function closeSidebarMenu() {
   const overlay = document.getElementById('sidebarOverlay');
   if (drawer) drawer.classList.remove('active');
   if (overlay) overlay.classList.remove('active');
+  if (typeof syncBodyOverlayScrollLock === 'function') syncBodyOverlayScrollLock();
 }
 
 function toggleSidebarMenu() {
@@ -9663,15 +9876,25 @@ function populateDropdowns() {
 // ==========================================
 // TRANSAÇÕES (NOVA, EDITAR, SALVAR, EXCLUIR)
 // ==========================================
+function syncBodyOverlayScrollLock() {
+  if (typeof document === 'undefined' || !document.body || !document.body.style) return;
+  const hasModal = typeof document.querySelector === 'function' && !!document.querySelector('.modal-overlay.open');
+  const drawer = document.getElementById('sidebarDrawer');
+  const hasDrawer = !!(drawer && drawer.classList && typeof drawer.classList.contains === 'function' && drawer.classList.contains('active'));
+  document.body.style.overflow = (hasModal || hasDrawer) ? 'hidden' : '';
+}
+
 function openModal(id) {
   const el = document.getElementById(id);
   if (el && el.classList) el.classList.add('open');
+  syncBodyOverlayScrollLock();
   if (typeof syncFabVisibilityState === 'function') syncFabVisibilityState();
 }
 
 function closeModal(id) {
   const el = document.getElementById(id);
   if (el && el.classList) el.classList.remove('open');
+  syncBodyOverlayScrollLock();
   if (typeof syncFabVisibilityState === 'function') syncFabVisibilityState();
 }
 
