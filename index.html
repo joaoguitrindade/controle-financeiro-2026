@@ -733,7 +733,7 @@
       font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.14s ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
     }
 
     .btn-quick-pill:hover {
@@ -1950,7 +1950,7 @@
       justify-content: center;
       gap: 4px;
       white-space: nowrap;
-      transition: all 0.14s ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
     }
 
     .segmented-btn.active {
@@ -2054,7 +2054,7 @@
       padding: 4px 11px;
       border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: all 0.14s ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
     }
 
     .inline-pill-btn.active {
@@ -2101,7 +2101,7 @@
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
-      transition: all 0.14s ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
     }
 
     .chip-btn:hover {
@@ -2721,7 +2721,7 @@
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
       opacity: 0;
       transform: translateY(-8px);
-      transition: all 0.2s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
     .toast-item.visible { opacity: 1; transform: translateY(0); }
 
@@ -2775,7 +2775,7 @@
       color: var(--text-muted);
       border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: all 0.14s ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
     }
     .auth-tab-btn.active {
       background: var(--bg-card);
@@ -3012,7 +3012,7 @@
       background: var(--bg-card-subtle);
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: all 0.14s ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
       text-align: left;
     }
 
@@ -4156,10 +4156,8 @@
     .period-hero-band {
       position: relative;
       background:
-        radial-gradient(65% 140% at 50% -25%, var(--primary-light) 0%, transparent 72%),
-        radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.045) 1px, transparent 0),
+        radial-gradient(70% 140% at 50% -30%, var(--primary-light) 0%, transparent 72%),
         var(--bg-card) !important;
-      background-size: 100% 100%, 18px 18px, 100% 100% !important;
       border: 1px solid var(--border) !important;
       border-radius: 22px !important;
       padding: 20px 22px 16px !important;
@@ -4174,10 +4172,8 @@
 
     body.dark-theme .period-hero-band {
       background:
-        radial-gradient(65% 140% at 50% -25%, var(--primary-light) 0%, transparent 72%),
-        radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.045) 1px, transparent 0),
+        radial-gradient(70% 140% at 50% -30%, var(--primary-light) 0%, transparent 72%),
         var(--bg-card) !important;
-      background-size: 100% 100%, 18px 18px, 100% 100% !important;
       border-color: var(--border-strong) !important;
       box-shadow:
         0 12px 32px -10px rgba(0, 0, 0, 0.58),
@@ -4365,6 +4361,23 @@
     .tx-row-item {
       content-visibility: auto;
       contain-intrinsic-size: 1px 50px;
+    }
+
+    /* =========================================================================
+       21. REFINAMENTO FINAL 60FPS (COMPOSITOR LAYER ISOLATION & ZERO SHADOW PAINT)
+       ========================================================================= */
+    header.app-topbar {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .btn,
+    .topbar-ghost-btn,
+    .topbar-icon-btn,
+    .period-edge-arrow,
+    .month-pill {
+      transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease !important;
     }
   </style>
 </head>
@@ -6239,6 +6252,27 @@
 
 <script>
 // ==========================================
+// SEGURANÇA OWASP (ANTI-XSS & ESCAPE DE ATRIBUTOS)
+// ==========================================
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeJsStr(value) {
+  return String(value ?? '')
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// ==========================================
 
 function createSafeFragment() {
   if (typeof document !== 'undefined' && typeof document.createDocumentFragment === 'function') {
@@ -7075,7 +7109,7 @@ function openSidebarMenu() {
 
   const lblLock = document.getElementById('lblAutoLockTime');
   if (lblLock) {
-    lblLock.textContent = (typeof autoLockMinutes !== "undefined" && autoLockMinutes > 0) ? (autoLockMinutes + "m") : "5m";
+    lblLock.textContent = (typeof autoLockMinutes !== "undefined" && autoLockMinutes > 0) ? (autoLockMinutes + "m") : "Desativado";
   }
 }
 
@@ -7720,21 +7754,27 @@ function syncFabVisibilityState() {
 }
 
 let _fabScrollSettleTimer = null;
+let _fabScrollState = null;
 function triggerFabScrollFeedback(direction) {
+  if (typeof window !== 'undefined' && window.innerWidth && window.innerWidth <= 768) return;
   const fab = document.getElementById('globalFabBtn');
   if (!fab || !fab.classList) return;
-  if (direction === 'down') {
-    fab.classList.add('fab-scroll-down');
-    fab.classList.remove('fab-scroll-up');
-  } else if (direction === 'up') {
-    fab.classList.add('fab-scroll-up');
-    fab.classList.remove('fab-scroll-down');
+  if (_fabScrollState !== direction) {
+    _fabScrollState = direction;
+    if (direction === 'down') {
+      fab.classList.add('fab-scroll-down');
+      fab.classList.remove('fab-scroll-up');
+    } else if (direction === 'up') {
+      fab.classList.add('fab-scroll-up');
+      fab.classList.remove('fab-scroll-down');
+    }
   }
   if (_fabScrollSettleTimer) clearTimeout(_fabScrollSettleTimer);
   _fabScrollSettleTimer = setTimeout(() => {
+    _fabScrollState = null;
     fab.classList.remove('fab-scroll-down');
     fab.classList.remove('fab-scroll-up');
-  }, 240);
+  }, 220);
 }
 
 function handleFluidViewportScroll() {
@@ -8306,10 +8346,14 @@ const formatBRL = (val) => {
 // ==========================================
 // CUSTOMIZAÇÃO DE CORES DO TEMA
 // ==========================================
-function applyThemeStyles() {
+let _lastAppliedThemeSignature = '';
+function applyThemeStyles(force = false) {
   if (!appData) return;
   if (!appData.themeColors) appData.themeColors = { ...DEFAULT_THEME_COLORS };
   const colors = appData.themeColors;
+  const sig = `${colors.primary||''}|${colors.accent||''}|${colors.success||''}|${colors.danger||''}|${colors.warning||''}|${colors.bgCard||''}|${colors.bgMain||''}`;
+  if (!force && sig === _lastAppliedThemeSignature) return;
+  _lastAppliedThemeSignature = sig;
 
   const primary = colors.primary || '#00A868';
   const accent = colors.accent || primary;
@@ -9262,17 +9306,17 @@ function renderMonthlyView() {
       bCard.innerHTML = `
         <div class="bank-card-top-row">
           <div class="bank-card-brand">
-            <label class="wallet-card-emblem" style="background: ${b.color || '#0052FF'};" title="Clique para alterar a cor do cartão ${b.name}">
-              <input type="color" value="${b.color || '#0052FF'}" class="color-picker-input-mini" onchange="updateBankColorByName('${b.name}', this.value)">
+            <label class="wallet-card-emblem" style="background: ${escapeHtml(b.color || '#0052FF')};" title="Clique para alterar a cor do cartão ${escapeHtml(b.name)}">
+              <input type="color" value="${escapeHtml(b.color || '#0052FF')}" class="color-picker-input-mini" onchange="updateBankColorByName('${escapeJsStr(b.name)}', this.value)">
             </label>
             <div class="bank-brand-text-col">
-              <span class="bank-name-label">${b.name}</span>
+              <span class="bank-name-label">${escapeHtml(b.name)}</span>
               <span class="bank-sub-caption">${cardInvoice > 0 ? 'Fatura em aberto neste mês' : 'Sem lançamentos na fatura'}</span>
             </div>
           </div>
           <div class="bank-card-amount-block">
             <strong class="val-neg font-mono bank-inv-amount">${formatBRL(cardInvoice)}</strong>
-            <button type="button" class="btn-icon-mini" onclick="openEditBankModalByName('${b.name}')" title="Configurar Cartão">
+            <button type="button" class="btn-icon-mini" onclick="openEditBankModalByName('${escapeJsStr(b.name)}')" title="Configurar Cartão">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </button>
           </div>
@@ -9391,7 +9435,7 @@ function renderMonthlyView() {
         </div>
         <div class="fixed-item-center">
           <div class="fixed-item-title-row">
-            <span class="fixed-item-title ${f.paid ? 'expense-paid' : ''}">${f.name}</span>
+            <span class="fixed-item-title ${f.paid ? 'expense-paid' : ''}">${escapeHtml(f.name)}</span>
             ${recurrenceBadgeHtml}
           </div>
           <div class="fixed-item-meta">
@@ -9404,8 +9448,8 @@ function renderMonthlyView() {
             <button type="button" class="btn-fixed-toggle ${f.paid ? 'btn-paid' : 'btn-unpaid'}" onclick="toggleFixedPaid('${f.id}')">
               ${f.paid ? 'Pago ✓' : 'Pagar'}
             </button>
-            ${!f.cardRefBankId ? `<button type="button" class="btn-edit-fixed" onclick="openEditFixedModal('${f.id}')" title="Editar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>` : ''}
-            ${!f.cardRefBankId ? `<button type="button" class="btn-del-fixed" onclick="deleteFixedExpense('${f.id}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-edit-fixed" onclick="openEditFixedModal('${escapeJsStr(f.id)}')" title="Editar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>` : ''}
+            ${!f.cardRefBankId ? `<button type="button" class="btn-del-fixed" onclick="deleteFixedExpense('${escapeJsStr(f.id)}')" title="Excluir"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>` : ''}
           </div>
         </div>
       `;
@@ -9792,7 +9836,7 @@ function renderTransactionsTable() {
     const catIcon = getCategoryIcon(t.category);
 
     const instInfo = getInstallmentInfo(t);
-    let installmentCell = `<span style="font-size: 0.76rem; color: var(--text-muted);">${t.installment || 'À VISTA'}</span>`;
+    let installmentCell = `<span style="font-size: 0.76rem; color: var(--text-muted);">${escapeHtml(t.installment || 'À VISTA')}</span>`;
     let valueCell = `<span class="${valClass} tx-value-amount">${valFormatted}</span>`;
     let shortInstMeta = (t.installment && t.installment !== 'À VISTA') ? t.installment : '';
 
@@ -9807,30 +9851,30 @@ function renderTransactionsTable() {
       date: `<td class="col-date">${dateFormatted}</td>`,
       desc: `
         <td class="col-desc">
-          <strong class="tx-title">${t.description}</strong>
+          <strong class="tx-title">${escapeHtml(t.description)}</strong>
           <div class="mobile-tx-meta">
-            <span>${dateFormatted}</span>
+            <span>${escapeHtml(dateFormatted)}</span>
             <span>•</span>
-            <span style="color: ${bankColor}; font-weight: 600;">${t.bank}</span>
-            ${shortInstMeta ? `<span>•</span> <span>${shortInstMeta}</span>` : ''}
+            <span style="color: ${escapeHtml(bankColor)}; font-weight: 600;">${escapeHtml(t.bank)}</span>
+            ${shortInstMeta ? `<span>•</span> <span>${escapeHtml(shortInstMeta)}</span>` : ''}
             ${isThirdParty ? authorBadge : ''}
           </div>
         </td>`,
       cat: `
         <td class="col-cat">
-          <div class="cat-circle" style="background: ${catColor}18; color: ${catColor};" title="${t.category}">
+          <div class="cat-circle" style="background: ${escapeHtml(catColor)}18; color: ${escapeHtml(catColor)};" title="${escapeHtml(t.category)}">
             ${catIcon}
           </div>
-          <span class="desktop-cat-badge badge" style="background: ${catColor}18; color: ${catColor};">
-            ${t.category}
+          <span class="desktop-cat-badge badge" style="background: ${escapeHtml(catColor)}18; color: ${escapeHtml(catColor)};">
+            ${escapeHtml(t.category)}
           </span>
         </td>`,
       type: `<td class="col-type"><span class="badge ${typeBadge}">${t.type}</span>${authorBadge ? ' ' + authorBadge : ''}</td>`,
       bank: `
         <td class="col-bank">
-          <span class="badge badge-bank-pill" style="border-color: ${bankColor}55; color: ${bankColor};">
-            <span class="bank-dot" style="background-color: ${bankColor};"></span>
-            <span>${t.bank}</span>
+          <span class="badge badge-bank-pill" style="border-color: ${escapeHtml(bankColor)}55; color: ${escapeHtml(bankColor)};">
+            <span class="bank-dot" style="background-color: ${escapeHtml(bankColor)};"></span>
+            <span>${escapeHtml(t.bank)}</span>
           </span>
         </td>`,
       installment: `<td class="col-installment">${installmentCell}</td>`,
@@ -9838,10 +9882,10 @@ function renderTransactionsTable() {
       actions: `
         <td class="col-actions">
           <div class="tx-actions-inline">
-            <button class="btn-icon" onclick="editTransaction('${t.id}')" title="Editar Lançamento">
+            <button class="btn-icon" onclick="editTransaction('${escapeJsStr(t.id)}')" title="Editar Lançamento">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
             </button>
-            <button class="btn-icon" style="color: var(--danger);" onclick="deleteTransaction('${t.id}')" title="Excluir Lançamento">
+            <button class="btn-icon" style="color: var(--danger);" onclick="deleteTransaction('${escapeJsStr(t.id)}')" title="Excluir Lançamento">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
@@ -9951,7 +9995,7 @@ function renderIncomesManagerList() {
     item.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 3px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <strong style="color: var(--text-main); font-size: 0.92rem;">${inc.description}</strong>
+          <strong style="color: var(--text-main); font-size: 0.92rem;">${escapeHtml(inc.description)}</strong>
           ${recurrenceBadge}
         </div>
         <span class="val-pos font-mono" style="font-size: 1rem; font-weight: 700;">${formatBRL(inc.value)}</span>
@@ -11548,7 +11592,7 @@ function renderCategoriesManager() {
     item.innerHTML = `
       <div style="display: flex; align-items: center; gap: 10px;">
         <input type="color" value="${cat.color || '#2563eb'}" class="color-picker-input" onchange="updateCategoryColor(${idx}, this.value)" title="Clique para editar a cor">
-        <strong>${cat.name}</strong>
+        <strong>${escapeHtml(cat.name)}</strong>
         <span class="badge ${cat.type === 'ENTRADA' ? 'badge-success' : (cat.type === 'RESERVA' ? 'badge-warning' : 'badge-danger')}">${cat.type}</span>
       </div>
       <div style="display: flex; gap: 6px;">
@@ -11659,7 +11703,7 @@ function renderBanksManager() {
         <input type="color" value="${b.color || '#2563eb'}" class="color-picker-input" onchange="updateBankColor(${idx}, this.value)" title="Clique para editar a cor">
         <div>
           <div style="display: flex; align-items: center; gap: 6px;">
-            <strong>${b.name}</strong>
+            <strong>${escapeHtml(b.name)}</strong>
             ${b.isCreditCard ? '<span class="badge badge-primary" style="font-size: 0.68rem;">💳 Cartão</span>' : ''}
           </div>
           <div style="margin-top: 3px;">
@@ -11668,7 +11712,7 @@ function renderBanksManager() {
         </div>
       </div>
       <div style="display: flex; gap: 6px;">
-        <button class="btn-icon" style="padding: 4px 8px;" onclick="openEditBankModalByName('${b.name}')" title="Alterar Cor e Nome do Banco">🎨</button>
+        <button class="btn-icon" style="padding: 4px 8px;" onclick="openEditBankModalByName('${escapeJsStr(b.name)}')" title="Alterar Cor e Nome do Banco">🎨</button>
         <button class="btn-icon" style="padding: 4px 8px;" onclick="editBankTypes(${idx})" title="Editar Tipos Permitidos">⚙️</button>
         <button class="btn-icon" style="padding: 4px 8px;" onclick="editBank(${idx})" title="Editar Nome">✏️</button>
         <button class="btn-icon" style="padding: 4px 8px; color: var(--danger);" onclick="deleteBank(${idx})" title="Excluir">🗑️</button>
